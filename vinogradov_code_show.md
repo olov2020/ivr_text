@@ -9,6 +9,8 @@
 
 ### VK: www.vk.com/olov2
 
-## Ссылка на видео
+#### Ссылка на видео
 
 [ https://drive.google.com/file/d/1ef1hGCYF9CaiBLwKphiOHSuFTcg_q3AH/view?usp=sharing ]
+
+#### Для улучшения качества видео выставите настройки графики на 1080p
