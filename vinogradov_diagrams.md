@@ -15,4 +15,4 @@
 
 #### Ссылка на папку с диаграммами классов
 
-[ https://drive.google.com/drive/folders/1LDIi72HTgKyYgduyJYaPp-emXW76o_F_?usp=sharing ]
+[ https://drive.google.com/drive/folders/1RwIAbFYvPWr7-o6CjnCTIPyWVGFii9Lb?usp=sharing ]
