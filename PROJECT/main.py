@@ -1,32 +1,76 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import Menu
-from tkinter import ttk
+import tkinter.filedialog as fd
+import rsa
 
 
-class Constants:
-    def __init__(self, window, note):
-        self.len = 3
-        self.func = 0
-        self.wind = window
-        self.note = note
-
-    def update_cur_func(self, cur_func):
-        self.func = cur_func
-        self.choose_func()
-
-    def choose_func(self):
-        if self.func == 0:
-            home_func(self.wind, self.func, self.note)
-        elif self.func == 1:
-            xor_func(self.wind, self.func, self.note)
-        elif self.func == 2:
-            repl_func(self.wind, self.func, self.note)
+def choose_directory():
+    filetypes = (("Текстовый файл", "*.txt"),
+                 ("Изображение", "*.jpg *.gif *.png"),
+                 ("Любой", "*"))
+    my_file = fd.askopenfile(title="Открыть файл", initialdir="/Users/vladi/OneDrive/Рабочий стол/vladimir/Lyceum/ИВР",
+                             filetypes=filetypes)  # here you can type path to your directory
+    if my_file:
+        print(*my_file.readlines())
+        my_file.close()
 
 
-def repl(_first_arg_label, _first_arg_entry, _second_arg_label, _second_arg_entry, _result_repl_label):
+def xor_function(_first_arg_label, _first_arg_entry, _second_arg_label, _second_arg_entry, _result_xor_label):
     """
 
+    :param _first_arg_label:
+    :param _first_arg_entry:
+    :param _second_arg_label:
+    :param _second_arg_entry:
+    :param _result_xor_label:
+    :return:
+    """
+    first_arg = _first_arg_entry.get()
+    if len(first_arg) != 0:
+        try:
+            first_arg = str(first_arg)
+        except ValueError:
+            messagebox.showwarning('Warning!', 'Please, type your text')
+            _first_arg_entry.delete(0, tk.END)
+            return
+    else:
+        messagebox.showwarning('Warning!', 'Please, type your text')
+        _first_arg_entry.delete(0, tk.END)
+        return
+    second_arg = _second_arg_entry.get()
+    if len(second_arg) != 0:
+        try:
+            second_arg = str(second_arg)
+        except ValueError:
+            messagebox.showwarning('Warning!', 'Please, type your key')
+            _second_arg_entry.delete(0, tk.END)
+            return
+    else:
+        messagebox.showwarning('Warning!', 'Please, type your key')
+        _second_arg_entry.delete(0, tk.END)
+        return
+    first_arg_text = f"Your text is <{first_arg}>"
+    _first_arg_label.configure(text=first_arg_text)
+    _first_arg_entry.delete(0, tk.END)
+    second_arg_text = f"Your key is <{second_arg}>"
+    _second_arg_label.configure(text=second_arg_text)
+    _second_arg_entry.delete(0, tk.END)
+    result_xored = []
+    for i in range(len(first_arg)):
+        # additional check print(hex(ord(first_arg[i % len(first_arg)])))
+        xored_arg = ord(first_arg[i % len(first_arg)]) ^ ord(
+            second_arg[i % len(second_arg)])  # additional check ^ ord(second_arg[i % len(second_arg)])
+        result_xored.append(hex(xored_arg)[2:])
+    result_output = ' '.join(result_xored)
+    _result_xor_label.delete(0, tk.END)
+    _result_xor_label.insert(0, result_output)
+    # _result_xor_label.configure(text=f'The result of XOR function is {result_output}')
+
+
+def replacement_function(_first_arg_label, _first_arg_entry, _second_arg_label, _second_arg_entry,
+                         _result_repl_label):
+    """
     :param _first_arg_label:
     :param _first_arg_entry:
     :param _second_arg_label:
@@ -82,237 +126,286 @@ def repl(_first_arg_label, _first_arg_entry, _second_arg_label, _second_arg_entr
     # _result_repl_label.configure(text=f'The result of Replacement function is {result_output}')
 
 
-def repl_func(window, const, note):
-    header_label = tk.Label(
-        window,
-        text="Replacement with Unicode",
-        pady=10,
-    )
-    first_arg_label = tk.Label(
-        window,
-        text="Write down text",
-        pady=10,
-    )
-    first_arg_entry = tk.Entry(
-        window,
-        fg="white",
-        bg="blue",
-        width=40,
-    )
-    second_arg_label = tk.Label(
-        window,
-        text="Write down the number",
-        pady=10,
-    )
-    second_arg_entry = tk.Entry(
-        window,
-        fg="white",
-        bg="blue",
-        width=40,
-    )
-    result_repl_label = tk.Entry(
-        window,
-        text='',
-        width=100,
-    )
-    separate1 = tk.Label(
-        window,
-        pady=5,
-        text='',
-    )
-    separate2 = tk.Label(
-        window,
-        pady=5,
-        text='',
-    )
-    function = tk.Button(
-        window,
-        text="Calculate the result",
-        command=lambda: repl(first_arg_label, first_arg_entry, second_arg_label, second_arg_entry, result_repl_label),
-    )
+class MainWindow(tk.Tk):
+    def __init__(self):
+        super().__init__()
 
-    header_label.pack()
-    first_arg_entry.focus()
-    first_arg_label.pack()
-    first_arg_entry.pack()
-    second_arg_label.pack()
-    second_arg_entry.pack()
-    separate1.pack()
-    function.pack()
-    separate2.pack()
-    result_repl_label.pack()
+        # settings for the window
+        self.title('Cryptography')
+        self.geometry('700x500+10+10')
 
-    window.mainloop()
+        # some variables
+        self.function_number = -1
+        self.pubkey = 'pubkey'
+        self.privkey = 'privkey'
+        self.status = 0
 
+        # creating menu
+        menu = tk.Menu(self)
 
-def xor(_first_arg_label, _first_arg_entry, _second_arg_label, _second_arg_entry, _result_xor_label):
-    """
+        # different tabs
+        # file tab
+        file = Menu(menu, tearoff=0)
+        file.add_command(label='Uploading file', command=lambda: choose_directory())
+        file.add_separator()
+        file.add_command(label='Exit', command=self.destroy)  # add messagebox to exit
 
-    :param _first_arg_label:
-    :param _first_arg_entry:
-    :param _second_arg_label:
-    :param _second_arg_entry:
-    :param _result_xor_label:
-    :return:
-    """
-    first_arg = _first_arg_entry.get()
-    if len(first_arg) != 0:
-        try:
-            first_arg = str(first_arg)
-        except ValueError:
-            messagebox.showwarning('Warning!', 'Please, type your text')
-            _first_arg_entry.delete(0, tk.END)
-            return
-    else:
-        messagebox.showwarning('Warning!', 'Please, type your text')
-        _first_arg_entry.delete(0, tk.END)
-        return
-    second_arg = _second_arg_entry.get()
-    if len(second_arg) != 0:
-        try:
-            second_arg = str(second_arg)
-        except ValueError:
-            messagebox.showwarning('Warning!', 'Please, type your key')
-            _second_arg_entry.delete(0, tk.END)
-            return
-    else:
-        messagebox.showwarning('Warning!', 'Please, type your key')
-        _second_arg_entry.delete(0, tk.END)
-        return
-    first_arg_text = f"Your text is ~~{first_arg}~~"
-    _first_arg_label.configure(text=first_arg_text)
-    _first_arg_entry.delete(0, tk.END)
-    second_arg_text = f"Your key is ~~{second_arg}~~"
-    _second_arg_label.configure(text=second_arg_text)
-    _second_arg_entry.delete(0, tk.END)
-    result_xored = []
-    for i in range(len(first_arg)):
-        # additional check print(hex(ord(first_arg[i % len(first_arg)])))
-        xored_arg = ord(first_arg[i % len(first_arg)]) ^ ord(second_arg[i % len(second_arg)])  # additional check ^ ord(second_arg[i % len(second_arg)])
-        result_xored.append(hex(xored_arg)[2:])
-    result_output = ' '.join(result_xored)
-    _result_xor_label.delete(0, tk.END)
-    _result_xor_label.insert(0, result_output)
-    # _result_xor_label.configure(text=f'The result of XOR function is {result_output}')
+        # choose function tab
+        choosing_function = Menu(menu, tearoff=0)
+        choosing_function.add_command(label='Home', command=lambda: self.update_current_function(0))
+        choosing_function.add_separator()
+        choosing_function.add_command(label='XOR', command=lambda: self.update_current_function(1))
+        choosing_function.add_separator()
+        choosing_function.add_command(label='Replacement', command=lambda: self.update_current_function(2))
+        choosing_function.add_separator()
+        choosing_function.add_command(label='RSA', command=lambda: self.update_current_function(3))
 
+        # adding tabs to menu
+        menu.add_cascade(label='File', menu=file)
+        menu.add_cascade(label='Choose function', menu=choosing_function)
 
-def xor_func(window, const, note):
-    header_label = tk.Label(
-        window,
-        text="XOR between 2 strings",
-        pady=10,
-    )
-    first_arg_label = tk.Label(
-        window,
-        text="Write down text",
-        pady=10,
-    )
-    first_arg_entry = tk.Entry(
-        window,
-        fg="white",
-        bg="blue",
-        width=40,
-    )
-    second_arg_label = tk.Label(
-        window,
-        text="Write down the key",
-        pady=10,
-    )
-    second_arg_entry = tk.Entry(
-        window,
-        fg="white",
-        bg="blue",
-        width=40,
-    )
-    result_xor_label = tk.Entry(
-        window,
-        text='',
-        width=100,
-    )
-    separate1 = tk.Label(
-        window,
-        pady=5,
-        text='',
-    )
-    separate2 = tk.Label(
-        window,
-        pady=5,
-        text='',
-    )
-    function = tk.Button(
-        window,
-        text="Calculate the result",
-        command=lambda: xor(first_arg_label, first_arg_entry, second_arg_label, second_arg_entry, result_xor_label),
-    )
+        # adding menu to window
+        self.config(menu=menu)
 
-    header_label.pack()
-    first_arg_entry.focus()
-    first_arg_label.pack()
-    first_arg_entry.pack()
-    second_arg_label.pack()
-    second_arg_entry.pack()
-    separate1.pack()
-    function.pack()
-    separate2.pack()
-    result_xor_label.pack()
+        # running program
+        self.mainloop()
 
-    window.mainloop()
+    def update_current_function(self, _function_number):
+        if self.function_number != _function_number:
+            self.destroy_everything()
+            self.function_number = _function_number
+            if self.function_number == 0:
+                self.home_show()
+            elif self.function_number == 1:
+                self.xor_show()
+            elif self.function_number == 2:
+                self.replacement_show()
+            elif self.function_number == 3:
+                self.rsa_show()
 
+    def destroy_everything(self):
+        for widget in self.winfo_children():
+            if widget.winfo_name() != '!menu':
+                widget.destroy()
+                # print(widget.winfo_name())
 
-def home_func(window, const, note):
-    """
-    notebook tkinter how to swich -> google
-    """
+    def upload_file(self):
+        btn_dir = tk.Button(self, text="Выбрать папку",
+                            command=choose_directory)
+        btn_dir.pack()
 
-    """
-    :param window: 
-    :param const: 
-    :param note: 
-    :return: 
-    """
+    def home_show(self):
+        welcome = tk.Label(
+            self,
+            text='Hello, world!\n'
+                 'Welcome to my application for Cryptography :)\n'
+                 'Here you can have some practise in it...',
+        )
 
-    # xor_on_page = ttk.Frame(note)
-    # note.add(xor_on_page, text="XOR")
-    # note.pack(expand=1, fill='both')
-    hi_label = tk.Label(
-        window,
-        text='Hi, pupil!',
-    )
-    hi_label.config(font=("Courier", 32))
-    hi_label.pack()
+        welcome.pack()
 
+    def xor_show(self):
+        header_label = tk.Label(
+            self,
+            text="XOR between 2 strings",
+            pady=10,
+        )
+        first_arg_label = tk.Label(
+            self,
+            text="Write down text",
+            pady=10,
+        )
+        first_arg_entry = tk.Entry(
+            self,
+            fg="white",
+            bg="blue",
+            width=80,
+        )
+        second_arg_label = tk.Label(
+            self,
+            text="Write down the key",
+            pady=10,
+        )
+        second_arg_entry = tk.Entry(
+            self,
+            fg="white",
+            bg="blue",
+            width=80,
+        )
+        result_label = tk.Entry(
+            self,
+            text='',
+            width=80,
+        )
+        separate1 = tk.Label(
+            self,
+            pady=5,
+            text='',
+        )
+        separate2 = tk.Label(
+            self,
+            pady=5,
+            text='',
+        )
+        function = tk.Button(
+            self,
+            text="Calculate the result",
+            command=lambda: xor_function(first_arg_label, first_arg_entry, second_arg_label, second_arg_entry,
+                                         result_label),
+        )
 
-def start():
-    window = tk.Tk()
-    window.geometry("700x500")
-    window.title("Добро пожаловать в приложение PythonRu")
-    notes = ttk.Notebook(window)
-    const = Constants(window, notes)
-    menu = Menu(window)
+        header_label.pack()
+        first_arg_entry.focus()
+        first_arg_label.pack()
+        first_arg_entry.pack()
+        second_arg_label.pack()
+        second_arg_entry.pack()
+        separate1.pack()
+        function.pack()
+        separate2.pack()
+        result_label.pack()
 
-    file = Menu(menu, tearoff=0)
-    file.add_command(label='new')
-    file.add_separator()
-    file.add_command(label='change')
+    def replacement_show(self):
+        header_label = tk.Label(
+            self,
+            text="Replacement with Unicode",
+            pady=10,
+        )
+        first_arg_label = tk.Label(
+            self,
+            text="Write down text",
+            pady=10,
+        )
+        first_arg_entry = tk.Entry(
+            self,
+            fg="white",
+            bg="blue",
+            width=80,
+        )
+        second_arg_label = tk.Label(
+            self,
+            text="Write down the number",
+            pady=10,
+        )
+        second_arg_entry = tk.Entry(
+            self,
+            fg="white",
+            bg="blue",
+            width=80,
+        )
+        result_label = tk.Entry(
+            self,
+            text='',
+            width=80,
+        )
+        separate1 = tk.Label(
+            self,
+            pady=5,
+            text='',
+        )
+        separate2 = tk.Label(
+            self,
+            pady=5,
+            text='',
+        )
+        function = tk.Button(
+            self,
+            text="Calculate the result",
+            command=lambda: replacement_function(first_arg_label, first_arg_entry, second_arg_label,
+                                                 second_arg_entry,
+                                                 result_label),
+        )
 
-    some_codes = Menu(menu, tearoff=0)
-    some_codes.add_command(label='Home', command=lambda: const.update_cur_func(0))
-    some_codes.add_separator()
-    some_codes.add_command(label='XOR', command=lambda: const.update_cur_func(1))
-    some_codes.add_separator()
-    some_codes.add_command(label='Replacement', command=lambda: const.update_cur_func(2))
+        header_label.pack()
+        first_arg_entry.focus()
+        first_arg_label.pack()
+        first_arg_entry.pack()
+        second_arg_label.pack()
+        second_arg_entry.pack()
+        separate1.pack()
+        function.pack()
+        separate2.pack()
+        result_label.pack()
 
-    menu.add_cascade(label='File', menu=file)
-    menu.add_cascade(label='Functions', menu=some_codes)
-    window.config(menu=menu)
+    def rsa_show(self):
+        header_label = tk.Label(
+            self,
+            text='Rsa encryption',
+            pady=10,
+        )
+        button_generating_keys = tk.Button(self, text='Сгенерировать пару ключей',
+                                           command=lambda: self.generating_keys(button_generating_keys))
 
-    window.mainloop()
+        header_label.pack()
+        button_generating_keys.pack()
 
+    def generating_keys(self, button_generating_keys):
+        button_generating_keys['state'] = 'disable'
 
-def main():
-    # print('Hello, world!')
-    start()
+        # generating keys
+        (pubkey, privkey) = rsa.newkeys(512)
+        pubkey_pem = pubkey.save_pkcs1()
+        privkey_pem = privkey.save_pkcs1()
+        self.pubkey = pubkey_pem
+        self.privkey = privkey_pem
+        self.working_with_keys()
+        print(pubkey_pem)
+        print(privkey_pem)
+
+    def working_with_keys(self):
+        explanation_label = tk.Label(
+            self,
+            text='Теперь у тебя есть открытый и закртый ключи:',
+            pady=10,
+        )
+        pubkey_label = tk.Label(
+            self,
+            text='Ваш публичный ключ. Делитесь им на здоровье',
+            pady=10,
+        )
+        pubkey_entry = tk.Entry(
+            self,
+            width=80,
+        )
+        pubkey_entry.insert(0, self.pubkey)
+        privkey_label = tk.Label(
+            self,
+            text='Ваш приватный ключ. Держите его в тайне',
+            pady=10,
+        )
+        privkey_entry = tk.Entry(
+            self,
+            width=80,
+        )
+
+        privkey_entry.insert(0, self.privkey)
+        privkey_button = tk.Button(self, text='Показать приватный ключ',
+                                   command=lambda: self.show_privkey(privkey_entry, privkey_button))
+        separate1 = tk.Label(
+            self,
+            pady=0,
+            text='',
+        )
+
+        explanation_label.pack()
+        pubkey_label.pack()
+        pubkey_entry.pack()
+        privkey_label.pack()
+        privkey_button.pack()
+        privkey_entry.pack_forget()
+        separate1.pack()
+
+    def show_privkey(self, privkey_entry, privkey_button):
+        self.status += 1
+        self.status %= 2
+
+        if self.status == 1:
+            privkey_button['text'] = 'Скрыть приватный ключ'
+            privkey_entry.pack()
+        else:
+            privkey_button['text'] = 'Показать приватный ключ'
+            privkey_entry.pack_forget()
 
 
 if __name__ == '__main__':
-    main()
+    MainWindow()
