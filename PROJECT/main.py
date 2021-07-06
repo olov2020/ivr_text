@@ -171,6 +171,8 @@ class MainWindow(tk.Tk):
         choosing_function.add_command(label='Replacement', command=lambda: self.update_current_function(2))
         choosing_function.add_separator()
         choosing_function.add_command(label='RSA', command=lambda: self.update_current_function(3))
+        choosing_function.add_separator()
+        choosing_function.add_command(label='Табличный алгоритм', command=lambda: self.update_current_function(4))
 
         # adding tabs to menu
         menu.add_cascade(label='File', menu=file)
@@ -201,6 +203,8 @@ class MainWindow(tk.Tk):
                 self.replacement_show()
             elif self.function_number == 3:
                 self.rsa_show()
+            elif self.function_number == 4:
+                self.table_algorithm_show()
 
     def destroy_everything(self):
         for widget in self.winfo_children():
@@ -441,12 +445,98 @@ class MainWindow(tk.Tk):
         result.configure(text=f'{crypto}')
 
     def decryption(self, crypto, result):  # not working for now
-        crypto = bytes(crypto, 'utf-8')
+        crypto = crypto.encode()  # need fix
         message = rsa.decrypt(crypto, self.privkey)
         message = message.decode()
         # result.delete(1.0, tk.END)
         # result.insert(1.0, message)
         result.configure(text=f'{message}')
+
+    def table_algorithm_show(self):
+        header_label = tk.Label(
+            self,
+            pady=5,
+            text='Это табличный алгоритм',
+        )
+        main_text_label = tk.Label(
+            self,
+            pady=5,
+            text='Исходный текст',
+        )
+        separate1 = tk.Label(
+            self,
+            text='',
+        )
+        main_text_entry = tk.Entry(self, width=60)
+        key_label = tk.Label(self, pady=5, text='Ключ')
+        key_entry = tk.Entry(self, width=20)
+        canvas = tk.Canvas(self)
+        canvas.create_rectangle(
+            250, 60, 430, 240,
+            outline="#aaf", fill="#aaf"
+        )
+        result_entry = tk.Entry(self, bg='#aaf', width=60)
+        result_button = tk.Button(self, text='Получить результат',
+                                  command=lambda: self.working_with_table_algorithm(main_text_entry.get(),
+                                                                                    key_entry.get(), result_entry,
+                                                                                    canvas_numbers_list,
+                                                                                    canvas_symbols_list,
+                                                                                    canvas))
+
+        # horizontal lines
+        canvas.create_line(250, 59, 430, 59)
+        canvas.create_line(250, 241, 430, 241)
+        canvas.create_line(250, 90, 430, 90)
+        canvas.create_line(250, 120, 430, 120)
+        canvas.create_line(250, 150, 430, 150)
+        canvas.create_line(250, 180, 430, 180)
+        canvas.create_line(250, 211, 430, 211)
+        canvas_numbers_list = [0 for j in range(6)]  # key numbers
+        canvas_symbols_list = [[0 for j in range(6)] for i in range(6)]  # main text symbols
+        for i in range(6):
+            canvas_numbers_list[i] = canvas.create_text(265 + i * 30, 50, text=f'{i + 1}')
+            for j in range(6):
+                canvas_symbols_list[i][j] = canvas.create_text(265 + j * 30, 75 + i * 30, text='a')
+
+        # vertical lines
+        canvas.create_line(249, 50, 249, 240)
+        canvas.create_line(280, 50, 280, 240)
+        canvas.create_line(310, 50, 310, 240)
+        canvas.create_line(340, 50, 340, 240)
+        canvas.create_line(370, 50, 370, 240)
+        canvas.create_line(400, 50, 400, 240)
+        canvas.create_line(431, 50, 431, 240)
+
+        header_label.pack()
+        main_text_label.pack()
+        main_text_entry.pack()
+        key_label.pack()
+        key_entry.pack()
+        canvas.pack(fill=tk.BOTH)
+        result_button.pack()
+        separate1.pack()
+        result_entry.pack()
+
+    def working_with_table_algorithm(self, main_text, key, result, canvas_numbers_list, canvas_symbols_list, canvas):
+        result_str = ''
+        for i in range(6):
+            canvas.itemconfigure(canvas_numbers_list[i], text=int(key[i]))
+            for j in range(6):
+                if len(main_text) > i * 6 + j:
+                    canvas.itemconfigure(canvas_symbols_list[i][j], text=main_text[i * 6 + j])
+                else:
+                    canvas.itemconfigure(canvas_symbols_list[i][j], text=' ')
+        for i in range(6):
+            t = 0
+            for j in range(6):
+                if int(key[j]) - 1 == i:
+                    t = j
+                    break
+            for j in range(6):
+                if len(main_text) > t + j * 6:
+                    result_str += main_text[t + j * 6]
+        result.delete(0, tk.END)
+        result.insert(0, result_str)
 
 
 if __name__ == '__main__':
