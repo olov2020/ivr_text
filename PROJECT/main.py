@@ -3,16 +3,18 @@ from tkinter import messagebox
 from tkinter import Menu
 import tkinter.filedialog as fd
 import rsa
+import os
 
 
 def choose_directory():
     filetypes = (("Текстовый файл", "*.txt"),
                  ("Изображение", "*.jpg *.gif *.png"),
                  ("Любой", "*"))
-    my_file = fd.askopenfile(title="Открыть файл", initialdir="/Users/vladi/OneDrive/Рабочий стол/vladimir/Lyceum/ИВР",
+    my_file = fd.askopenfile(title="Открыть файл", initialdir="/ИВР",
                              filetypes=filetypes)  # here you can type path to your directory
     if my_file:
-        print(*my_file.readlines())
+        # working with file
+        # print(*my_file.readlines())
         my_file.close()
 
 
@@ -126,6 +128,12 @@ def replacement_function(_first_arg_label, _first_arg_entry, _second_arg_label, 
     # _result_repl_label.configure(text=f'The result of Replacement function is {result_output}')
 
 
+def swap_texts(message, result):
+    crypto = result['text']  # .get(1.0, tk.END)
+    message.delete(1.0, tk.END)
+    message.insert(1.0, crypto)
+
+
 class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -133,12 +141,16 @@ class MainWindow(tk.Tk):
         # settings for the window
         self.title('Cryptography')
         self.geometry('700x500+10+10')
+        self.protocol("WM_DELETE_WINDOW", lambda: self.exit_function())
 
         # some variables
         self.function_number = -1
-        self.pubkey = 'pubkey'
-        self.privkey = 'privkey'
-        self.status = 0
+        self.status = 1
+
+        # generating keys
+        (pubkey, privkey) = rsa.newkeys(512)
+        self.pubkey = pubkey
+        self.privkey = privkey
 
         # creating menu
         menu = tk.Menu(self)
@@ -148,7 +160,7 @@ class MainWindow(tk.Tk):
         file = Menu(menu, tearoff=0)
         file.add_command(label='Uploading file', command=lambda: choose_directory())
         file.add_separator()
-        file.add_command(label='Exit', command=self.destroy)  # add messagebox to exit
+        file.add_command(label='Exit', command=lambda: self.exit_function())  # add messagebox to exit
 
         # choose function tab
         choosing_function = Menu(menu, tearoff=0)
@@ -169,6 +181,13 @@ class MainWindow(tk.Tk):
 
         # running program
         self.mainloop()
+
+    def exit_function(self):
+        try:
+            os.remove('Keys.txt')  # your working directory
+            self.destroy()
+        except FileNotFoundError:
+            self.destroy()
 
     def update_current_function(self, _function_number):
         if self.function_number != _function_number:
@@ -342,69 +361,92 @@ class MainWindow(tk.Tk):
     def generating_keys(self, button_generating_keys):
         button_generating_keys['state'] = 'disable'
 
-        # generating keys
-        (pubkey, privkey) = rsa.newkeys(512)
-        pubkey_pem = pubkey.save_pkcs1()
-        privkey_pem = privkey.save_pkcs1()
-        self.pubkey = pubkey_pem
-        self.privkey = privkey_pem
         self.working_with_keys()
-        print(pubkey_pem)
-        print(privkey_pem)
+        # pubkey and privkey in console
+        # print(pubkey_pem)
+        # print(privkey_pem)
 
     def working_with_keys(self):
+        keys_file = open("Keys.txt", "w+")
+        keys_file.write(
+            f"Это твой публичный ключ. Поделись им с друзьями :)\n{self.pubkey.save_pkcs1()}\n"
+            f"\nЭто твой приватный ключ. Сохрани его в секрете\n{self.privkey.save_pkcs1()}\n")
+        keys_file.close()
         explanation_label = tk.Label(
             self,
-            text='Теперь у тебя есть открытый и закртый ключи:',
+            text='Теперь у тебя есть открытый и закртый ключи.\n'
+                 'Они сохранились в папку, из которой была запущена эта программа.\n'
+                 'Найди и открой этот файл, он тебе понадобится.',
             pady=10,
         )
-        pubkey_label = tk.Label(
+        message_label = tk.Label(
             self,
-            text='Ваш публичный ключ. Делитесь им на здоровье',
-            pady=10,
+            text='Введите сообщение которое хотите зашифровать / расшифровать',
+            pady=5
         )
-        pubkey_entry = tk.Entry(
+        message_text = tk.Text(
             self,
-            width=80,
+            width=40,
+            height=7,
         )
-        pubkey_entry.insert(0, self.pubkey)
-        privkey_label = tk.Label(
-            self,
-            text='Ваш приватный ключ. Держите его в тайне',
-            pady=10,
-        )
-        privkey_entry = tk.Entry(
-            self,
-            width=80,
-        )
+        drop_down_encryption_list = [
+            "Зашифровать",
+            "Расшифровать",
+        ]
 
-        privkey_entry.insert(0, self.privkey)
-        privkey_button = tk.Button(self, text='Показать приватный ключ',
-                                   command=lambda: self.show_privkey(privkey_entry, privkey_button))
-        separate1 = tk.Label(
-            self,
-            pady=0,
-            text='',
-        )
+        # result_text = tk.Text(
+        #     self,
+        #     width=40,
+        #     height=7,
+        # )
+
+        def callback(*args):
+            result_label.configure(text=f'Результутат команды {variable.get()}')
+            # print(variable.get())
+            if variable.get() == 'Зашифровать':
+                self.encryption(message_text.get(1.0, tk.END), result)
+            elif variable.get() == 'Расшифровать':
+                self.decryption(message_text.get(1.0, tk.END), result)
+
+        result_label = tk.Label(self, pady=5, text=f'Здесь будет твой ответ')
+        result = tk.Label(self, pady=5, text=f'Some text')
+        variable = tk.StringVar(self)
+        variable.set(drop_down_encryption_list[0])  # default value
+        variable.trace("w", callback)
+
+        drop_down_encryption_menu = tk.OptionMenu(self, variable, *drop_down_encryption_list)
+        result_button = tk.Button(self, text='Поменять',
+                                  command=lambda: swap_texts(message_text, result))
+
+        scroll = tk.Scrollbar(command=message_text.yview)
+        scroll.pack(side=tk.LEFT, fill=tk.Y)
+
+        message_text.config(yscrollcommand=scroll.set)
 
         explanation_label.pack()
-        pubkey_label.pack()
-        pubkey_entry.pack()
-        privkey_label.pack()
-        privkey_button.pack()
-        privkey_entry.pack_forget()
-        separate1.pack()
+        message_label.pack()
+        message_text.pack()
+        drop_down_encryption_menu.pack()
+        result_label.pack()
+        # result_text.pack()
+        result.pack()
+        result_button.pack()
 
-    def show_privkey(self, privkey_entry, privkey_button):
-        self.status += 1
-        self.status %= 2
+    def encryption(self, message, result):
+        message = message.encode()
+        crypto = rsa.encrypt(message, self.pubkey)
+        print(crypto)
+        # result.delete(1.0, tk.END)
+        # result.insert(1.0, crypto)
+        result.configure(text=f'{crypto}')
 
-        if self.status == 1:
-            privkey_button['text'] = 'Скрыть приватный ключ'
-            privkey_entry.pack()
-        else:
-            privkey_button['text'] = 'Показать приватный ключ'
-            privkey_entry.pack_forget()
+    def decryption(self, crypto, result):  # not working for now
+        crypto = bytes(crypto, 'utf-8')
+        message = rsa.decrypt(crypto, self.privkey)
+        message = message.decode()
+        # result.delete(1.0, tk.END)
+        # result.insert(1.0, message)
+        result.configure(text=f'{message}')
 
 
 if __name__ == '__main__':
