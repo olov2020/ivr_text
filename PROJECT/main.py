@@ -5,6 +5,22 @@ import tkinter.filedialog as fd
 import rsa
 import os
 
+"""
+1) XOR works well now, returns in hex format
+2) Replacement works well now
+3) RSA need some fixes
+4) Table algorithm:
+    showing works well
+    result works well
+    (4, 5, 6) works well
+    
+Need to do:
+1) Some design maybe
+2) Add comments to the whole code
+3) Cheats for table
+4) Files for tables
+"""
+
 
 def choose_directory():
     filetypes = (("Текстовый файл", "*.txt"),
@@ -18,120 +34,239 @@ def choose_directory():
         my_file.close()
 
 
-def xor_function(_first_arg_label, _first_arg_entry, _second_arg_label, _second_arg_entry, _result_xor_label):
-    """
-
-    :param _first_arg_label:
-    :param _first_arg_entry:
-    :param _second_arg_label:
-    :param _second_arg_entry:
-    :param _result_xor_label:
-    :return:
-    """
+def xor_function(_first_arg_entry, _second_arg_entry, _result_entry):
     first_arg = _first_arg_entry.get()
-    if len(first_arg) != 0:
-        try:
-            first_arg = str(first_arg)
-        except ValueError:
-            messagebox.showwarning('Warning!', 'Please, type your text')
-            _first_arg_entry.delete(0, tk.END)
-            return
-    else:
+    second_arg = _second_arg_entry.get()
+    if first_arg == '':
         messagebox.showwarning('Warning!', 'Please, type your text')
         _first_arg_entry.delete(0, tk.END)
+        _first_arg_entry.focus()
         return
-    second_arg = _second_arg_entry.get()
-    if len(second_arg) != 0:
-        try:
-            second_arg = str(second_arg)
-        except ValueError:
-            messagebox.showwarning('Warning!', 'Please, type your key')
-            _second_arg_entry.delete(0, tk.END)
-            return
-    else:
-        messagebox.showwarning('Warning!', 'Please, type your key')
-        _second_arg_entry.delete(0, tk.END)
-        return
-    first_arg_text = f"Your text is <{first_arg}>"
-    _first_arg_label.configure(text=first_arg_text)
-    _first_arg_entry.delete(0, tk.END)
-    second_arg_text = f"Your key is <{second_arg}>"
-    _second_arg_label.configure(text=second_arg_text)
-    _second_arg_entry.delete(0, tk.END)
-    result_xored = []
-    for i in range(len(first_arg)):
-        # additional check print(hex(ord(first_arg[i % len(first_arg)])))
-        xored_arg = ord(first_arg[i % len(first_arg)]) ^ ord(
-            second_arg[i % len(second_arg)])  # additional check ^ ord(second_arg[i % len(second_arg)])
-        result_xored.append(hex(xored_arg)[2:])
-    result_output = ' '.join(result_xored)
-    _result_xor_label.delete(0, tk.END)
-    _result_xor_label.insert(0, result_output)
-    # _result_xor_label.configure(text=f'The result of XOR function is {result_output}')
-
-
-def replacement_function(_first_arg_label, _first_arg_entry, _second_arg_label, _second_arg_entry,
-                         _result_repl_label):
-    """
-    :param _first_arg_label:
-    :param _first_arg_entry:
-    :param _second_arg_label:
-    :param _second_arg_entry:
-    :param _result_repl_label:
-    :return:
-    """
-    first_arg = _first_arg_entry.get()
-    if len(first_arg) != 0:
-        try:
-            first_arg = str(first_arg)
-        except ValueError:
-            messagebox.showwarning('Warning!', 'Please, type your text')
-            _first_arg_entry.delete(0, tk.END)
-            return
-    else:
+    if second_arg == '':
         messagebox.showwarning('Warning!', 'Please, type your text')
-        _first_arg_entry.delete(0, tk.END)
-        return
-    second_arg = _second_arg_entry.get()
-    if len(second_arg) != 0:
-        try:
-            second_arg = int(second_arg)
-        except ValueError:
-            messagebox.showwarning('Warning!', 'Please, type your number')
-            _second_arg_entry.delete(0, tk.END)
-            return
-    else:
-        messagebox.showwarning('Warning!', 'Please, type your number')
         _second_arg_entry.delete(0, tk.END)
+        _second_arg_entry.focus()
         return
-    first_arg_text = f"Your text is ~~{first_arg}~~"
-    _first_arg_label.configure(text=first_arg_text)
-    _first_arg_entry.delete(0, tk.END)
-    second_arg_text = f"Your number is ~~{second_arg}~~"
-    _second_arg_label.configure(text=second_arg_text)
-    _second_arg_entry.delete(0, tk.END)
-    result_repl = []
-    check = False
+    result_list = []
     for i in range(len(first_arg)):
-        repl_arg = ord(first_arg[i]) + int(second_arg)  # Adding given number to the unicode number of each symbol
-        if repl_arg < 0 or repl_arg > 917999:
-            check = True
-            break
-        result_repl.append(chr(repl_arg))
-    if check:
-        messagebox.showwarning('Warning!', 'Incorrect number. Result is out of Unicode table')
-        _second_arg_entry.delete(0, tk.END)
+        xored_arg = ord(first_arg[i % len(first_arg)]) ^ ord(second_arg[i % len(second_arg)])
+        # additional check ^ ord(second_arg[i % len(second_arg)])
+        result_list.append(f'{hex(xored_arg)} ')  # result in hex format for unicode, not ascii!
+    result_output = ' '.join(result_list)
+    _result_entry.delete(0, tk.END)
+    _result_entry.insert(0, result_output)
+
+
+def replacement_function(_first_arg_entry, _second_arg_entry, _third_arg_entry, _result_repl_label):
+    all_changes = {}
+    first_arg = _first_arg_entry.get()
+    second_arg = _second_arg_entry.get()
+    third_arg = _third_arg_entry.get()
+    first_list = []
+    second_list = []
+    third_list = []
+    if first_arg == '':
+        messagebox.showwarning('Warning!', 'Please, write some text')
+        _first_arg_entry.delete(0, tk.END)
+        _first_arg_entry.focus()
         return
-    result_output = ''.join(result_repl)
+    if second_arg == '':
+        messagebox.showwarning('Warning!', 'Please, write some text')
+        _second_arg_entry.delete(0, tk.END)
+        _second_arg_entry.focus()
+        return
+    if third_arg == '':
+        messagebox.showwarning('Warning!', 'Please, write some text')
+        _third_arg_entry.delete(0, tk.END)
+        _third_arg_entry.focus()
+        return
+    if len(first_arg) != len(second_arg):
+        messagebox.showwarning('Warning!', 'Please, write valid lines')
+        if len(first_arg) > len(second_arg):
+            _first_arg_entry.delete(0, tk.END)
+            _first_arg_entry.focus()
+        elif len(first_arg) < len(second_arg):
+            _second_arg_entry.delete(0, tk.END)
+            _second_arg_entry.focus()
+        return
+
+    for i in range(len(third_arg)):
+        t = 0
+        for j in range(len(first_arg)):
+            if first_arg[j] == third_arg[i]:
+                t += 1
+        if t != 1:
+            messagebox.showwarning('Warning!', 'Please, write valid text')
+            _third_arg_entry.delete(0, tk.END)
+            _third_arg_entry.focus()
+            return
+        third_list.append(third_arg[i])
+    for i in range(len(first_arg)):
+        for j in range(len(first_list)):
+            if first_arg[i] == first_list[j]:
+                messagebox.showwarning('Warning!', 'Please, write different symbols')
+                _first_arg_entry.delete(0, tk.END)
+                _first_arg_entry.focus()
+                return
+            if second_list[j] == second_arg[i]:
+                messagebox.showwarning('Warning!', 'Please, write different symbols')
+                _second_arg_entry.delete(0, tk.END)
+                _second_arg_entry.focus()
+                return
+        first_list.append(first_arg[i])
+        second_list.append(second_arg[i])
+    for i in range(len(first_list)):
+        all_changes[first_list[i]] = second_list[i]
+    # print(all_changes)
+
+    result = ''
+    for i in range(len(third_list)):
+        result += all_changes.get(third_list[i])
     _result_repl_label.delete(0, tk.END)
-    _result_repl_label.insert(0, result_output)
-    # _result_repl_label.configure(text=f'The result of Replacement function is {result_output}')
+    _result_repl_label.insert(0, result)
 
 
 def swap_texts(message, result):
-    crypto = result['text']  # .get(1.0, tk.END)
+    crypto = result.get(1.0, tk.END)
     message.delete(1.0, tk.END)
     message.insert(1.0, crypto)
+
+
+def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_list, canvas_symbols_list,
+                                 canvas_fill_squares_list, canvas, typo_algorithm):
+    # all check for valid key and text
+    main_text = main_text_entry.get()
+    key = key_entry.get()
+    if main_text == '':
+        messagebox.showwarning('Warning!', 'Please, enter your text')
+        return
+    if key == '':
+        messagebox.showwarning('Warning!', 'Please, enter your key')
+        return
+    check_len_key = 0
+    for i in range(len(key)):
+        if key[i].isdigit():
+            check_len_key += 1
+            if key[i] == '0' or key[i] == '7' or key[i] == '8' or key[i] == '9':
+                messagebox.showwarning('Warning!', 'Please, enter valid key')
+                key_entry.delete(0, tk.END)
+                key_entry.focus()
+                return
+        # *key_not_digit*
+        # else:
+        #     check_len_key -= 1
+    if check_len_key != 6:  # *key_not_digit* and check_len_key != -6:
+        messagebox.showwarning('Warning!', 'Please, enter valid key')
+        key_entry.delete(0, tk.END)
+        key_entry.focus()
+        return
+    key_list = []
+    for i in range(6):
+        for j in range(len(key_list)):
+            if int(key[i]) == key_list[j]:
+                messagebox.showwarning('Warning!', 'Please, enter valid key')
+                key_entry.delete(0, tk.END)
+                key_entry.focus()
+                return
+        key_list.append(int(key[i]))
+
+    if typo_algorithm == 4:  # зашифровать
+        # filling table (canvas) by adding key and text
+        result_str = ''
+        for i in range(6):
+            canvas.itemconfigure(canvas_key_list[i], text=key_list[i])
+            for j in range(6):
+                if len(main_text) > i * 6 + j:
+                    canvas.itemconfigure(canvas_symbols_list[i][j], text=main_text[i * 6 + j])
+                else:
+                    canvas.itemconfigure(canvas_symbols_list[i][j], text='')
+
+        # showing the result
+        for i in range(6):
+            t = 0
+            if check_len_key == 6:
+                for j in range(6):
+                    if key_list[j] - 1 == i:
+                        t = j
+                        break
+            # in case we want to see letter symbols in our key
+            # it'll go with mark *key_not_digit*
+            # elif check_len_key == -6:
+            #     for j in range(5):
+            #         if key_list[j + 1] < key_list[t]:
+            #             t = j + 1
+            #     key_list[t] = 'яя'
+            for j in range(6):
+                if len(main_text) > t + j * 6:
+                    result_str += main_text[t + j * 6]
+        result.delete(0, tk.END)
+        result.insert(0, result_str)
+    # separator
+    elif typo_algorithm == 5:  # расшифровать
+        # filling table (canvas) by adding key and text
+        result_str = ''
+        result_list = []
+        for i in range(6):
+            prom_res = []
+            canvas.itemconfigure(canvas_key_list[i], text=key_list[i])
+            t = 0
+            for j in range(6):
+                if key_list[j] - 1 == i:
+                    t = j
+            for j in range(6):
+                if len(main_text) > i * 6 + j:
+                    canvas.itemconfigure(canvas_symbols_list[j][t], text=main_text[i * 6 + j])
+                    prom_res.append(main_text[i * 6 + j])
+                else:
+                    canvas.itemconfigure(canvas_symbols_list[j][t], text='')
+                    prom_res.append('')
+            result_list.append(prom_res)
+
+        # showing the result
+        for i in range(6):
+            for j in range(6):
+                result_str += result_list[key_list[j] - 1][i]
+        result.delete(0, tk.END)
+        result.insert(0, result_str)
+    # separator
+    elif typo_algorithm == 6:  # дешифровать
+        # filling table (canvas) by adding key and text
+        check_fill = 0
+        result_str = ''
+        result_list = []
+        for i in range(6):
+            prom_res = []
+            canvas.itemconfigure(canvas_key_list[i], text=key_list[i])
+            t = 0
+            for j in range(6):
+                if key_list[j] - 1 == i:
+                    t = j
+            for j in range(6):
+                # a = (j + check_fill) % 6
+                # b = (t + (j + check_fill) // 6) % 6
+                c = i * 6 + j - check_fill
+                if len(main_text) > c:
+                    if canvas_fill_squares_list[j][t] == 1:
+                        check_fill += 1
+                        prom_res.append('')
+                    elif canvas_fill_squares_list[j][t] == 0:
+                        canvas.itemconfigure(canvas_symbols_list[j][t], text=main_text[c])
+                        prom_res.append(main_text[c])
+                else:
+                    if canvas_fill_squares_list[j][t] == 1:
+                        check_fill += 1
+                        prom_res.append('')
+                    elif canvas_fill_squares_list[j][t] == 0:
+                        canvas.itemconfigure(canvas_symbols_list[j][t], text='')
+                    prom_res.append('')
+            result_list.append(prom_res)
+
+        # showing the result
+        for i in range(6):
+            for j in range(6):
+                result_str += result_list[key_list[j] - 1][i]
+        result.delete(0, tk.END)
+        result.insert(0, result_str)
 
 
 class MainWindow(tk.Tk):
@@ -171,8 +306,16 @@ class MainWindow(tk.Tk):
         choosing_function.add_command(label='Replacement', command=lambda: self.update_current_function(2))
         choosing_function.add_separator()
         choosing_function.add_command(label='RSA', command=lambda: self.update_current_function(3))
+
+        choosing_table_algorithm = Menu(menu, tearoff=0)
+        choosing_table_algorithm.add_command(label='Зашифровать', command=lambda: self.update_current_function(4))
+        choosing_table_algorithm.add_separator()
+        choosing_table_algorithm.add_command(label='Расшифровать', command=lambda: self.update_current_function(5))
+        choosing_table_algorithm.add_separator()
+        choosing_table_algorithm.add_command(label='Дешифровать', command=lambda: self.update_current_function(6))
+
         choosing_function.add_separator()
-        choosing_function.add_command(label='Табличный алгоритм', command=lambda: self.update_current_function(4))
+        choosing_function.add_cascade(label='Табличный алгоритм', menu=choosing_table_algorithm)
 
         # adding tabs to menu
         menu.add_cascade(label='File', menu=file)
@@ -204,7 +347,11 @@ class MainWindow(tk.Tk):
             elif self.function_number == 3:
                 self.rsa_show()
             elif self.function_number == 4:
-                self.table_algorithm_show()
+                self.table_algorithm_show(4)
+            elif self.function_number == 5:
+                self.table_algorithm_show(5)
+            elif self.function_number == 6:
+                self.table_algorithm_show(6)
 
     def destroy_everything(self):
         for widget in self.winfo_children():
@@ -240,8 +387,6 @@ class MainWindow(tk.Tk):
         )
         first_arg_entry = tk.Entry(
             self,
-            fg="white",
-            bg="blue",
             width=80,
         )
         second_arg_label = tk.Label(
@@ -251,14 +396,13 @@ class MainWindow(tk.Tk):
         )
         second_arg_entry = tk.Entry(
             self,
-            fg="white",
-            bg="blue",
             width=80,
         )
-        result_label = tk.Entry(
+        result_entry = tk.Entry(
             self,
             text='',
             width=80,
+            bg='#aaf',
         )
         separate1 = tk.Label(
             self,
@@ -273,8 +417,7 @@ class MainWindow(tk.Tk):
         function = tk.Button(
             self,
             text="Calculate the result",
-            command=lambda: xor_function(first_arg_label, first_arg_entry, second_arg_label, second_arg_entry,
-                                         result_label),
+            command=lambda: xor_function(first_arg_entry, second_arg_entry, result_entry),
         )
 
         header_label.pack()
@@ -286,40 +429,47 @@ class MainWindow(tk.Tk):
         separate1.pack()
         function.pack()
         separate2.pack()
-        result_label.pack()
+        result_entry.pack()
 
     def replacement_show(self):
         header_label = tk.Label(
             self,
-            text="Replacement with Unicode",
+            text="Замена",
             pady=10,
         )
         first_arg_label = tk.Label(
             self,
-            text="Write down text",
+            text="Напишите ваш алфавит, состоящий из уникальных символов",
             pady=10,
         )
         first_arg_entry = tk.Entry(
             self,
-            fg="white",
-            bg="blue",
             width=80,
         )
         second_arg_label = tk.Label(
             self,
-            text="Write down the number",
+            text="Напишите алфавит, на который будут заменяться буквы первого алфавита,\n"
+                 "алфавит также должен состоять из уникальных символов",
             pady=10,
         )
         second_arg_entry = tk.Entry(
             self,
-            fg="white",
-            bg="blue",
             width=80,
+        )
+        third_arg_entry = tk.Entry(
+            self,
+            width=80,
+        )
+        third_arg_label = tk.Label(
+            self,
+            text="Напишите сообщение",
+            pady=10,
         )
         result_label = tk.Entry(
             self,
             text='',
             width=80,
+            bg='#aaf',
         )
         separate1 = tk.Label(
             self,
@@ -334,9 +484,7 @@ class MainWindow(tk.Tk):
         function = tk.Button(
             self,
             text="Calculate the result",
-            command=lambda: replacement_function(first_arg_label, first_arg_entry, second_arg_label,
-                                                 second_arg_entry,
-                                                 result_label),
+            command=lambda: replacement_function(first_arg_entry, second_arg_entry, third_arg_entry, result_label),
         )
 
         header_label.pack()
@@ -345,6 +493,8 @@ class MainWindow(tk.Tk):
         first_arg_entry.pack()
         second_arg_label.pack()
         second_arg_entry.pack()
+        third_arg_label.pack()
+        third_arg_entry.pack()
         separate1.pack()
         function.pack()
         separate2.pack()
@@ -398,29 +548,28 @@ class MainWindow(tk.Tk):
             "Расшифровать",
         ]
 
-        # result_text = tk.Text(
-        #     self,
-        #     width=40,
-        #     height=7,
-        # )
+        result_text = tk.Text(
+            self,
+            width=40,
+            height=7,
+        )
 
         def callback(*args):
             result_label.configure(text=f'Результутат команды {variable.get()}')
             # print(variable.get())
             if variable.get() == 'Зашифровать':
-                self.encryption(message_text.get(1.0, tk.END), result)
+                self.encryption(message_text.get(1.0, tk.END), result_text)
             elif variable.get() == 'Расшифровать':
-                self.decryption(message_text.get(1.0, tk.END), result)
+                self.decryption(message_text.get(1.0, tk.END), result_text)
 
         result_label = tk.Label(self, pady=5, text=f'Здесь будет твой ответ')
-        result = tk.Label(self, pady=5, text=f'Some text')
         variable = tk.StringVar(self)
         variable.set(drop_down_encryption_list[0])  # default value
         variable.trace("w", callback)
 
         drop_down_encryption_menu = tk.OptionMenu(self, variable, *drop_down_encryption_list)
         result_button = tk.Button(self, text='Поменять',
-                                  command=lambda: swap_texts(message_text, result))
+                                  command=lambda: swap_texts(message_text, result_text))
 
         scroll = tk.Scrollbar(command=message_text.yview)
         scroll.pack(side=tk.LEFT, fill=tk.Y)
@@ -432,27 +581,27 @@ class MainWindow(tk.Tk):
         message_text.pack()
         drop_down_encryption_menu.pack()
         result_label.pack()
-        # result_text.pack()
-        result.pack()
+        result_text.pack()
         result_button.pack()
 
     def encryption(self, message, result):
         message = message.encode()
         crypto = rsa.encrypt(message, self.pubkey)
         print(crypto)
-        # result.delete(1.0, tk.END)
-        # result.insert(1.0, crypto)
-        result.configure(text=f'{crypto}')
+        result.delete(1.0, tk.END)
+        result.insert(1.0, crypto)
+        # result.configure(text=f'{crypto}')
 
     def decryption(self, crypto, result):  # not working for now
         crypto = crypto.encode()  # need fix
+        print(crypto)
         message = rsa.decrypt(crypto, self.privkey)
         message = message.decode()
-        # result.delete(1.0, tk.END)
-        # result.insert(1.0, message)
-        result.configure(text=f'{message}')
+        result.delete(1.0, tk.END)
+        result.insert(1.0, message)
+        # result.configure(text=f'{message}')
 
-    def table_algorithm_show(self):
+    def table_algorithm_show(self, typo_algorithm):
         header_label = tk.Label(
             self,
             pady=5,
@@ -463,25 +612,65 @@ class MainWindow(tk.Tk):
             pady=5,
             text='Исходный текст',
         )
+
+        def filling_squares(event):
+            x = event.x
+            y = event.y
+            # print(x, y)
+            if 250 < x < 430 and 60 < y < 240:
+                a = (y - 60) // 30
+                b = (x - 250) // 30
+                if canvas_fill_squares_list[a][b] == 0:
+                    canvas.itemconfigure(canvas_symbols_list[a][b], text='*')
+                    canvas_fill_squares_list[a][b] = 1
+                elif canvas_fill_squares_list[a][b] == 1:
+                    canvas.itemconfigure(canvas_symbols_list[a][b], text='')
+                    canvas_fill_squares_list[a][b] = 0
+
+        if typo_algorithm == 4:
+            main_text_label['text'] = 'Исходный текст'
+            header_label['text'] = 'Это табличный алгоритм для зашифрования'
+        elif typo_algorithm == 5:
+            main_text_label['text'] = 'Шифротекст'
+            header_label['text'] = 'Это табличный алгоритм для расшифрования'
+        elif typo_algorithm == 6:
+            main_text_label['text'] = 'Шифротекст'
+            header_label['text'] = 'Это табличный алгоритм для дешифрования'
+            self.bind('<Double-Button-1>', filling_squares)
         separate1 = tk.Label(
             self,
             text='',
         )
         main_text_entry = tk.Entry(self, width=60)
+        # if you need preset text
+        # *preset*
+        # main_text_entry.delete(0, tk.END)
+        # main_text_entry.insert(0, 'Привет, меня зовут Кот Василий')
         key_label = tk.Label(self, pady=5, text='Ключ')
         key_entry = tk.Entry(self, width=20)
+        # *preset*
+        # key_entry.delete(0, tk.END)
+        # key_entry.insert(0, '213456')
         canvas = tk.Canvas(self)
         canvas.create_rectangle(
             250, 60, 430, 240,
             outline="#aaf", fill="#aaf"
         )
         result_entry = tk.Entry(self, bg='#aaf', width=60)
+        # *preset*
+        # result_entry.delete(0, tk.END)
+        # if typo_algorithm == 4:
+        #     result_entry.insert(0, 'р зКсП,  аимооивевтлену итятВй')
+        # elif typo_algorithm == 5:
+        #     result_entry.insert(0, ',П  а рзКсмиооиеввтлнеу ияттВй')
         result_button = tk.Button(self, text='Получить результат',
-                                  command=lambda: self.working_with_table_algorithm(main_text_entry.get(),
-                                                                                    key_entry.get(), result_entry,
-                                                                                    canvas_numbers_list,
-                                                                                    canvas_symbols_list,
-                                                                                    canvas))
+                                  command=lambda: working_with_table_algorithm(main_text_entry,
+                                                                               key_entry, result_entry,
+                                                                               canvas_key_list,
+                                                                               canvas_symbols_list,
+                                                                               canvas_fill_squares_list,
+                                                                               canvas,
+                                                                               typo_algorithm))
 
         # horizontal lines
         canvas.create_line(250, 59, 430, 59)
@@ -491,12 +680,15 @@ class MainWindow(tk.Tk):
         canvas.create_line(250, 150, 430, 150)
         canvas.create_line(250, 180, 430, 180)
         canvas.create_line(250, 211, 430, 211)
-        canvas_numbers_list = [0 for j in range(6)]  # key numbers
-        canvas_symbols_list = [[0 for j in range(6)] for i in range(6)]  # main text symbols
+        canvas_key_list = [0 for _ in range(6)]  # key numbers
+        canvas_symbols_list = [[0 for _ in range(6)] for _ in range(6)]  # main text symbols
+        canvas_fill_squares_list = [[0 for _ in range(6)] for _ in range(6)]  # text which were replaced by <*>
         for i in range(6):
-            canvas_numbers_list[i] = canvas.create_text(265 + i * 30, 50, text=f'{i + 1}')
+            canvas_key_list[i] = canvas.create_text(265 + i * 30, 50, text=f'{i + 1}')
             for j in range(6):
                 canvas_symbols_list[i][j] = canvas.create_text(265 + j * 30, 75 + i * 30, text='a')
+                # 0 - we should replace <symbol> to <*>
+                # 1 - we should replace <*> to <symbol>
 
         # vertical lines
         canvas.create_line(249, 50, 249, 240)
@@ -516,27 +708,6 @@ class MainWindow(tk.Tk):
         result_button.pack()
         separate1.pack()
         result_entry.pack()
-
-    def working_with_table_algorithm(self, main_text, key, result, canvas_numbers_list, canvas_symbols_list, canvas):
-        result_str = ''
-        for i in range(6):
-            canvas.itemconfigure(canvas_numbers_list[i], text=int(key[i]))
-            for j in range(6):
-                if len(main_text) > i * 6 + j:
-                    canvas.itemconfigure(canvas_symbols_list[i][j], text=main_text[i * 6 + j])
-                else:
-                    canvas.itemconfigure(canvas_symbols_list[i][j], text=' ')
-        for i in range(6):
-            t = 0
-            for j in range(6):
-                if int(key[j]) - 1 == i:
-                    t = j
-                    break
-            for j in range(6):
-                if len(main_text) > t + j * 6:
-                    result_str += main_text[t + j * 6]
-        result.delete(0, tk.END)
-        result.insert(0, result_str)
 
 
 if __name__ == '__main__':
