@@ -6,37 +6,42 @@ import rsa
 import os
 
 """
-1) XOR works well now, returns in hex format
+Done
+1) XOR works well now
 2) Replacement works well now
 3) RSA need some fixes
 4) Table algorithm:
     showing works well
     result works well
     (4, 5, 6) works well
+5) Full commented code
     
 Need to do:
-1) Some design maybe
-2) Add comments to the whole code
-3) Cheats for table
-4) Files for tables
+1) Design
+2) Cheats for table
+3) Files for table
+4) Home page
+5) My page
 """
 
 
-def choose_directory():
+def choose_directory():  # uploading file
     filetypes = (("Текстовый файл", "*.txt"),
                  ("Изображение", "*.jpg *.gif *.png"),
                  ("Любой", "*"))
     my_file = fd.askopenfile(title="Открыть файл", initialdir="/ИВР",
                              filetypes=filetypes)  # here you can type path to your directory
-    if my_file:
+    if my_file:  # if file is open
         # working with file
         # print(*my_file.readlines())
         my_file.close()
 
 
-def xor_function(_first_arg_entry, _second_arg_entry, _result_entry):
+def xor_function(_first_arg_entry, _second_arg_entry, _result_entry):  # working on xor result
     first_arg = _first_arg_entry.get()
     second_arg = _second_arg_entry.get()
+
+    # all necessary checks
     if first_arg == '':
         messagebox.showwarning('Warning!', 'Please, type your text')
         _first_arg_entry.delete(0, tk.END)
@@ -58,6 +63,7 @@ def xor_function(_first_arg_entry, _second_arg_entry, _result_entry):
 
 
 def replacement_function(_first_arg_entry, _second_arg_entry, _third_arg_entry, _result_repl_label):
+    # working on replacement result
     all_changes = {}
     first_arg = _first_arg_entry.get()
     second_arg = _second_arg_entry.get()
@@ -65,6 +71,8 @@ def replacement_function(_first_arg_entry, _second_arg_entry, _third_arg_entry, 
     first_list = []
     second_list = []
     third_list = []
+
+    # all necessary checks
     if first_arg == '':
         messagebox.showwarning('Warning!', 'Please, write some text')
         _first_arg_entry.delete(0, tk.END)
@@ -126,7 +134,8 @@ def replacement_function(_first_arg_entry, _second_arg_entry, _third_arg_entry, 
     _result_repl_label.insert(0, result)
 
 
-def swap_texts(message, result):
+def swap_texts(message, result):  # related to rsa function
+    # use this instead of copying text
     crypto = result.get(1.0, tk.END)
     message.delete(1.0, tk.END)
     message.insert(1.0, crypto)
@@ -134,7 +143,7 @@ def swap_texts(message, result):
 
 def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_list, canvas_symbols_list,
                                  canvas_fill_squares_list, canvas, typo_algorithm):
-    # all check for valid key and text
+    # all checks for valid key and text
     main_text = main_text_entry.get()
     key = key_entry.get()
     if main_text == '':
@@ -189,8 +198,8 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
                     if key_list[j] - 1 == i:
                         t = j
                         break
-            # in case we want to see letter symbols in our key
-            # it'll go with mark *key_not_digit*
+            # *key_not_digit*
+            # in case we want to see letter symbols in the key
             # elif check_len_key == -6:
             #     for j in range(5):
             #         if key_list[j + 1] < key_list[t]:
@@ -321,7 +330,7 @@ class MainWindow(tk.Tk):
         menu.add_cascade(label='File', menu=file)
         menu.add_cascade(label='Choose function', menu=choosing_function)
 
-        # adding menu to window
+        # adding menu to the window
         self.config(menu=menu)
 
         # running program
@@ -329,14 +338,14 @@ class MainWindow(tk.Tk):
 
     def exit_function(self):
         try:
-            os.remove('Keys.txt')  # your working directory
+            os.remove('Keys.txt')  # deleting keys file, 'cause no one should know your keys
             self.destroy()
         except FileNotFoundError:
             self.destroy()
 
-    def update_current_function(self, _function_number):
+    def update_current_function(self, _function_number):  # choosing the right function
         if self.function_number != _function_number:
-            self.destroy_everything()
+            self.destroy_everything()  # deleting previous function
             self.function_number = _function_number
             if self.function_number == 0:
                 self.home_show()
@@ -347,24 +356,19 @@ class MainWindow(tk.Tk):
             elif self.function_number == 3:
                 self.rsa_show()
             elif self.function_number == 4:
-                self.table_algorithm_show(4)
+                self.table_algorithm_show(4)  # зашифровать
             elif self.function_number == 5:
-                self.table_algorithm_show(5)
+                self.table_algorithm_show(5)  # расшифровать
             elif self.function_number == 6:
-                self.table_algorithm_show(6)
+                self.table_algorithm_show(6)  # дешифровать
 
-    def destroy_everything(self):
+    def destroy_everything(self):  # deleting previous function -> this is it
         for widget in self.winfo_children():
             if widget.winfo_name() != '!menu':
                 widget.destroy()
                 # print(widget.winfo_name())
 
-    def upload_file(self):
-        btn_dir = tk.Button(self, text="Выбрать папку",
-                            command=choose_directory)
-        btn_dir.pack()
-
-    def home_show(self):
+    def home_show(self):  # function to show welcome page
         welcome = tk.Label(
             self,
             text='Hello, world!\n'
@@ -374,7 +378,8 @@ class MainWindow(tk.Tk):
 
         welcome.pack()
 
-    def xor_show(self):
+    def xor_show(self):  # xor show function
+        # all widgets
         header_label = tk.Label(
             self,
             text="XOR between 2 strings",
@@ -420,6 +425,7 @@ class MainWindow(tk.Tk):
             command=lambda: xor_function(first_arg_entry, second_arg_entry, result_entry),
         )
 
+        # showing widgets
         header_label.pack()
         first_arg_entry.focus()
         first_arg_label.pack()
@@ -431,7 +437,8 @@ class MainWindow(tk.Tk):
         separate2.pack()
         result_entry.pack()
 
-    def replacement_show(self):
+    def replacement_show(self):  # replacement show function
+        # all widgets
         header_label = tk.Label(
             self,
             text="Замена",
@@ -487,6 +494,7 @@ class MainWindow(tk.Tk):
             command=lambda: replacement_function(first_arg_entry, second_arg_entry, third_arg_entry, result_label),
         )
 
+        # showing widgets
         header_label.pack()
         first_arg_entry.focus()
         first_arg_label.pack()
@@ -500,7 +508,8 @@ class MainWindow(tk.Tk):
         separate2.pack()
         result_label.pack()
 
-    def rsa_show(self):
+    def rsa_show(self):  # rsa show function
+        # all widgets
         header_label = tk.Label(
             self,
             text='Rsa encryption',
@@ -509,23 +518,25 @@ class MainWindow(tk.Tk):
         button_generating_keys = tk.Button(self, text='Сгенерировать пару ключей',
                                            command=lambda: self.generating_keys(button_generating_keys))
 
+        # showing widgets
         header_label.pack()
         button_generating_keys.pack()
 
-    def generating_keys(self, button_generating_keys):
+    def generating_keys(self, button_generating_keys):  # generating keys function
+        # disable button, 'cause only one pair can be generated and used
         button_generating_keys['state'] = 'disable'
 
         self.working_with_keys()
-        # pubkey and privkey in console
-        # print(pubkey_pem)
-        # print(privkey_pem)
 
-    def working_with_keys(self):
+    def working_with_keys(self):  # working with keys function
+        # writing keys to the file in the same directory where this program runs
         keys_file = open("Keys.txt", "w+")
         keys_file.write(
             f"Это твой публичный ключ. Поделись им с друзьями :)\n{self.pubkey.save_pkcs1()}\n"
             f"\nЭто твой приватный ключ. Сохрани его в секрете\n{self.privkey.save_pkcs1()}\n")
         keys_file.close()
+
+        # all widgets
         explanation_label = tk.Label(
             self,
             text='Теперь у тебя есть открытый и закртый ключи.\n'
@@ -554,6 +565,7 @@ class MainWindow(tk.Tk):
             height=7,
         )
 
+        # drop-down menu function
         def callback(*args):
             result_label.configure(text=f'Результутат команды {variable.get()}')
             # print(variable.get())
@@ -562,6 +574,7 @@ class MainWindow(tk.Tk):
             elif variable.get() == 'Расшифровать':
                 self.decryption(message_text.get(1.0, tk.END), result_text)
 
+        # drop-down menu
         result_label = tk.Label(self, pady=5, text=f'Здесь будет твой ответ')
         variable = tk.StringVar(self)
         variable.set(drop_down_encryption_list[0])  # default value
@@ -571,11 +584,7 @@ class MainWindow(tk.Tk):
         result_button = tk.Button(self, text='Поменять',
                                   command=lambda: swap_texts(message_text, result_text))
 
-        scroll = tk.Scrollbar(command=message_text.yview)
-        scroll.pack(side=tk.LEFT, fill=tk.Y)
-
-        message_text.config(yscrollcommand=scroll.set)
-
+        # showing widgets
         explanation_label.pack()
         message_label.pack()
         message_text.pack()
@@ -584,24 +593,24 @@ class MainWindow(tk.Tk):
         result_text.pack()
         result_button.pack()
 
-    def encryption(self, message, result):
+    def encryption(self, message, result):  # зашифрование rsa
         message = message.encode()
         crypto = rsa.encrypt(message, self.pubkey)
         print(crypto)
         result.delete(1.0, tk.END)
         result.insert(1.0, crypto)
-        # result.configure(text=f'{crypto}')
 
-    def decryption(self, crypto, result):  # not working for now
-        crypto = crypto.encode()  # need fix
+    def decryption(self, crypto, result):  # расшифрование rsa
+        # need fix!
+        crypto = crypto.encode()
         print(crypto)
         message = rsa.decrypt(crypto, self.privkey)
         message = message.decode()
         result.delete(1.0, tk.END)
         result.insert(1.0, message)
-        # result.configure(text=f'{message}')
 
-    def table_algorithm_show(self, typo_algorithm):
+    def table_algorithm_show(self, typo_algorithm):  # table algorithm show function
+        # all widgets
         header_label = tk.Label(
             self,
             pady=5,
@@ -613,13 +622,16 @@ class MainWindow(tk.Tk):
             text='Исходный текст',
         )
 
+        # replacing symbols by <*> after double left button click
         def filling_squares(event):
+            # getting coordinates of double tap
             x = event.x
             y = event.y
-            # print(x, y)
-            if 250 < x < 430 and 60 < y < 240:
+            if 250 < x < 430 and 60 < y < 240:  # checking if they are fit the area
                 a = (y - 60) // 30
                 b = (x - 250) // 30
+                # 0 - we should replace <symbol> to <*>
+                # 1 - we should replace <*> to <>
                 if canvas_fill_squares_list[a][b] == 0:
                     canvas.itemconfigure(canvas_symbols_list[a][b], text='*')
                     canvas_fill_squares_list[a][b] = 1
@@ -627,6 +639,7 @@ class MainWindow(tk.Tk):
                     canvas.itemconfigure(canvas_symbols_list[a][b], text='')
                     canvas_fill_squares_list[a][b] = 0
 
+        # checking which algorithm user chooses
         if typo_algorithm == 4:
             main_text_label['text'] = 'Исходный текст'
             header_label['text'] = 'Это табличный алгоритм для зашифрования'
@@ -636,33 +649,42 @@ class MainWindow(tk.Tk):
         elif typo_algorithm == 6:
             main_text_label['text'] = 'Шифротекст'
             header_label['text'] = 'Это табличный алгоритм для дешифрования'
-            self.bind('<Double-Button-1>', filling_squares)
+            self.bind('<Double-Button-1>', filling_squares)  # detecting double left click
+
+        # all widgets
         separate1 = tk.Label(
             self,
             text='',
         )
         main_text_entry = tk.Entry(self, width=60)
-        # if you need preset text
+
         # *preset*
+        # if you need preset text
         # main_text_entry.delete(0, tk.END)
         # main_text_entry.insert(0, 'Привет, меня зовут Кот Василий')
+
         key_label = tk.Label(self, pady=5, text='Ключ')
         key_entry = tk.Entry(self, width=20)
+
         # *preset*
         # key_entry.delete(0, tk.END)
         # key_entry.insert(0, '213456')
+
+        # area where text will be placed and shown
         canvas = tk.Canvas(self)
         canvas.create_rectangle(
             250, 60, 430, 240,
             outline="#aaf", fill="#aaf"
         )
         result_entry = tk.Entry(self, bg='#aaf', width=60)
+
         # *preset*
         # result_entry.delete(0, tk.END)
         # if typo_algorithm == 4:
         #     result_entry.insert(0, 'р зКсП,  аимооивевтлену итятВй')
         # elif typo_algorithm == 5:
         #     result_entry.insert(0, ',П  а рзКсмиооиеввтлнеу ияттВй')
+
         result_button = tk.Button(self, text='Получить результат',
                                   command=lambda: working_with_table_algorithm(main_text_entry,
                                                                                key_entry, result_entry,
@@ -680,15 +702,17 @@ class MainWindow(tk.Tk):
         canvas.create_line(250, 150, 430, 150)
         canvas.create_line(250, 180, 430, 180)
         canvas.create_line(250, 211, 430, 211)
+
+        # useful lists
         canvas_key_list = [0 for _ in range(6)]  # key numbers
         canvas_symbols_list = [[0 for _ in range(6)] for _ in range(6)]  # main text symbols
-        canvas_fill_squares_list = [[0 for _ in range(6)] for _ in range(6)]  # text which were replaced by <*>
+        canvas_fill_squares_list = [[0 for _ in range(6)] for _ in range(6)]  # places where <*> is placed
+
+        # default filling canvas
         for i in range(6):
             canvas_key_list[i] = canvas.create_text(265 + i * 30, 50, text=f'{i + 1}')
             for j in range(6):
                 canvas_symbols_list[i][j] = canvas.create_text(265 + j * 30, 75 + i * 30, text='a')
-                # 0 - we should replace <symbol> to <*>
-                # 1 - we should replace <*> to <symbol>
 
         # vertical lines
         canvas.create_line(249, 50, 249, 240)
@@ -699,6 +723,7 @@ class MainWindow(tk.Tk):
         canvas.create_line(400, 50, 400, 240)
         canvas.create_line(431, 50, 431, 240)
 
+        # show widgets
         header_label.pack()
         main_text_label.pack()
         main_text_entry.pack()
@@ -710,5 +735,5 @@ class MainWindow(tk.Tk):
         result_entry.pack()
 
 
-if __name__ == '__main__':
-    MainWindow()
+if __name__ == '__main__':  # run program
+    MainWindow()  # call window showing class
