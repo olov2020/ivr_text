@@ -27,14 +27,14 @@ Need to do:
 
 def choose_directory():  # uploading file
     filetypes = (("Текстовый файл", "*.txt"),
-                 ("Изображение", "*.jpg *.gif *.png"),
-                 ("Любой", "*"))
-    my_file = fd.askopenfile(title="Открыть файл", initialdir="/ИВР",
+                 ("Любой", "*.png"))
+    my_file = fd.askopenfile(title="Открыть файл", initialdir="/TestApp",
                              filetypes=filetypes)  # here you can type path to your directory
     if my_file:  # if file is open
         # working with file
         # print(*my_file.readlines())
-        my_file.close()
+        return my_file.read()
+    return ''
 
 
 def xor_function(_first_arg_entry, _second_arg_entry, _result_entry):  # working on xor result
@@ -57,7 +57,7 @@ def xor_function(_first_arg_entry, _second_arg_entry, _result_entry):  # working
         xored_arg = ord(first_arg[i % len(first_arg)]) ^ ord(second_arg[i % len(second_arg)])
         # additional check ^ ord(second_arg[i % len(second_arg)])
         result_list.append(f'{hex(xored_arg)} ')  # result in hex format for unicode, not ascii!
-    result_output = ' '.join(result_list)
+    result_output = ''.join(result_list)
     _result_entry.delete(0, tk.END)
     _result_entry.insert(0, result_output)
 
@@ -141,6 +141,128 @@ def swap_texts(message, result):  # related to rsa function
     message.insert(1.0, crypto)
 
 
+def working_with_files(file_text, main_text_entry, key_entry):
+    xor_text = "Игровые смартфоны сейчас в тренде, а уж модели ASUS всегда привлекали внимание и получали" \
+               " одобрение аудитории. Сегодня на обзоре — геймерский телефон линейки Republic of Gamers нового" \
+               " поколения, оснащённый по последнему слову мобильной техники. Протестируем новинку всесторонне." \
+               " Индивидуальность во всём. В дизайне ROG Phone 5 видна манера ASUS: рубленные линии, цепляющие" \
+               " глаз яркие элементы. С первых минут использования замечаешь увесистость модели (целых 238 грамм)" \
+               " и чрезвычайно скользкую поверхность, главным образом из-за качественного олеофобного покрытия" \
+               " с обеих сторон. Так что лучше сразу облачить устройство в комплектный чехол. Заодно чехол скроет" \
+               " слегка выступающий из корпуса блок камер, а небольшие бортики над дисплеем уберегут стекло" \
+               " Gorilla Glass Victus от повреждений. У кейса есть и недостатки — он не защищает правый торец" \
+               " аппарата, а через две недели использования начинает люфтить. Под стеклом на тыльной стороне" \
+               " смартфона — логотип ROG c RGB-подсветкой. Отметим, что в версиях Pro и Ultimate вместо него" \
+               " установлен небольшой PMOLED-дисплей. Рамка аппарата выполнена из алюминия, помогающего отводить" \
+               " тепло от компонентов при интенсивной работе. На левом торце — дополнительный разъём USB Type-C" \
+               " и контактная площадка из пяти пинов для подключения внешнего кулера. Если в них нет необходимости," \
+               " они прикрываются резиновой заглушкой, которая легко слетает даже при обычном хвате телефона." \
+               " Велика вероятность её потерять. Ниже находится лоток для двух симок, так что возможности расширить" \
+               " память нет. Геймерские аксессуары. Какой игровой телефон сегодня можно представить без активной" \
+               " системы охлаждения? У ROG Phone 5 есть внешний вентилятор — он может быть или отсутствовать" \
+               " в комплекте в зависимости от версии устройства. Чтобы прикрепить кулер к смартфону, аппарат не" \
+               " обязательно вынимать из чехла. Достаточно совместить контакты на корпусе гаджета и вентилятора," \
+               " затем надавить на телефон до характерного щелчка. Проделать это с первого раза удаётся не всегда," \
+               " к тому же кажется, что так можно поцарапать алюминиевую рамку корпуса. Уж лучше бы производитель" \
+               " сохранил более удачные крепления кулера от предшественника. Из плюсов — на корпусе вертушки" \
+               " красуются две дополнительные настраиваемые кнопки, удобная ножка-подставка и собственная" \
+               " RGB-подсветка. Эффективность работы вентилятора мы решили продемонстрировать с помощью двух" \
+               " бенчмарков. Ещё из геймерских аксессуаров производитель представил вакуумные наушники" \
+               " ROG Centa II. Подключаются они через старый добрый аудиоджек. «Уши» могут похвастать технологией" \
+               " активного шумоподавления и большим разнообразием комплектных амбушюр, среди которых каждый найдёт" \
+               " вариант себе по размеру. В остальном затычки ничем не выделяются. Безупречный дисплей. Экран" \
+               " ROG Phone 5 представлен 6,78-дюймовой матрицей AMOLED с разрешением FHD+. К углам обзора не" \
+               " придраться, максимальной яркости хватает, чтобы отчётливо видеть информацию даже под прямыми" \
+               " лучами солнца. С цветопередачей всё в порядке, более того, панель поддерживает технологию HDR10+." \
+               " ШИМ незаметен, но на всякий случай есть функция DC Dimming. Частота опроса сенсорного слоя" \
+               " составляет 300 раз в секунду, поддерживаются варианты развёртки в 60, 120 и 144 Гц. Радует, что" \
+               " ASUS не стала делать в дисплее вырезы. Фронтальную камеру спрятали в небольшую рамку над матрицей," \
+               " а снизу есть симметричный отступ того же размера, поэтому перфекционисты могут спать спокойно." \
+               " Для индикации пропущенных уведомлений используется маленький светодиод, расположенный над экраном," \
+               " или функция Always on Display. Для безопасной разблокировки гаджета под дисплеем разместился" \
+               " быстрый сканер отпечатков пальцев, работающий, за редким исключением, без ошибок. Максимальная" \
+               " производительность и специальный софт. В ROG Phone 5 установили новый топовый восьмиядерный" \
+               " 5-нанометровый чипсет Qualcomm Snapdragon 888. Максимальная частота большого ядра достигает" \
+               " 2,84 ГГц. За графику отвечает ускоритель Adreno 660. Тестовый экземпляр получил 16 ГБ оперативной" \
+               " памяти типа LPDDR5 и 256 ГБ постоянного хранилища стандарта UFS 3.1. Аппарат функционирует под" \
+               " управлением ОС Android 11 с оболочкой ROG UI. При первой настройке прошивка предлагает выбрать" \
+               " одну из двух тем оформления: фирменный лончер или интерфейс чистой версии Android. Из" \
+               " предустановленного софта выделим специализированное ПО Armoury Crate, возможности которого" \
+               " рассмотрим на скриншотах. Далее мы приступили к тестированию игр. Каждое приложение запускали" \
+               " с наилучшими графическими настройками. Аппарат всегда работал в режиме «X»" \
+               " (максимальная производительность) с подключённым кулером. Замеры fps осуществлялись с помощью" \
+               " утилиты PerfDog. Универсальный набор камер. Прошлогодний ROG Phone 3, будучи геймерским" \
+               " смартфоном, всё-таки удивил своими способностями по части фото и видео. Поэтому в ASUS решили" \
+               " не изобретать велосипед и оснастили новинку аналогичным с предшественником блоком камер из трёх" \
+               " модулей. Основной объектив представлен сенсором Sony IMX686 на 64 Мп со светосилой f/1.8. Его" \
+               " дополняют ширик на 13 Мп со 125-градусным углом обзора и макросенсор на 5 Мп. Предлагаем" \
+               " ознакомиться с примерами снимков. ROG Phone 5 способен снимать 4K-видео на 60 fps. В таком режиме" \
+               " прекрасно себя демонстрирует электронная стабилизация — тряска практически незаметна. Четыре" \
+               " микрофона здорово отсекают шум сильного морского ветра. Автофокус за редкими исключениями" \
+               " срабатывает корректно и быстро. Производительности гаджета достаточно, чтобы снимать ускоренные" \
+               " 4K-видео. Надо лишь установить смартфон на штатив и оставить его на несколько минут. Съёмка" \
+               " 8K-видео доступна только на 30 fps. В таком случае отключается стабилизация, но автофокус остаётся" \
+               " моментальным. Передовые технологии на каждый день. Скоростной интернет в ROG Phone 5" \
+               " обеспечивается модулем Wi-Fi 6E, а на будущее заложена поддержка сетей 5G. Также есть NFC-чип" \
+               " для бесконтактной оплаты. Смартфон способен улавливать спутники GPS, Glonass, Galileo и BeiDou," \
+               " так что с ним вы точно не потеряетесь. Для меломанов станут полезными встроенный" \
+               " ЦАП ESS SABRE ES9280AC, кодек Bluetooth aptX и аудиоджек. Насладиться прослушиванием любимых" \
+               " композиций или просмотром контента помогут едва ли не лучшие стереодинамики в классе. Звучат они" \
+               " громко, чисто и басовито. Ещё понравился приятный вибромоторчик, который выводит ощущения от" \
+               " использования гаджета на новый уровень. Из интересных функций в прошивке выделим возможность" \
+               " дублирования приложений, что особенно удобно, если у вас несколько аккаунтов в одном сервисе." \
+               " Доступна настройка различных жестов, например, двойного постукивания для пробуждения смартфона" \
+               " и рисования символов на заблокированном экране для запуска определённых задач. А в холодное" \
+               " время года станет незаменимым режим работы в перчатках. Двойная батарея. Аппарат оборудован двумя" \
+               " аккумуляторами по 3000 мАч. На автономность сильно влияют выбранные режимы работы дисплея и" \
+               " производительности. При активации «сверхустойчивого» пресета функционирования ЦП частота обновления" \
+               " дисплея блокируется на 60 Гц. Так смартфон с лёгкостью выдержит полтора дня активной эксплуатации." \
+               " Тогда как в режиме «X» и с развёрткой 144 Гц проценты будут таять на глазах. Тестовый ролик Full HD" \
+               " на среднем уровне яркости в авиарежиме ROG Phone 5 непрерывно крутит 20 часов. Практически" \
+               " аналогичный результат получился и при воспроизведении 1080p-видео на YouTube. Играть в Genshin" \
+               " Impact с подключённым вентилятором и режимом максимальной производительности можно всего 2 часа," \
+               " а в этой же игре без кулера и в «Динамичном» режиме смартфон проработал 3 часа. В комплекте с" \
+               " устройством поставляется блок питания на 65 Вт. Заряжать новинку можно через любой разъём, но не" \
+               " одновременно. Гаджет поддерживает быструю зарядку: первые 25% восполняются за 7 минут, до 50%" \
+               " ROG Phone 5 подпитывается за 16 минут, а 75% он набирает за 29 минут. Таким образом до 100% аппарат" \
+               " заряжается всего за 53 минуты. Батарея при этом нагревается до 41 градуса. Итоги. ROG Phone 5" \
+               " — универсальный флагман с широкими возможностями для гейминга и повседневного использования." \
+               " Смартфон вместил в себя всё, чего только можно хотеть сегодня: топовое железо, способное тянуть" \
+               " любую игру на максимальных настройках графики, а также передовые технологии вроде Wi-Fi 6E," \
+               " скоростной зарядки, стереодинамиков и отличного дисплея. Аппарат порадовал способностями по части" \
+               " съёмки фото и видео, а также фирменным софтом. Из недостатков выделим разве что быстрый разряд в" \
+               " определённых режимах работы, неудобный способ крепления вентилятора к корпусу и отсутствие" \
+               " влагозащиты. Но эти недочёты меркнут в сравнении с преимуществами новинки."
+    trash_text = file_text.split('/')
+
+    # working with trash text
+    result_list = []
+    for i in range(len(trash_text)):
+        xored_arg = ord(chr(int(trash_text[i % len(trash_text)], 16))) ^ ord(xor_text[i % len(xor_text)]) \
+            # ^ ord(xor_text[i % len(xor_text)]) - for check
+        result_list.append(f'{chr(int(hex(xored_arg), 16))}')  # (f'{chr(int(hex(xored_arg), 16))}') - for check
+    result_output = ''.join(result_list)
+
+    # finding main text
+    s1 = result_output.find('$')
+    s2 = result_output.rfind('$')
+    main_text = result_output[s1 + 1:s2]
+
+    # finding key text
+    s1 = result_output.find('&')
+    s2 = result_output.rfind('&')
+    key_text = result_output[s1 + 1:s2]
+
+    # additional printing
+    # print(result_output)
+    # print(main_text)
+    # print(key_text)
+
+    main_text_entry.insert(0, main_text)
+    main_text_entry['state'] = 'disable'
+    key_entry.insert(0, key_text)
+
+
 def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_list, canvas_symbols_list,
                                  canvas_fill_squares_list, canvas, typo_algorithm):
     # all checks for valid key and text
@@ -210,7 +332,7 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
                     result_str += main_text[t + j * 6]
         result.delete(0, tk.END)
         result.insert(0, result_str)
-    # separator
+        # separator
     elif typo_algorithm == 5:  # расшифровать
         # filling table (canvas) by adding key and text
         result_str = ''
@@ -237,9 +359,8 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
                 result_str += result_list[key_list[j] - 1][i]
         result.delete(0, tk.END)
         result.insert(0, result_str)
-    # separator
+        # separator
     elif typo_algorithm == 6:  # дешифровать
-        # filling table (canvas) by adding key and text
         check_fill = 0
         result_str = ''
         result_list = []
@@ -339,9 +460,9 @@ class MainWindow(tk.Tk):
     def exit_function(self):
         try:
             os.remove('Keys.txt')  # deleting keys file, 'cause no one should know your keys
-            self.destroy()
         except FileNotFoundError:
-            self.destroy()
+            pass
+        self.destroy()
 
     def update_current_function(self, _function_number):  # choosing the right function
         if self.function_number != _function_number:
@@ -356,11 +477,15 @@ class MainWindow(tk.Tk):
             elif self.function_number == 3:
                 self.rsa_show()
             elif self.function_number == 4:
-                self.table_algorithm_show(4)  # зашифровать
+                self.table_algorithm_show(4, '')  # зашифровать
             elif self.function_number == 5:
-                self.table_algorithm_show(5)  # расшифровать
+                self.table_algorithm_show(5, '')  # расшифровать
             elif self.function_number == 6:
-                self.table_algorithm_show(6)  # дешифровать
+                file_text = choose_directory()
+                if file_text == '':
+                    self.update_current_function(0)
+                    return
+                self.table_algorithm_show(6, file_text)  # дешифровать
 
     def destroy_everything(self):  # deleting previous function -> this is it
         for widget in self.winfo_children():
@@ -609,7 +734,7 @@ class MainWindow(tk.Tk):
         result.delete(1.0, tk.END)
         result.insert(1.0, message)
 
-    def table_algorithm_show(self, typo_algorithm):  # table algorithm show function
+    def table_algorithm_show(self, typo_algorithm, file_text):  # table algorithm show function
         # all widgets
         header_label = tk.Label(
             self,
@@ -621,6 +746,19 @@ class MainWindow(tk.Tk):
             pady=5,
             text='Исходный текст',
         )
+        separate1 = tk.Label(
+            self,
+            text='',
+        )
+        main_text_entry = tk.Entry(self, width=60)
+
+        # *preset*
+        # if you need preset text
+        # main_text_entry.delete(0, tk.END)
+        # main_text_entry.insert(0, 'Привет, меня зовут Кот Василий')
+
+        key_label = tk.Label(self, pady=5, text='Ключ')
+        key_entry = tk.Entry(self, width=20)
 
         # replacing symbols by <*> after double left button click
         def filling_squares(event):
@@ -650,21 +788,7 @@ class MainWindow(tk.Tk):
             main_text_label['text'] = 'Шифротекст'
             header_label['text'] = 'Это табличный алгоритм для дешифрования'
             self.bind('<Double-Button-1>', filling_squares)  # detecting double left click
-
-        # all widgets
-        separate1 = tk.Label(
-            self,
-            text='',
-        )
-        main_text_entry = tk.Entry(self, width=60)
-
-        # *preset*
-        # if you need preset text
-        # main_text_entry.delete(0, tk.END)
-        # main_text_entry.insert(0, 'Привет, меня зовут Кот Василий')
-
-        key_label = tk.Label(self, pady=5, text='Ключ')
-        key_entry = tk.Entry(self, width=20)
+            working_with_files(file_text, main_text_entry, key_entry)
 
         # *preset*
         # key_entry.delete(0, tk.END)
