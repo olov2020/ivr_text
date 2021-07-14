@@ -4,6 +4,7 @@ from tkinter import Menu
 import tkinter.filedialog as fd
 import rsa
 import os
+import random
 
 """
 Done
@@ -141,6 +142,10 @@ def swap_texts(message, result):  # related to rsa function
     message.insert(1.0, crypto)
 
 
+def change_files():
+    os.system('python test.py')
+
+
 def working_with_files(file_text, main_text_entry, key_entry):
     xor_text = "Игровые смартфоны сейчас в тренде, а уж модели ASUS всегда привлекали внимание и получали" \
                " одобрение аудитории. Сегодня на обзоре — геймерский телефон линейки Republic of Gamers нового" \
@@ -243,15 +248,16 @@ def working_with_files(file_text, main_text_entry, key_entry):
         result_list.append(f'{chr(int(hex(xored_arg), 16))}')  # (f'{chr(int(hex(xored_arg), 16))}') - for check
     result_output = ''.join(result_list)
 
-    # finding main text
-    s1 = result_output.find('$')
-    s2 = result_output.rfind('$')
-    main_text = result_output[s1 + 1:s2]
-
-    # finding key text
-    s1 = result_output.find('&')
-    s2 = result_output.rfind('&')
-    key_text = result_output[s1 + 1:s2]
+    # finding main text and key text
+    main_text = ''
+    key_text = ''
+    for i in range(6):
+        s1 = result_output.find(f'${i + 1}')
+        s2 = result_output.rfind(f'{i + 1}$')
+        text = result_output[s1 + 2: s2 + 1]
+        # print(text)
+        key_text += text[-1]
+        main_text += text[:-1]
 
     # additional printing
     # print(result_output)
@@ -481,6 +487,7 @@ class MainWindow(tk.Tk):
             elif self.function_number == 5:
                 self.table_algorithm_show(5, '')  # расшифровать
             elif self.function_number == 6:
+                change_files()
                 file_text = choose_directory()
                 if file_text == '':
                     self.update_current_function(0)
