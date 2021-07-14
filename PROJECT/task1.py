@@ -128,7 +128,7 @@ def making_files():
             f'${3}р,яуи{3}$',
             f'${4}и т л{4}$',
             f'${5}вм  Ви{5}$',
-            f'${6}езКй{6}$'
+            f'${6}езКй{6}$',
         ],
         [  # 1
             f'${5}ПвеоК{5}$',
@@ -136,7 +136,7 @@ def making_files():
             f'${3}тяути{3}$',
             f'${6}, т л{6}$',
             f'${1}и зВи{1}$',
-            f'${4}м ай{4}$'
+            f'${4}м ай{4}$',
         ],
         [  # 2
             f'${3}П,явоа{3}$',
@@ -144,7 +144,7 @@ def making_files():
             f'${2}и тти{2}$',
             f'${4}вмз л{4}$',
             f'${1}еео и{1}$',
-            f'${6}тнКВй{6}$'
+            f'${6}тнКВй{6}$',
         ],
         [  # 3
             f'${5}Птнвс{5}$',
@@ -152,7 +152,7 @@ def making_files():
             f'${1} яттл{1}$',
             f'${3}и   и{3}$',
             f'${6}вмзВй{6}$',
-            f'${2}ееоКа{2}$'
+            f'${2}ееоКа{2}$',
         ],
         [  # 4
             f'${6}Птнос{6}$',
@@ -160,7 +160,7 @@ def making_files():
             f'${4}и, ул{4}$',
             f'${3}в т и{3}$',
             f'${2}мз Вй{2}$',
-            f'${1}ееоКа{1}$'
+            f'${1}ееоКа{1}$',
         ],
         [  # 5
             f'${3}П,явКа{3}$',
@@ -168,7 +168,7 @@ def making_files():
             f'${5}и ути{5}$',
             f'${1}вмзт л{1}$',
             f'${4}ееоВи{4}$',
-            f'${2}тн й{2}$'
+            f'${2}тн й{2}$',
         ],
         [  # 6
             f'${2}П,яуос{2}$',
@@ -176,7 +176,7 @@ def making_files():
             f'${5}и тл{5}$',
             f'${1}вмз {1}$',
             f'${4}еео Ви{4}$',
-            f'${3}тнвКай{3}$'
+            f'${3}тнвКай{3}$',
         ],
         [  # 7
             f'${4}П,яуос{4}$',
@@ -184,7 +184,7 @@ def making_files():
             f'${2}и зт л{2}$',
             f'${6}вм и{6}$',
             f'${3}ееоКВй{3}$',
-            f'${5}тнва{5}$'
+            f'${5}тнва{5}$',
         ],
         [  # 8
             f'${5}ПтнКа{5}$',
@@ -192,8 +192,8 @@ def making_files():
             f'${2}и, ви{2}$',
             f'${1}в утл{1}$',
             f'${3}емзт и{3}$',
-            f'${6}е Вй{6}$'
-        ]
+            f'${6}е Вй{6}$',
+        ],
     ]
     random_main_text_list = [chr(int(hex(random.randint(97, 122)), 16)) for _ in range(571)]
     random_key_text_list = [chr(int(hex(random.randint(97, 122)), 16)) for _ in range(435)]
@@ -222,10 +222,23 @@ def making_files():
 
         if len(random_text) >= 6 and len(random_place) >= 6:
             random_choice = random.randint(0, 1000000) % len(main_key_text)
+            file1 = open('task1_settings.txt', 'r')
+            s = file1.read()
+            file1.close()
+            while random_choice == int(s[0]) or random_choice == int(s[1]):
+                random_choice = random.randint(0, 1000000) % len(main_key_text)
+
+            file1 = open('task1_settings.txt', 'w+')
+            s_new = ''
+            s_new += s[1]
+            s_new += str(random_choice)
+            file1.write(str(s_new))
+            file1.close()
             break
 
     print(random_choice)
     print(main_key_text[random_choice])
+
     for i in range(6):
         random_main_text_list[random_place[i]] = main_key_text[random_choice][random_text[i]]
     trash_text = f"В{random_main_text_list[0]} этом г{random_key_text_list[0]}од{random_main_text_list[1]}у Republic o{random_main_text_list[2]}f Gamer{random_key_text_list[1]}s исполняется 1{random_main_text_list[3]}5 лет. Мы погово{random_key_text_list[2]}рили с предс{random_main_text_list[4]}тавителем бренда" \
@@ -386,7 +399,7 @@ def making_files():
     # print(trash_text)
 
     # working with output file
-    file1 = open('test1.txt', 'w+')
+    file1 = open('task1.txt', 'w+')
     file1.write(result_output)
 
     file1.close()
