@@ -4,7 +4,6 @@ from tkinter import Menu
 import tkinter.filedialog as fd
 import rsa
 import os
-import random
 
 """
 Done
@@ -18,18 +17,16 @@ Done
 5) Full commented code
     
 Need to do:
-1) Design
-2) Cheats for table
-3) Files for table
-4) Home page
-5) My page
+1) Cheats for table
+2) Home page
+3) My page
 """
 
 
 def choose_directory():  # uploading file
     filetypes = (("Текстовый файл", "*.txt"),
-                 ("Любой", "*.png"))
-    my_file = fd.askopenfile(title="Открыть файл", initialdir="/TestApp",
+                 ("Любой", "*.txt"))
+    my_file = fd.askopenfile(title="Открыть файл", initialdir="",
                              filetypes=filetypes)  # here you can type path to your directory
     if my_file:  # if file is open
         # working with file
@@ -143,7 +140,7 @@ def swap_texts(message, result):  # related to rsa function
 
 
 def change_files():
-    os.system('python test.py')
+    os.system('python task1.py')
 
 
 def working_with_files(file_text, main_text_entry, key_entry):
@@ -405,6 +402,32 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
         result.insert(0, result_str)
 
 
+class Tips(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        # settings for the window
+        self.title('Tips')
+        self.geometry('300x300+30+30')
+        self.protocol("WM_DELETE_WINDOW", lambda: self.destroy())
+
+        label_tip = tk.Label(self, text='Показать запрещенные ячейки в:')
+        first_tip = tk.Checkbutton(self, text='первом столбце')
+        second_tip = tk.Checkbutton(self, text='втором столбце')
+        third_tip = tk.Checkbutton(self, text='третьем столбце')
+        fourth_tip = tk.Checkbutton(self, text='четвертом столбце')
+        fifth_tip = tk.Checkbutton(self, text='пятом столбце')
+        sixth_tip = tk.Checkbutton(self, text='шестом столбце')
+
+        label_tip.pack()
+        first_tip.pack()
+        second_tip.pack()
+        third_tip.pack()
+        fourth_tip.pack()
+        fifth_tip.pack()
+        sixth_tip.pack()
+
+
 class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -416,7 +439,6 @@ class MainWindow(tk.Tk):
 
         # some variables
         self.function_number = -1
-        self.status = 1
 
         # generating keys
         (pubkey, privkey) = rsa.newkeys(512)
@@ -424,41 +446,42 @@ class MainWindow(tk.Tk):
         self.privkey = privkey
 
         # creating menu
-        menu = tk.Menu(self)
+        self.menu = tk.Menu(self)
 
         # different tabs
         # file tab
-        file = Menu(menu, tearoff=0)
-        file.add_command(label='Uploading file', command=lambda: choose_directory())
-        file.add_separator()
-        file.add_command(label='Exit', command=lambda: self.exit_function())  # add messagebox to exit
+        self.file = Menu(self.menu, tearoff=0)
+        self.file.add_command(label='Uploading file', command=lambda: choose_directory())
+        self.file.add_separator()
+        self.file.add_command(label='Exit', command=lambda: self.exit_function())  # add messagebox to exit
 
         # choose function tab
-        choosing_function = Menu(menu, tearoff=0)
-        choosing_function.add_command(label='Home', command=lambda: self.update_current_function(0))
-        choosing_function.add_separator()
-        choosing_function.add_command(label='XOR', command=lambda: self.update_current_function(1))
-        choosing_function.add_separator()
-        choosing_function.add_command(label='Replacement', command=lambda: self.update_current_function(2))
-        choosing_function.add_separator()
-        choosing_function.add_command(label='RSA', command=lambda: self.update_current_function(3))
+        self.choosing_function = Menu(self.menu, tearoff=0)
+        self.choosing_function.add_command(label='Home', command=lambda: self.update_current_function(0))
+        self.choosing_function.add_separator()
+        self.choosing_function.add_command(label='XOR', command=lambda: self.update_current_function(1))
+        self.choosing_function.add_separator()
+        self.choosing_function.add_command(label='Replacement', command=lambda: self.update_current_function(2))
+        self.choosing_function.add_separator()
+        self.choosing_function.add_command(label='RSA', command=lambda: self.update_current_function(3))
 
-        choosing_table_algorithm = Menu(menu, tearoff=0)
-        choosing_table_algorithm.add_command(label='Зашифровать', command=lambda: self.update_current_function(4))
-        choosing_table_algorithm.add_separator()
-        choosing_table_algorithm.add_command(label='Расшифровать', command=lambda: self.update_current_function(5))
-        choosing_table_algorithm.add_separator()
-        choosing_table_algorithm.add_command(label='Дешифровать', command=lambda: self.update_current_function(6))
+        self.choosing_table_algorithm = Menu(self.menu, tearoff=0)
+        self.choosing_table_algorithm.add_command(label='Зашифровать', command=lambda: self.update_current_function(4))
+        self.choosing_table_algorithm.add_separator()
+        self.choosing_table_algorithm.add_command(label='Расшифровать', command=lambda: self.update_current_function(5))
+        self.choosing_table_algorithm.add_separator()
+        self.choosing_table_algorithm.add_command(label='Дешифровать', command=lambda: self.update_current_function(6))
 
-        choosing_function.add_separator()
-        choosing_function.add_cascade(label='Табличный алгоритм', menu=choosing_table_algorithm)
+        self.choosing_function.add_separator()
+        self.choosing_function.add_cascade(label='Табличный алгоритм', menu=self.choosing_table_algorithm)
 
         # adding tabs to menu
-        menu.add_cascade(label='File', menu=file)
-        menu.add_cascade(label='Choose function', menu=choosing_function)
+        self.menu.add_cascade(label='File', menu=self.file)
+        self.menu.add_cascade(label='Choose function', menu=self.choosing_function)
+        self.menu.add_command(label='Подсказки', state='disabled', command=Tips)
 
         # adding menu to the window
-        self.config(menu=menu)
+        self.config(menu=self.menu)
 
         # running program
         self.mainloop()
@@ -474,6 +497,10 @@ class MainWindow(tk.Tk):
         if self.function_number != _function_number:
             self.destroy_everything()  # deleting previous function
             self.function_number = _function_number
+            self.menu.entryconfig('Подсказки', state='disabled')
+            if self.function_number == 6:
+                self.menu.entryconfig('Подсказки', state='normal')
+
             if self.function_number == 0:
                 self.home_show()
             elif self.function_number == 1:
