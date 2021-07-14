@@ -169,6 +169,30 @@ def making_files():
             f'${1}вмзт л{1}$',
             f'${4}ееоВи{4}$',
             f'${2}тн й{2}$'
+        ],
+        [  # 6
+            f'${2}П,яуос{2}$',
+            f'${6}р ти{6}$',
+            f'${5}и тл{5}$',
+            f'${1}вмз {1}$',
+            f'${4}еео Ви{4}$',
+            f'${3}тнвКай{3}$'
+        ],
+        [  # 7
+            f'${4}П,яуос{4}$',
+            f'${1}р ти{1}$',
+            f'${2}и зт л{2}$',
+            f'${6}вм и{6}$',
+            f'${3}ееоКВй{3}$',
+            f'${5}тнва{5}$'
+        ],
+        [  # 8
+            f'${5}ПтнКа{5}$',
+            f'${4}ряоос{4}$',
+            f'${2}и, ви{2}$',
+            f'${1}в утл{1}$',
+            f'${3}емзт и{3}$',
+            f'${6}е Вй{6}$'
         ]
     ]
     random_main_text_list = [chr(int(hex(random.randint(97, 122)), 16)) for _ in range(571)]
@@ -197,7 +221,7 @@ def making_files():
             random_text.append(a)
 
         if len(random_text) >= 6 and len(random_place) >= 6:
-            random_choice = random.randint(0, 10000) % 6
+            random_choice = random.randint(0, 1000000) % len(main_key_text)
             break
 
     print(random_choice)
