@@ -23,6 +23,10 @@ Need to do:
 """
 
 # global variables
+sum_tips = 0
+key_answer_list = []
+some_tips_list = []
+all_columns_filled_list = []
 xor_text = "Игровые смартфоны сейчас в тренде, а уж модели ASUS всегда привлекали внимание и получали" \
            " одобрение аудитории. Сегодня на обзоре — геймерский телефон линейки Republic of Gamers нового" \
            " поколения, оснащённый по последнему слову мобильной техники. Протестируем новинку всесторонне." \
@@ -246,6 +250,8 @@ def change_all_task_files(main_key_text, task_number):
     random_place = []
     random_text = []
     random_choice = 0
+    num_of_tasks = len(main_key_text)
+    num_of_strings = len(main_key_text[0])
 
     while True:
         a = random.randint(0, 570)
@@ -257,7 +263,7 @@ def change_all_task_files(main_key_text, task_number):
         if t == 0:
             random_place.append(a)
 
-        a = random.randint(0, 5)
+        a = random.randint(0, num_of_strings - 1)
         t = 0
         for j in range(len(random_text)):
             if random_text[j] == a:
@@ -266,13 +272,13 @@ def change_all_task_files(main_key_text, task_number):
         if t == 0:
             random_text.append(a)
 
-        if len(random_text) >= 6 and len(random_place) >= 6:
-            random_choice = random.randint(0, 1000000) % len(main_key_text)
+        if len(random_text) >= num_of_strings and len(random_place) >= num_of_strings:
+            random_choice = random.randint(0, 1000000) % num_of_tasks
             file1 = open(f'{task_number}_settings.txt', 'r')
             s = file1.read()
             file1.close()
             while random_choice == int(s[0]) or random_choice == int(s[1]):
-                random_choice = random.randint(0, 1000000) % len(main_key_text)
+                random_choice = random.randint(0, 1000000) % num_of_tasks
 
             file1 = open(f'{task_number}_settings.txt', 'w+')
             s_new = ''
@@ -287,7 +293,7 @@ def change_all_task_files(main_key_text, task_number):
     print(main_key_text[random_choice])
     print()
 
-    for i in range(6):
+    for i in range(num_of_strings):
         random_main_text_list[random_place[i]] = main_key_text[random_choice][random_text[i]]
     trash_text = f"В{random_main_text_list[0]} этом г{random_key_text_list[0]}од{random_main_text_list[1]}у Republic o{random_main_text_list[2]}f Gamer{random_key_text_list[1]}s исполняется 1{random_main_text_list[3]}5 лет. Мы погово{random_key_text_list[2]}рили с предс{random_main_text_list[4]}тавителем бренда" \
                  f" и выя{random_main_text_list[5]}снили,{random_key_text_list[3]} как всё{random_main_text_list[6]} начиналось{random_main_text_list[7]}, какие продук{random_key_text_list[4]}ты выстреливал{random_main_text_list[8]}и ярче в{random_key_text_list[5]}сего и что отличает геймеров" \
@@ -454,9 +460,9 @@ def change_all_task_files(main_key_text, task_number):
 
 
 def working_with_files(file_text, main_text_entry, key_entry):
-    global xor_text
-
-    trash_text = ''
+    global xor_text, key_answer_list, some_tips_list
+    key_answer_list = []
+    some_tips_list = []
 
     trash_text = file_text.split('/')
 
@@ -478,6 +484,27 @@ def working_with_files(file_text, main_text_entry, key_entry):
         # print(text)
         key_text += text[-1]
         main_text += text[:-1]
+
+    # finding answer key
+    s1 = result_output.find(f'%')
+    while not result_output[s1 + 1].isdigit():
+        s1 = result_output.find(f'%')
+    key_answer = result_output[s1 + 1: s1 + 7]
+    print(key_answer)
+    for i in range(6):
+        key_answer_list.append(int(key_answer[i]))
+
+    # finding filled squares
+    while True:
+        s1 = result_output.find(f'&')
+        if result_output[s1 + 1].isdigit() and result_output[s1 + 2].isdigit():
+            pair_of_coordinates = result_output[s1 + 1: s1 + 3]
+            some_tips_list.append([int(pair_of_coordinates[0]), int(pair_of_coordinates[1])])
+        before_keyword, keyword, after_keyword = result_output.partition('&')
+        result_output = after_keyword
+        if s1 == -1:
+            break
+    print(some_tips_list)
 
     # additional printing
     # print(result_output)
@@ -587,6 +614,8 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
         result.insert(0, result_str)
         # separator
     elif typo_algorithm == 6:  # дешифровать
+        filling_squares_with_tips(canvas, canvas_fill_squares_list, canvas_symbols_list)
+
         check_fill = 0
         result_str = ''
         result_list = []
@@ -636,40 +665,130 @@ class Tips(tk.Tk):
 
         self.label_tip = tk.Label(self, text='Показать запрещенные ячейки в:')
 
-        self.first_tip_var = tk.IntVar()
-        self.second_tip_var = tk.IntVar()
-        self.third_tip_var = tk.IntVar()
-        self.fourth_tip_var = tk.IntVar()
-        self.fifth_tip_var = tk.IntVar()
-        self.sixth_tip_var = tk.IntVar()
-        self.first_tip = tk.Checkbutton(self, text='первом столбце', variable=self.first_tip_var, onvalue=1,
-                                        offvalue=0, command=lambda: self.click())
-        self.second_tip = tk.Checkbutton(self, text='втором столбце', variable=self.second_tip_var, onvalue=1,
-                                         offvalue=0, command=lambda: self.click())
-        self.third_tip = tk.Checkbutton(self, text='третьем столбце', variable=self.third_tip_var, onvalue=1,
-                                        offvalue=0, command=lambda: self.click())
-        self.fourth_tip = tk.Checkbutton(self, text='четвертом столбце', variable=self.fourth_tip_var, onvalue=1,
-                                         offvalue=0, command=lambda: self.click())
-        self.fifth_tip = tk.Checkbutton(self, text='пятом столбце', variable=self.fifth_tip_var, onvalue=1,
-                                        offvalue=0, command=lambda: self.click())
-        self.sixth_tip = tk.Checkbutton(self, text='шестом столбце', variable=self.sixth_tip_var, onvalue=1,
-                                        offvalue=0, command=lambda: self.click())
+        self.first_tip_var_filled = tk.IntVar()
+        self.second_tip_var_filled = tk.IntVar()
+        self.third_tip_var_filled = tk.IntVar()
+        self.fourth_tip_var_filled = tk.IntVar()
+        self.fifth_tip_var_filled = tk.IntVar()
+        self.sixth_tip_var_filled = tk.IntVar()
+
+        self.first_tip_filled = tk.Checkbutton(self, text='первом столбце', variable=self.first_tip_var_filled,
+                                               onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip1())
+        self.second_tip_filled = tk.Checkbutton(self, text='втором столбце', variable=self.second_tip_var_filled,
+                                                onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip2())
+        self.third_tip_filled = tk.Checkbutton(self, text='третьем столбце', variable=self.third_tip_var_filled,
+                                               onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip3())
+        self.fourth_tip_filled = tk.Checkbutton(self, text='четвертом столбце', variable=self.fourth_tip_var_filled,
+                                                onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip4())
+        self.fifth_tip_filled = tk.Checkbutton(self, text='пятом столбце', variable=self.fifth_tip_var_filled,
+                                               onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip5())
+        self.sixth_tip_filled = tk.Checkbutton(self, text='шестом столбце', variable=self.sixth_tip_var_filled,
+                                               onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip6())
+
+        if sum_tips == 3:
+            self.first_tip_filled.config(state=tk.DISABLED)
+            self.second_tip_filled.config(state=tk.DISABLED)
+            self.third_tip_filled.config(state=tk.DISABLED)
+            self.fourth_tip_filled.config(state=tk.DISABLED)
+            self.fifth_tip_filled.config(state=tk.DISABLED)
+            self.sixth_tip_filled.config(state=tk.DISABLED)
 
         self.label_tip.pack()
-        self.first_tip.pack()
-        self.second_tip.pack()
-        self.third_tip.pack()
-        self.fourth_tip.pack()
-        self.fifth_tip.pack()
-        self.sixth_tip.pack()
+        self.first_tip_filled.pack()
+        self.second_tip_filled.pack()
+        self.third_tip_filled.pack()
+        self.fourth_tip_filled.pack()
+        self.fifth_tip_filled.pack()
+        self.sixth_tip_filled.pack()
 
-    def click(self):
-        sum_tip_var = self.first_tip_var.get() + self.second_tip_var.get() + self.third_tip_var.get() \
-                      + self.fourth_tip_var.get() + self.fifth_tip_var.get() + self.sixth_tip_var.get()
-        print(self.first_tip_var.get())
-        if sum_tip_var == 3:
-            if self.first_tip_var.get() == 0:
-                self.first_tip.config(state=tk.DISABLED)
+    def toggle_click_tip1(self):
+        self.first_tip_var_filled.set(not self.first_tip_var_filled.get())
+        self.check_click_tip()
+
+    def toggle_click_tip2(self):
+        self.second_tip_var_filled.set(not self.second_tip_var_filled.get())
+        self.check_click_tip()
+
+    def toggle_click_tip3(self):
+        self.third_tip_var_filled.set(not self.third_tip_var_filled.get())
+        self.check_click_tip()
+
+    def toggle_click_tip4(self):
+        self.fourth_tip_var_filled.set(not self.fourth_tip_var_filled.get())
+        self.check_click_tip()
+
+    def toggle_click_tip5(self):
+        self.fifth_tip_var_filled.set(not self.fifth_tip_var_filled.get())
+        self.check_click_tip()
+
+    def toggle_click_tip6(self):
+        self.sixth_tip_var_filled.set(not self.sixth_tip_var_filled.get())
+        self.check_click_tip()
+
+    def check_click_tip(self):
+        global all_columns_filled_list, sum_tips
+        all_columns_filled_list = []
+        first_column_filled_list = []
+        second_column_filled_list = []
+        third_column_filled_list = []
+        fourth_column_filled_list = []
+        fifth_column_filled_list = []
+        sixth_column_filled_list = []
+
+        if sum_tips != 3:
+            sum_tips = self.first_tip_var_filled.get() + self.second_tip_var_filled.get() + \
+               self.third_tip_var_filled.get() + self.fourth_tip_var_filled.get() + \
+               self.fifth_tip_var_filled.get() + self.sixth_tip_var_filled.get()
+        print(sum_tips)
+
+        if sum_tips == 3:
+            if self.first_tip_var_filled.get() == 1:
+                for i in range(len(some_tips_list)):
+                    if some_tips_list[i][1] == 0:
+                        first_column_filled_list.append(some_tips_list[i])
+            if self.second_tip_var_filled.get() == 1:
+                for i in range(len(some_tips_list)):
+                    if some_tips_list[i][1] == 1:
+                        second_column_filled_list.append(some_tips_list[i])
+            if self.third_tip_var_filled.get() == 1:
+                for i in range(len(some_tips_list)):
+                    if some_tips_list[i][1] == 2:
+                        third_column_filled_list.append(some_tips_list[i])
+            if self.fourth_tip_var_filled.get() == 1:
+                for i in range(len(some_tips_list)):
+                    if some_tips_list[i][1] == 3:
+                        fourth_column_filled_list.append(some_tips_list[i])
+            if self.fifth_tip_var_filled.get() == 1:
+                for i in range(len(some_tips_list)):
+                    if some_tips_list[i][1] == 4:
+                        fifth_column_filled_list.append(some_tips_list[i])
+            if self.sixth_tip_var_filled.get() == 1:
+                for i in range(len(some_tips_list)):
+                    if some_tips_list[i][1] == 5:
+                        sixth_column_filled_list.append(some_tips_list[i])
+            all_columns_filled_list.append(first_column_filled_list)
+            all_columns_filled_list.append(second_column_filled_list)
+            all_columns_filled_list.append(third_column_filled_list)
+            all_columns_filled_list.append(fourth_column_filled_list)
+            all_columns_filled_list.append(fifth_column_filled_list)
+            all_columns_filled_list.append(sixth_column_filled_list)
+            self.first_tip_filled.config(state=tk.DISABLED)
+            self.second_tip_filled.config(state=tk.DISABLED)
+            self.third_tip_filled.config(state=tk.DISABLED)
+            self.fourth_tip_filled.config(state=tk.DISABLED)
+            self.fifth_tip_filled.config(state=tk.DISABLED)
+            self.sixth_tip_filled.config(state=tk.DISABLED)
+
+
+def filling_squares_with_tips(canvas, canvas_fill_squares_list, canvas_symbols_list):
+    global all_columns_filled_list
+    for i in range(len(all_columns_filled_list)):
+        for j in range(len(all_columns_filled_list[i])):
+            a = all_columns_filled_list[i][j][0]
+            b = all_columns_filled_list[i][j][1]
+            if canvas_fill_squares_list[a][b] == 0:
+                canvas.itemconfigure(canvas_symbols_list[a][b], text='*')
+                canvas_fill_squares_list[a][b] = 1
 
 
 class MainWindow(tk.Tk):
@@ -735,6 +854,444 @@ class MainWindow(tk.Tk):
             os.remove('Keys.txt')  # deleting keys file, 'cause no one should know your keys
         except FileNotFoundError:
             pass
+        change_all_task_files(
+            [
+                [  # 0
+                    f'${1}Птеооа{1}$',
+                    f'${2}нвтс{2}$',
+                    f'${3}р,яуи{3}$',
+                    f'${4}и т л{4}$',
+                    f'${5}вм  Ви{5}$',
+                    f'${6}езКй{6}$',
+                    f'%123456%',
+                    f'&01&',
+                    f'&11&',
+                    f'&15&',
+                    f'&23&',
+                    f'&42&',
+                    f'&45&',
+                ],
+                [  # 1
+                    f'${5}ПвеоК{5}$',
+                    f'${2}ренвос{2}$',
+                    f'${3}тяути{3}$',
+                    f'${6}, т л{6}$',
+                    f'${1}и зВи{1}$',
+                    f'${4}м ай{4}$',
+                    f'%523614%',
+                    f'&02&',
+                    f'&03&',
+                    f'&05&',
+                    f'&25&',
+                    f'&34&',
+                    f'&50&',
+                ],
+                [  # 2
+                    f'${3}П,явоа{3}$',
+                    f'${5}р ус{5}$',
+                    f'${2}и тти{2}$',
+                    f'${4}вмз л{4}$',
+                    f'${1}еео и{1}$',
+                    f'${6}тнКВй{6}$',
+                    f'%352416%',
+                    f'&11&',
+                    f'&22&',
+                    f'&25&',
+                    f'&33&',
+                    f'&41&',
+                    f'&44&',
+                ],
+                [  # 3
+                    f'${5}Птнвс{5}$',
+                    f'${4}р,уои{4}$',
+                    f'${1} яттл{1}$',
+                    f'${3}и   и{3}$',
+                    f'${6}вмзВй{6}$',
+                    f'${2}ееоКа{2}$',
+                    f'%541362%',
+                    f'&02&',
+                    f'&13&',
+                    f'&21&',
+                    f'&34&',
+                    f'&40&',
+                    f'&55&',
+                ],
+                [  # 4
+                    f'${6}Птнос{6}$',
+                    f'${5}рявти{5}$',
+                    f'${4}и, ул{4}$',
+                    f'${3}в т и{3}$',
+                    f'${2}мз Вй{2}$',
+                    f'${1}ееоКа{1}$',
+                    f'%654321%',
+                    f'&04&',
+                    f'&11&',
+                    f'&23&',
+                    f'&30&',
+                    f'&42&',
+                    f'&55&',
+                ],
+                [  # 5
+                    f'${3}П,явКа{3}$',
+                    f'${6}р ос{6}$',
+                    f'${5}и ути{5}$',
+                    f'${1}вмзт л{1}$',
+                    f'${4}ееоВи{4}$',
+                    f'${2}тн й{2}$',
+                    f'%365142%',
+                    f'&11&',
+                    f'&22&',
+                    f'&25&',
+                    f'&31&',
+                    f'&34&',
+                    f'&45&',
+                ],
+                [  # 6
+                    f'${2}П,яуос{2}$',
+                    f'${6}р ти{6}$',
+                    f'${5}и тл{5}$',
+                    f'${1}вмз {1}$',
+                    f'${4}еео Ви{4}$',
+                    f'${3}тнвКай{3}$',
+                    f'%265143%',
+                    f'&11&',
+                    f'&22&',
+                    f'&31&',
+                    f'&33&',
+                    f'&42&',
+                    f'&53&',
+                ],
+                [  # 7
+                    f'${4}П,яуос{4}$',
+                    f'${1}р ти{1}$',
+                    f'${2}и зт л{2}$',
+                    f'${6}вм и{6}$',
+                    f'${3}ееоКВй{3}$',
+                    f'${5}тнва{5}$',
+                    f'%412635%',
+                    f'&11&',
+                    f'&23&',
+                    f'&31&',
+                    f'&35&',
+                    f'&43&',
+                    f'&55&',
+                ],
+                [  # 8
+                    f'${5}ПтнКа{5}$',
+                    f'${4}ряоос{4}$',
+                    f'${2}и, ви{2}$',
+                    f'${1}в утл{1}$',
+                    f'${3}емзт и{3}$',
+                    f'${6}е Вй{6}$',
+                    f'%542136%',
+                    f'&05&',
+                    f'&11&',
+                    f'&23&',
+                    f'&25&',
+                    f'&30&',
+                    f'&42&',
+                ],
+            ],
+            'task1'
+        )
+        change_all_task_files(
+            [
+                [  # 0
+                    f'${2}тшкар{2}$',
+                    f'${4}оирли{4}$',
+                    f'${6}А и{6}$',
+                    f'${3} лпгт{3}$',
+                    f'${1}уйтом{1}$',
+                    f'${5}эч о{5}$',
+                    f'%246315%',
+                    f'&00&',
+                    f'&01&',
+                    f'&04&',
+                    f'&22&',
+                    f'&23&',
+                    f'&42&',
+                    f'&44&',
+                    f'&52&',
+                    f'&55&',
+                ],
+                [  # 1
+                    f'${1} ирар{1}$',
+                    f'${6}Айии{6}$',
+                    f'${2} лплт{2}$',
+                    f'${5}эу гм{5}$',
+                    f'${3}тчт{3}$',
+                    f'${4}ошкоо{4}$',
+                    f'%162534%',
+                    f'&00&',
+                    f'&11&',
+                    f'&22&',
+                    f'&24&',
+                    f'&33&',
+                    f'&41&',
+                    f'&44&',
+                    f'&54&',
+                    f'&55&',
+                ],
+                [  # 2
+                    f'${6}Ашроо{6}$',
+                    f'${1} оир{1}$',
+                    f'${5} иа{5}$',
+                    f'${4}элйпли{4}$',
+                    f'${2}у гт{2}$',
+                    f'${3}тиктм{3}$',
+                    f'%615423%',
+                    f'&02&',
+                    f'&04&',
+                    f'&10&',
+                    f'&22&',
+                    f'&31&',
+                    f'&34&',
+                    f'&41&',
+                    f'&45&',
+                    f'&52&',
+                ],
+                [  # 3
+                    f'${3}Алироо{3}$',
+                    f'${2} йар{2}$',
+                    f'${4}эуии{4}$',
+                    f'${5}т л{5}$',
+                    f'${6}очпт{6}$',
+                    f'${1} шктгм{1}$',
+                    f'%324561%',
+                    f'&11&',
+                    f'&13&',
+                    f'&22&',
+                    f'&24&',
+                    f'&31&',
+                    f'&33&',
+                    f'&42&',
+                    f'&44&',
+                    f'&53&',
+                ],
+                [  # 4
+                    f'${5}Аткоо{5}$',
+                    f'${3}ошрр{3}$',
+                    f'${2}  иа{2}$',
+                    f'${1}лйили{1}$',
+                    f'${4}эупт{4}$',
+                    f'${6}ч тгм{6}$',
+                    f'%532146%',
+                    f'&01&',
+                    f'&03&',
+                    f'&05&',
+                    f'&20&',
+                    f'&24&',
+                    f'&32&',
+                    f'&41&',
+                    f'&44&',
+                    f'&52&',
+                ],
+                [  # 5
+                    f'${2}ч по{2}$',
+                    f'${1}Аошктр{1}$',
+                    f'${3}  ои{3}$',
+                    f'${4}эла{4}$',
+                    f'${5}туирлт{5}$',
+                    f'${6}йигм{6}$',
+                    f'%213456%',
+                    f'&00&',
+                    f'&05&',
+                    f'&10&',
+                    f'&15&',
+                    f'&22&',
+                    f'&23&',
+                    f'&32&',
+                    f'&33&',
+                    f'&53&',
+                ],
+                [  # 6
+                    f'${4}Аошро{4}$',
+                    f'${3}иио{3}$',
+                    f'${5}  йар{5}$',
+                    f'${6}элпли{6}$',
+                    f'${2}у тт{2}$',
+                    f'${1}тчкгм{1}$',
+                    f'%435621%',
+                    f'&01&',
+                    f'&04&',
+                    f'&11&',
+                    f'&23&',
+                    f'&32&',
+                    f'&35&',
+                    f'&41&',
+                    f'&44&',
+                    f'&50&',
+                ],
+                [  # 7
+                    f'${3} шоо{3}$',
+                    f'${1}Аирр{1}$',
+                    f'${5} лйиаи{5}$',
+                    f'${4}эупл{4}$',
+                    f'${2}т гт{2}$',
+                    f'${6}очктм{6}$',
+                    f'%315426%',
+                    f'&00&',
+                    f'&11&',
+                    f'&14&',
+                    f'&23&',
+                    f'&30&',
+                    f'&34&',
+                    f'&41&',
+                    f'&45&',
+                    f'&53&',
+                ],
+                [  # 8
+                    f'${6}Алроо{6}$',
+                    f'${3} иар{3}$',
+                    f'${2}эуйии{2}$',
+                    f'${4}тч пл{4}$',
+                    f'${1}оштт{1}$',
+                    f'${5} кгм{5}$',
+                    f'%632415%',
+                    f'&11&',
+                    f'&15&',
+                    f'&20&',
+                    f'&24&',
+                    f'&31&',
+                    f'&35&',
+                    f'&42&',
+                    f'&44&',
+                    f'&53&',
+                ],
+            ],
+            'task2'
+        )
+        change_all_task_files(
+            [
+                [  # 0
+                    f'${2}Кйолнл{2}$',
+                    f'${6}огиа{6}$',
+                    f'${1}т дмы{1}$',
+                    f'${5}оаябук{5}$',
+                    f'${4}р ора{4}$',
+                    f'${3}ык- л{3}$',
+                    f'%261543%',
+                    f'&11&',
+                    f'&24&',
+                    f'&32&',
+                    f'&45&',
+                    f'&51&',
+                ],
+                [  # 1
+                    f'${1}Кка р{1}$',
+                    f'${3}ыо-нл{3}$',
+                    f'${4}ойглы{4}$',
+                    f'${2}т диак{2}$',
+                    f'${6}оябма{6}$',
+                    f'${5}р оул{5}$',
+                    f'%134265%',
+                    f'&01&',
+                    f'&10&',
+                    f'&24&',
+                    f'&25&',
+                    f'&42&',
+                ],
+                [  # 2
+                    f'${5}ыолны{5}$',
+                    f'${1}Кйиа{1}$',
+                    f'${6}о гбмк{6}$',
+                    f'${3}тядуа{3}$',
+                    f'${4}о аор{4}$',
+                    f'${2}рк- лл{2}$',
+                    f'%516342%',
+                    f'&00&',
+                    f'&21&',
+                    f'&33&',
+                    f'&51&',
+                    f'&54&',
+                ],
+                [  # 3
+                    f'${2}Кыкл л{2}$',
+                    f'${5}йоины{5}$',
+                    f'${1}о гак{1}$',
+                    f'${6}тдбма{6}$',
+                    f'${3}ояаоу{3}$',
+                    f'${4}р -рл{4}$',
+                    f'%251634%',
+                    f'&01&',
+                    f'&13&',
+                    f'&42&',
+                    f'&45&',
+                    f'&54&',
+                ],
+                [  # 4
+                    f'${3}Кк- л{3}$',
+                    f'${5}ойоны{5}$',
+                    f'${2}т гла{2}$',
+                    f'${1}оядимк{1}$',
+                    f'${6}р абуа{6}$',
+                    f'${4}ыорл{4}$',
+                    f'%352164%',
+                    f'&10&',
+                    f'&15&',
+                    f'&25&',
+                    f'&31&',
+                    f'&52&',
+                ],
+                [  # 5
+                    f'${5}Кыдор{5}$',
+                    f'${6}о а л{6}$',
+                    f'${4}йк-ны{4}$',
+                    f'${3}толак{3}$',
+                    f'${1}о има{1}$',
+                    f'${2}рягбул{2}$',
+                    f'%564312%',
+                    f'&02&',
+                    f'&11&',
+                    f'&13&',
+                    f'&20&',
+                    f'&24&',
+                ],
+                [  # 6
+                    f'${3}Кйгил{3}$',
+                    f'${1}о дба{1}$',
+                    f'${2}тяамы{2}$',
+                    f'${5}о -оук{5}$',
+                    f'${4}ркл а{4}$',
+                    f'${6}ыонрл{6}$',
+                    f'%312546%',
+                    f'&25&',
+                    f'&32&',
+                    f'&40&',
+                    f'&44&',
+                    f'&51&',
+                ],
+                [  # 7
+                    f'${6}Коны{6}$',
+                    f'${2}ойгла{2}$',
+                    f'${5}т димк{5}$',
+                    f'${1}ояабуа{1}$',
+                    f'${4}р -ор{4}$',
+                    f'${3}ык лл{3}$',
+                    f'%625143%',
+                    f'&10&',
+                    f'&25&',
+                    f'&30&',
+                    f'&51&',
+                    f'&54&',
+                ],
+                [  # 8
+                    f'${3}Кйол р{3}$',
+                    f'${2}о гнл{2}$',
+                    f'${4}тдаы{4}$',
+                    f'${1}ояимк{1}$',
+                    f'${5}р аба{5}$',
+                    f'${6}ык-оул{6}$',
+                    f'%324156%',
+                    f'&12&',
+                    f'&23&',
+                    f'&31&',
+                    f'&32&',
+                    f'&44&',
+                ],
+            ],
+            'task3'
+        )
         self.destroy()
 
     def update_current_function(self, _function_number):  # choosing the right function
@@ -744,6 +1301,447 @@ class MainWindow(tk.Tk):
             self.menu.entryconfig('Подсказки', state='disabled')
             if self.function_number == 6:
                 self.menu.entryconfig('Подсказки', state='normal')
+            if self.function_number != 6:# $ - peaces of main text
+                # % - right key
+                # & - filled squares
+                change_all_task_files(
+                    [
+                        [  # 0
+                            f'${1}Птеооа{1}$',
+                            f'${2}нвтс{2}$',
+                            f'${3}р,яуи{3}$',
+                            f'${4}и т л{4}$',
+                            f'${5}вм  Ви{5}$',
+                            f'${6}езКй{6}$',
+                            f'%123456%',
+                            f'&01&',
+                            f'&11&',
+                            f'&15&',
+                            f'&23&',
+                            f'&42&',
+                            f'&45&',
+                        ],
+                        [  # 1
+                            f'${5}ПвеоК{5}$',
+                            f'${2}ренвос{2}$',
+                            f'${3}тяути{3}$',
+                            f'${6}, т л{6}$',
+                            f'${1}и зВи{1}$',
+                            f'${4}м ай{4}$',
+                            f'%523614%',
+                            f'&02&',
+                            f'&03&',
+                            f'&05&',
+                            f'&25&',
+                            f'&34&',
+                            f'&50&',
+                        ],
+                        [  # 2
+                            f'${3}П,явоа{3}$',
+                            f'${5}р ус{5}$',
+                            f'${2}и тти{2}$',
+                            f'${4}вмз л{4}$',
+                            f'${1}еео и{1}$',
+                            f'${6}тнКВй{6}$',
+                            f'%352416%',
+                            f'&11&',
+                            f'&22&',
+                            f'&25&',
+                            f'&33&',
+                            f'&41&',
+                            f'&44&',
+                        ],
+                        [  # 3
+                            f'${5}Птнвс{5}$',
+                            f'${4}р,уои{4}$',
+                            f'${1} яттл{1}$',
+                            f'${3}и   и{3}$',
+                            f'${6}вмзВй{6}$',
+                            f'${2}ееоКа{2}$',
+                            f'%541362%',
+                            f'&02&',
+                            f'&13&',
+                            f'&21&',
+                            f'&34&',
+                            f'&40&',
+                            f'&55&',
+                        ],
+                        [  # 4
+                            f'${6}Птнос{6}$',
+                            f'${5}рявти{5}$',
+                            f'${4}и, ул{4}$',
+                            f'${3}в т и{3}$',
+                            f'${2}мз Вй{2}$',
+                            f'${1}ееоКа{1}$',
+                            f'%654321%',
+                            f'&04&',
+                            f'&11&',
+                            f'&23&',
+                            f'&30&',
+                            f'&42&',
+                            f'&55&',
+                        ],
+                        [  # 5
+                            f'${3}П,явКа{3}$',
+                            f'${6}р ос{6}$',
+                            f'${5}и ути{5}$',
+                            f'${1}вмзт л{1}$',
+                            f'${4}ееоВи{4}$',
+                            f'${2}тн й{2}$',
+                            f'%365142%',
+                            f'&11&',
+                            f'&22&',
+                            f'&25&',
+                            f'&31&',
+                            f'&34&',
+                            f'&45&',
+                        ],
+                        [  # 6
+                            f'${2}П,яуос{2}$',
+                            f'${6}р ти{6}$',
+                            f'${5}и тл{5}$',
+                            f'${1}вмз {1}$',
+                            f'${4}еео Ви{4}$',
+                            f'${3}тнвКай{3}$',
+                            f'%265143%',
+                            f'&11&',
+                            f'&22&',
+                            f'&31&',
+                            f'&33&',
+                            f'&42&',
+                            f'&53&',
+                        ],
+                        [  # 7
+                            f'${4}П,яуос{4}$',
+                            f'${1}р ти{1}$',
+                            f'${2}и зт л{2}$',
+                            f'${6}вм и{6}$',
+                            f'${3}ееоКВй{3}$',
+                            f'${5}тнва{5}$',
+                            f'%412635%',
+                            f'&11&',
+                            f'&23&',
+                            f'&31&',
+                            f'&35&',
+                            f'&43&',
+                            f'&55&',
+                        ],
+                        [  # 8
+                            f'${5}ПтнКа{5}$',
+                            f'${4}ряоос{4}$',
+                            f'${2}и, ви{2}$',
+                            f'${1}в утл{1}$',
+                            f'${3}емзт и{3}$',
+                            f'${6}е Вй{6}$',
+                            f'%542136%',
+                            f'&05&',
+                            f'&11&',
+                            f'&23&',
+                            f'&25&',
+                            f'&30&',
+                            f'&42&',
+                        ],
+                    ],
+                    'task1'
+                )
+                change_all_task_files(
+                    [
+                        [  # 0
+                            f'${2}тшкар{2}$',
+                            f'${4}оирли{4}$',
+                            f'${6}А и{6}$',
+                            f'${3} лпгт{3}$',
+                            f'${1}уйтом{1}$',
+                            f'${5}эч о{5}$',
+                            f'%246315%',
+                            f'&00&',
+                            f'&01&',
+                            f'&04&',
+                            f'&22&',
+                            f'&23&',
+                            f'&42&',
+                            f'&44&',
+                            f'&52&',
+                            f'&55&',
+                        ],
+                        [  # 1
+                            f'${1} ирар{1}$',
+                            f'${6}Айии{6}$',
+                            f'${2} лплт{2}$',
+                            f'${5}эу гм{5}$',
+                            f'${3}тчт{3}$',
+                            f'${4}ошкоо{4}$',
+                            f'%162534%',
+                            f'&00&',
+                            f'&11&',
+                            f'&22&',
+                            f'&24&',
+                            f'&33&',
+                            f'&41&',
+                            f'&44&',
+                            f'&54&',
+                            f'&55&',
+                        ],
+                        [  # 2
+                            f'${6}Ашроо{6}$',
+                            f'${1} оир{1}$',
+                            f'${5} иа{5}$',
+                            f'${4}элйпли{4}$',
+                            f'${2}у гт{2}$',
+                            f'${3}тиктм{3}$',
+                            f'%615423%',
+                            f'&02&',
+                            f'&04&',
+                            f'&10&',
+                            f'&22&',
+                            f'&31&',
+                            f'&34&',
+                            f'&41&',
+                            f'&45&',
+                            f'&52&',
+                        ],
+                        [  # 3
+                            f'${3}Алироо{3}$',
+                            f'${2} йар{2}$',
+                            f'${4}эуии{4}$',
+                            f'${5}т л{5}$',
+                            f'${6}очпт{6}$',
+                            f'${1} шктгм{1}$',
+                            f'%324561%',
+                            f'&11&',
+                            f'&13&',
+                            f'&22&',
+                            f'&24&',
+                            f'&31&',
+                            f'&33&',
+                            f'&42&',
+                            f'&44&',
+                            f'&53&',
+                        ],
+                        [  # 4
+                            f'${5}Аткоо{5}$',
+                            f'${3}ошрр{3}$',
+                            f'${2}  иа{2}$',
+                            f'${1}лйили{1}$',
+                            f'${4}эупт{4}$',
+                            f'${6}ч тгм{6}$',
+                            f'%532146%',
+                            f'&01&',
+                            f'&03&',
+                            f'&05&',
+                            f'&20&',
+                            f'&24&',
+                            f'&32&',
+                            f'&41&',
+                            f'&44&',
+                            f'&52&',
+                        ],
+                        [  # 5
+                            f'${2}ч по{2}$',
+                            f'${1}Аошктр{1}$',
+                            f'${3}  ои{3}$',
+                            f'${4}эла{4}$',
+                            f'${5}туирлт{5}$',
+                            f'${6}йигм{6}$',
+                            f'%213456%',
+                            f'&00&',
+                            f'&05&',
+                            f'&10&',
+                            f'&15&',
+                            f'&22&',
+                            f'&23&',
+                            f'&32&',
+                            f'&33&',
+                            f'&53&',
+                        ],
+                        [  # 6
+                            f'${4}Аошро{4}$',
+                            f'${3}иио{3}$',
+                            f'${5}  йар{5}$',
+                            f'${6}элпли{6}$',
+                            f'${2}у тт{2}$',
+                            f'${1}тчкгм{1}$',
+                            f'%435621%',
+                            f'&01&',
+                            f'&04&',
+                            f'&11&',
+                            f'&23&',
+                            f'&32&',
+                            f'&35&',
+                            f'&41&',
+                            f'&44&',
+                            f'&50&',
+                        ],
+                        [  # 7
+                            f'${3} шоо{3}$',
+                            f'${1}Аирр{1}$',
+                            f'${5} лйиаи{5}$',
+                            f'${4}эупл{4}$',
+                            f'${2}т гт{2}$',
+                            f'${6}очктм{6}$',
+                            f'%315426%',
+                            f'&00&',
+                            f'&11&',
+                            f'&14&',
+                            f'&23&',
+                            f'&30&',
+                            f'&34&',
+                            f'&41&',
+                            f'&45&',
+                            f'&53&',
+                        ],
+                        [  # 8
+                            f'${6}Алроо{6}$',
+                            f'${3} иар{3}$',
+                            f'${2}эуйии{2}$',
+                            f'${4}тч пл{4}$',
+                            f'${1}оштт{1}$',
+                            f'${5} кгм{5}$',
+                            f'%632415%',
+                            f'&11&',
+                            f'&15&',
+                            f'&20&',
+                            f'&24&',
+                            f'&31&',
+                            f'&35&',
+                            f'&42&',
+                            f'&44&',
+                            f'&53&',
+                        ],
+                    ],
+                    'task2'
+                )
+                change_all_task_files(
+                    [
+                        [  # 0
+                            f'${2}Кйолнл{2}$',
+                            f'${6}огиа{6}$',
+                            f'${1}т дмы{1}$',
+                            f'${5}оаябук{5}$',
+                            f'${4}р ора{4}$',
+                            f'${3}ык- л{3}$',
+                            f'%261543%',
+                            f'&11&',
+                            f'&24&',
+                            f'&32&',
+                            f'&45&',
+                            f'&51&',
+                        ],
+                        [  # 1
+                            f'${1}Кка р{1}$',
+                            f'${3}ыо-нл{3}$',
+                            f'${4}ойглы{4}$',
+                            f'${2}т диак{2}$',
+                            f'${6}оябма{6}$',
+                            f'${5}р оул{5}$',
+                            f'%134265%',
+                            f'&01&',
+                            f'&10&',
+                            f'&24&',
+                            f'&25&',
+                            f'&42&',
+                        ],
+                        [  # 2
+                            f'${5}ыолны{5}$',
+                            f'${1}Кйиа{1}$',
+                            f'${6}о гбмк{6}$',
+                            f'${3}тядуа{3}$',
+                            f'${4}о аор{4}$',
+                            f'${2}рк- лл{2}$',
+                            f'%516342%',
+                            f'&00&',
+                            f'&21&',
+                            f'&33&',
+                            f'&51&',
+                            f'&54&',
+                        ],
+                        [  # 3
+                            f'${2}Кыкл л{2}$',
+                            f'${5}йоины{5}$',
+                            f'${1}о гак{1}$',
+                            f'${6}тдбма{6}$',
+                            f'${3}ояаоу{3}$',
+                            f'${4}р -рл{4}$',
+                            f'%251634%',
+                            f'&01&',
+                            f'&13&',
+                            f'&42&',
+                            f'&45&',
+                            f'&54&',
+                        ],
+                        [  # 4
+                            f'${3}Кк- л{3}$',
+                            f'${5}ойоны{5}$',
+                            f'${2}т гла{2}$',
+                            f'${1}оядимк{1}$',
+                            f'${6}р абуа{6}$',
+                            f'${4}ыорл{4}$',
+                            f'%352164%',
+                            f'&10&',
+                            f'&15&',
+                            f'&25&',
+                            f'&31&',
+                            f'&52&',
+                        ],
+                        [  # 5
+                            f'${5}Кыдор{5}$',
+                            f'${6}о а л{6}$',
+                            f'${4}йк-ны{4}$',
+                            f'${3}толак{3}$',
+                            f'${1}о има{1}$',
+                            f'${2}рягбул{2}$',
+                            f'%564312%',
+                            f'&02&',
+                            f'&11&',
+                            f'&13&',
+                            f'&20&',
+                            f'&24&',
+                        ],
+                        [  # 6
+                            f'${3}Кйгил{3}$',
+                            f'${1}о дба{1}$',
+                            f'${2}тяамы{2}$',
+                            f'${5}о -оук{5}$',
+                            f'${4}ркл а{4}$',
+                            f'${6}ыонрл{6}$',
+                            f'%312546%',
+                            f'&25&',
+                            f'&32&',
+                            f'&40&',
+                            f'&44&',
+                            f'&51&',
+                        ],
+                        [  # 7
+                            f'${6}Коны{6}$',
+                            f'${2}ойгла{2}$',
+                            f'${5}т димк{5}$',
+                            f'${1}ояабуа{1}$',
+                            f'${4}р -ор{4}$',
+                            f'${3}ык лл{3}$',
+                            f'%625143%',
+                            f'&10&',
+                            f'&25&',
+                            f'&30&',
+                            f'&51&',
+                            f'&54&',
+                        ],
+                        [  # 8
+                            f'${3}Кйол р{3}$',
+                            f'${2}о гнл{2}$',
+                            f'${4}тдаы{4}$',
+                            f'${1}ояимк{1}$',
+                            f'${5}р аба{5}$',
+                            f'${6}ык-оул{6}$',
+                            f'%324156%',
+                            f'&12&',
+                            f'&23&',
+                            f'&31&',
+                            f'&32&',
+                            f'&44&',
+                        ],
+                    ],
+                    'task3'
+                )
 
             if self.function_number == 0:
                 self.home_show()
@@ -758,237 +1756,6 @@ class MainWindow(tk.Tk):
             elif self.function_number == 5:
                 self.table_algorithm_show(5, '')  # расшифровать
             elif self.function_number == 6:
-                change_all_task_files(
-                    [
-                        [  # 0
-                            f'${1}Птеооа{1}$',
-                            f'${2}нвтс{2}$',
-                            f'${3}р,яуи{3}$',
-                            f'${4}и т л{4}$',
-                            f'${5}вм  Ви{5}$',
-                            f'${6}езКй{6}$',
-                        ],
-                        [  # 1
-                            f'${5}ПвеоК{5}$',
-                            f'${2}ренвос{2}$',
-                            f'${3}тяути{3}$',
-                            f'${6}, т л{6}$',
-                            f'${1}и зВи{1}$',
-                            f'${4}м ай{4}$',
-                        ],
-                        [  # 2
-                            f'${3}П,явоа{3}$',
-                            f'${5}р ус{5}$',
-                            f'${2}и тти{2}$',
-                            f'${4}вмз л{4}$',
-                            f'${1}еео и{1}$',
-                            f'${6}тнКВй{6}$',
-                        ],
-                        [  # 3
-                            f'${5}Птнвс{5}$',
-                            f'${4}р,уои{4}$',
-                            f'${1} яттл{1}$',
-                            f'${3}и   и{3}$',
-                            f'${6}вмзВй{6}$',
-                            f'${2}ееоКа{2}$',
-                        ],
-                        [  # 4
-                            f'${6}Птнос{6}$',
-                            f'${5}рявти{5}$',
-                            f'${4}и, ул{4}$',
-                            f'${3}в т и{3}$',
-                            f'${2}мз Вй{2}$',
-                            f'${1}ееоКа{1}$',
-                        ],
-                        [  # 5
-                            f'${3}П,явКа{3}$',
-                            f'${6}р ос{6}$',
-                            f'${5}и ути{5}$',
-                            f'${1}вмзт л{1}$',
-                            f'${4}ееоВи{4}$',
-                            f'${2}тн й{2}$',
-                        ],
-                        [  # 6
-                            f'${2}П,яуос{2}$',
-                            f'${6}р ти{6}$',
-                            f'${5}и тл{5}$',
-                            f'${1}вмз {1}$',
-                            f'${4}еео Ви{4}$',
-                            f'${3}тнвКай{3}$',
-                        ],
-                        [  # 7
-                            f'${4}П,яуос{4}$',
-                            f'${1}р ти{1}$',
-                            f'${2}и зт л{2}$',
-                            f'${6}вм и{6}$',
-                            f'${3}ееоКВй{3}$',
-                            f'${5}тнва{5}$',
-                        ],
-                        [  # 8
-                            f'${5}ПтнКа{5}$',
-                            f'${4}ряоос{4}$',
-                            f'${2}и, ви{2}$',
-                            f'${1}в утл{1}$',
-                            f'${3}емзт и{3}$',
-                            f'${6}е Вй{6}$',
-                        ],
-                    ],
-                    'task1'
-                )
-                change_all_task_files(
-                    [
-                        [  # 0
-                            f'${2}тшкар{2}$',
-                            f'${4}оирли{4}$',
-                            f'${6}А и{6}$',
-                            f'${3} лпгт{3}$',
-                            f'${1}уйтом{1}$',
-                            f'${5}эч о{5}$',
-                        ],
-                        [  # 1
-                            f'${1} ирар{1}$',
-                            f'${6}Айии{6}$',
-                            f'${2} лплт{2}$',
-                            f'${5}эу гм{5}$',
-                            f'${3}тчт{3}$',
-                            f'${4}ошкоо{4}$',
-                        ],
-                        [  # 2
-                            f'${6}Ашроо{6}$',
-                            f'${1} оир{1}$',
-                            f'${5} иа{5}$',
-                            f'${4}элйпли{4}$',
-                            f'${2}у гт{2}$',
-                            f'${3}тиктм{3}$',
-                        ],
-                        [  # 3
-                            f'${3}Алироо{3}$',
-                            f'${2} йар{2}$',
-                            f'${4}эуии{4}$',
-                            f'${5}т л{5}$',
-                            f'${6}очпт{6}$',
-                            f'${1} шктгм{1}$',
-                        ],
-                        [  # 4
-                            f'${5}Аткоо{5}$',
-                            f'${3}ошрр{3}$',
-                            f'${2}  иа{2}$',
-                            f'${1}лйили{1}$',
-                            f'${4}эупт{4}$',
-                            f'${6}ч тгм{6}$',
-                        ],
-                        [  # 5
-                            f'${2}ч по{2}$',
-                            f'${1}Аошктр{1}$',
-                            f'${3}  ои{3}$',
-                            f'${4}эла{4}$',
-                            f'${5}туирлт{5}$',
-                            f'${6}йигм{6}$',
-                        ],
-                        [  # 6
-                            f'${4}Аошро{4}$',
-                            f'${3}иио{3}$',
-                            f'${5}  йар{5}$',
-                            f'${6}элпли{6}$',
-                            f'${2}у тт{2}$',
-                            f'${1}тчкгм{1}$',
-                        ],
-                        [  # 7
-                            f'${3} шоо{3}$',
-                            f'${1}Аирр{1}$',
-                            f'${5} лйиаи{5}$',
-                            f'${4}эупл{4}$',
-                            f'${2}т гт{2}$',
-                            f'${6}очктм{6}$',
-                        ],
-                        [  # 8
-                            f'${6}Алроо{5}$',
-                            f'${3} иар{3}$',
-                            f'${2}эуйии{2}$',
-                            f'${4}тч пл{4}$',
-                            f'${1}оштт{1}$',
-                            f'${5} кгм{5}$',
-                        ],
-                    ],
-                    'task2'
-                )
-                change_all_task_files(
-                    [
-                        [  # 0
-                            f'${2}Кйолнл{2}$',
-                            f'${6}огиа{6}$',
-                            f'${1}т дмы{1}$',
-                            f'${5}оаябук{5}$',
-                            f'${4}р ора{4}$',
-                            f'${3}ык- л{3}$',
-                        ],
-                        [  # 1
-                            f'${1}Кка р{1}$',
-                            f'${3}ыо-нл{3}$',
-                            f'${4}ойглы{4}$',
-                            f'${2}т диак{2}$',
-                            f'${6}оябма{6}$',
-                            f'${5}р оул{5}$',
-                        ],
-                        [  # 2
-                            f'${5}ыолны{5}$',
-                            f'${1}Кйиа{1}$',
-                            f'${6}о гбмк{6}$',
-                            f'${3}тядуа{3}$',
-                            f'${4}о аор{4}$',
-                            f'${2}рк- лл{2}$',
-                        ],
-                        [  # 3
-                            f'${2}Кыкл л{2}$',
-                            f'${5}йоины{5}$',
-                            f'${1}о гак{1}$',
-                            f'${6}тдбма{6}$',
-                            f'${3}ояаоу{3}$',
-                            f'${4}р -рл{4}$',
-                        ],
-                        [  # 4
-                            f'${3}Кк- л{3}$',
-                            f'${5}ойоны{5}$',
-                            f'${2}т гла{2}$',
-                            f'${1}оядимк{1}$',
-                            f'${6}р абуа{6}$',
-                            f'${4}ыорл{4}$',
-                        ],
-                        [  # 5
-                            f'${5}Кыдор{5}$',
-                            f'${6}о а л{6}$',
-                            f'${4}йк-ны{4}$',
-                            f'${3}толак{3}$',
-                            f'${1}о има{1}$',
-                            f'${2}рягбул{2}$',
-                        ],
-                        [  # 6
-                            f'${3}Кйгил{3}$',
-                            f'${1}о дба{1}$',
-                            f'${2}тяамы{2}$',
-                            f'${5}о -оук{5}$',
-                            f'${4}ркл а{4}$',
-                            f'${6}ыонрл{6}$',
-                        ],
-                        [  # 7
-                            f'${6}Коны{6}$',
-                            f'${2}ойгла{2}$',
-                            f'${5}т димк{5}$',
-                            f'${1}ояабуа{1}$',
-                            f'${4}р -ор{4}$',
-                            f'${3}ык лл{3}$',
-                        ],
-                        [  # 8
-                            f'${3}Кйол р{3}$',
-                            f'${2}о гнл{2}$',
-                            f'${4}тдаы{4}$',
-                            f'${1}ояимк{1}$',
-                            f'${5}р аба{5}$',
-                            f'${6}ык-оул{6}$',
-                        ],
-                    ],
-                    'task3'
-                )
                 file_text = choose_directory()
                 if file_text == '':
                     self.update_current_function(0)
