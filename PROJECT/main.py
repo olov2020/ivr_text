@@ -5,26 +5,9 @@ import tkinter.filedialog as fd
 import rsa
 import os
 
-"""
-Done
-1) XOR works well now
-2) Replacement works well now
-3) RSA need some fixes
-4) Table algorithm:
-    showing works well
-    result works well
-    (4, 5, 6) works well
-5) Full commented code
-    
-Need to do:
-1) key answer checkbuttons for table
-2) Home page
-3) My page
-"""
-
 # global variables
-sum_tips_filled = 0
-sum_tips_key = 0
+sum_tips_filled = [0 for _ in range(6)]
+sum_tips_key = [0 for _ in range(6)]
 key_answer_list = []  # true key
 some_tips_list = []  # all filled squares
 all_columns_filled_list = []  # filled positions which should be shown
@@ -458,213 +441,110 @@ class Tips(tk.Tk):
         self.geometry('300x400+100+100')
         self.protocol("WM_DELETE_WINDOW", lambda: self.destroy())
 
-        global sum_tips_key, sum_tips_filled
-
         # filled answer
         self.label_tip_filled = tk.Label(self, text='Показать запрещенные ячейки в:')
 
-        self.first_tip_var_filled = tk.IntVar()
-        self.second_tip_var_filled = tk.IntVar()
-        self.third_tip_var_filled = tk.IntVar()
-        self.fourth_tip_var_filled = tk.IntVar()
-        self.fifth_tip_var_filled = tk.IntVar()
-        self.sixth_tip_var_filled = tk.IntVar()
+        # all variables for filled squares
+        self.tips_var_filled_list = [tk.IntVar() for _ in range(6)]
+        self.tips_filled_list = []
 
-        self.first_tip_filled = tk.Checkbutton(self, text='первом столбце', variable=self.first_tip_var_filled,
-                                               onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip1())
-        self.second_tip_filled = tk.Checkbutton(self, text='втором столбце', variable=self.second_tip_var_filled,
-                                                onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip2())
-        self.third_tip_filled = tk.Checkbutton(self, text='третьем столбце', variable=self.third_tip_var_filled,
-                                               onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip3())
-        self.fourth_tip_filled = tk.Checkbutton(self, text='четвертом столбце', variable=self.fourth_tip_var_filled,
-                                                onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip4())
-        self.fifth_tip_filled = tk.Checkbutton(self, text='пятом столбце', variable=self.fifth_tip_var_filled,
-                                               onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip5())
-        self.sixth_tip_filled = tk.Checkbutton(self, text='шестом столбце', variable=self.sixth_tip_var_filled,
-                                               onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip6())
+        self.tips_filled_list.append(tk.Checkbutton(self, text='первом столбце', variable=self.tips_var_filled_list[0],
+                                                    onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 0)))
+        # toggle_click_tip(which list, which place)
+        self.tips_filled_list.append(tk.Checkbutton(self, text='втором столбце', variable=self.tips_var_filled_list[1],
+                                                    onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 1)))
+        self.tips_filled_list.append(tk.Checkbutton(self, text='третьем столбце', variable=self.tips_var_filled_list[2],
+                                                    onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 2)))
+        self.tips_filled_list.append(tk.Checkbutton(self, text='четвертом столбце',
+                                                    variable=self.tips_var_filled_list[3],
+                                                    onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 3)))
+        self.tips_filled_list.append(tk.Checkbutton(self, text='пятом столбце', variable=self.tips_var_filled_list[4],
+                                                    onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 4)))
+        self.tips_filled_list.append(tk.Checkbutton(self, text='шестом столбце', variable=self.tips_var_filled_list[5],
+                                                    onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 5)))
 
-        if sum_tips_filled == 3:
-            self.first_tip_filled.config(state=tk.DISABLED)
-            self.second_tip_filled.config(state=tk.DISABLED)
-            self.third_tip_filled.config(state=tk.DISABLED)
-            self.fourth_tip_filled.config(state=tk.DISABLED)
-            self.fifth_tip_filled.config(state=tk.DISABLED)
-            self.sixth_tip_filled.config(state=tk.DISABLED)
+        if sum(sum_tips_filled) < 3:
+            for i in range(len(sum_tips_filled)):
+                if sum_tips_filled[i] == 1:
+                    self.tips_filled_list[i].config(state=tk.DISABLED)
+                elif sum_tips_filled[i] == 0:
+                    self.tips_filled_list[i].config(state=tk.NORMAL)
+        elif sum(sum_tips_filled) == 3:
+            for i in range(len(sum_tips_filled)):
+                self.tips_filled_list[i].config(state=tk.DISABLED)
 
         # key answer
         self.label_tip_key = tk.Label(self, text='Показать правильное расположение столбцов:')
 
-        self.first_tip_var_key = tk.IntVar()
-        self.second_tip_var_key = tk.IntVar()
-        self.third_tip_var_key = tk.IntVar()
-        self.fourth_tip_var_key = tk.IntVar()
-        self.fifth_tip_var_key = tk.IntVar()
-        self.sixth_tip_var_key = tk.IntVar()
+        # all variables for key answer
+        self.tips_var_key_list = [tk.IntVar() for _ in range(6)]
+        self.tips_key_list = []
 
-        self.first_tip_key = tk.Checkbutton(self, text='первый столбец', variable=self.first_tip_var_key,
-                                            onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip7())
-        self.second_tip_key = tk.Checkbutton(self, text='второй столбец', variable=self.second_tip_var_key,
-                                             onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip8())
-        self.third_tip_key = tk.Checkbutton(self, text='третий столбец', variable=self.third_tip_var_key,
-                                            onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip9())
-        self.fourth_tip_key = tk.Checkbutton(self, text='четвертый столбец', variable=self.fourth_tip_var_key,
-                                             onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip10())
-        self.fifth_tip_key = tk.Checkbutton(self, text='пятый столбец', variable=self.fifth_tip_var_key,
-                                            onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip11())
-        self.sixth_tip_key = tk.Checkbutton(self, text='шестой столбец', variable=self.sixth_tip_var_key,
-                                            onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip12())
+        self.tips_key_list.append(tk.Checkbutton(self, text='первый столбец', variable=self.tips_var_key_list[0],
+                                                 onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(1, 0)))
+        self.tips_key_list.append(tk.Checkbutton(self, text='второй столбец', variable=self.tips_var_key_list[1],
+                                                 onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(1, 1)))
+        self.tips_key_list.append(tk.Checkbutton(self, text='третий столбец', variable=self.tips_var_key_list[2],
+                                                 onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(1, 2)))
+        self.tips_key_list.append(tk.Checkbutton(self, text='четвертый столбец', variable=self.tips_var_key_list[3],
+                                                 onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(1, 3)))
+        self.tips_key_list.append(tk.Checkbutton(self, text='пятый столбец', variable=self.tips_var_key_list[4],
+                                                 onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(1, 4)))
+        self.tips_key_list.append(tk.Checkbutton(self, text='шестой столбец', variable=self.tips_var_key_list[5],
+                                                 onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(1, 5)))
 
-        if sum_tips_key == 3:
-            self.first_tip_key.config(state=tk.DISABLED)
-            self.second_tip_key.config(state=tk.DISABLED)
-            self.third_tip_key.config(state=tk.DISABLED)
-            self.fourth_tip_key.config(state=tk.DISABLED)
-            self.fifth_tip_key.config(state=tk.DISABLED)
-            self.sixth_tip_key.config(state=tk.DISABLED)
+        if sum(sum_tips_key) < 3:
+            for i in range(len(sum_tips_key)):
+                if sum_tips_key[i] == 1:
+                    self.tips_key_list[i].config(state=tk.DISABLED)
+                elif sum_tips_key[i] == 0:
+                    self.tips_key_list[i].config(state=tk.NORMAL)
+        elif sum(sum_tips_key) == 3:
+            for i in range(len(sum_tips_key)):
+                self.tips_key_list[i].config(state=tk.DISABLED)
 
         self.label_tip_filled.pack()
-        self.first_tip_filled.pack()
-        self.second_tip_filled.pack()
-        self.third_tip_filled.pack()
-        self.fourth_tip_filled.pack()
-        self.fifth_tip_filled.pack()
-        self.sixth_tip_filled.pack()
+        for i in self.tips_filled_list:
+            i.pack()
         self.label_tip_key.pack()
-        self.first_tip_key.pack()
-        self.second_tip_key.pack()
-        self.third_tip_key.pack()
-        self.fourth_tip_key.pack()
-        self.fifth_tip_key.pack()
-        self.sixth_tip_key.pack()
+        for i in self.tips_key_list:
+            i.pack()
 
-    def toggle_click_tip1(self):
-        self.first_tip_var_filled.set(not self.first_tip_var_filled.get())
-        self.check_click_tip()
-
-    def toggle_click_tip2(self):
-        self.second_tip_var_filled.set(not self.second_tip_var_filled.get())
-        self.check_click_tip()
-
-    def toggle_click_tip3(self):
-        self.third_tip_var_filled.set(not self.third_tip_var_filled.get())
-        self.check_click_tip()
-
-    def toggle_click_tip4(self):
-        self.fourth_tip_var_filled.set(not self.fourth_tip_var_filled.get())
-        self.check_click_tip()
-
-    def toggle_click_tip5(self):
-        self.fifth_tip_var_filled.set(not self.fifth_tip_var_filled.get())
-        self.check_click_tip()
-
-    def toggle_click_tip6(self):
-        self.sixth_tip_var_filled.set(not self.sixth_tip_var_filled.get())
-        self.check_click_tip()
-
-    def toggle_click_tip7(self):
-        self.first_tip_var_key.set(not self.first_tip_var_key.get())
-        self.check_click_tip()
-
-    def toggle_click_tip8(self):
-        self.second_tip_var_key.set(not self.second_tip_var_key.get())
-        self.check_click_tip()
-
-    def toggle_click_tip9(self):
-        self.third_tip_var_key.set(not self.third_tip_var_key.get())
-        self.check_click_tip()
-
-    def toggle_click_tip10(self):
-        self.fourth_tip_var_key.set(not self.fourth_tip_var_key.get())
-        self.check_click_tip()
-
-    def toggle_click_tip11(self):
-        self.fifth_tip_var_key.set(not self.fifth_tip_var_key.get())
-        self.check_click_tip()
-
-    def toggle_click_tip12(self):
-        self.sixth_tip_var_key.set(not self.sixth_tip_var_key.get())
+    def toggle_click_tip(self, which_list, place):
+        if which_list == 0:
+            self.tips_var_filled_list[place].set(not self.tips_var_filled_list[place].get())
+        elif which_list == 1:
+            self.tips_var_key_list[place].set(not self.tips_var_key_list[place].get())
         self.check_click_tip()
 
     def check_click_tip(self):
-        global all_columns_filled_list, sum_tips_filled, sum_tips_key, show_key_list
+        global all_columns_filled_list, show_key_list
 
         all_columns_filled_list = []
-        first_column_filled_list = []
-        second_column_filled_list = []
-        third_column_filled_list = []
-        fourth_column_filled_list = []
-        fifth_column_filled_list = []
-        sixth_column_filled_list = []
 
-        if sum_tips_filled != 3:
-            sum_tips_filled = self.first_tip_var_filled.get() + self.second_tip_var_filled.get() + \
-                              self.third_tip_var_filled.get() + self.fourth_tip_var_filled.get() + \
-                              self.fifth_tip_var_filled.get() + self.sixth_tip_var_filled.get()
+        if sum(sum_tips_filled) != 3:
+            for i in range(6):
+                sum_tips_filled[i] = self.tips_var_filled_list[i].get()
         # print(sum_tips_filled)
-        if sum_tips_key != 3:
-            sum_tips_key = self.first_tip_var_key.get() + self.second_tip_var_key.get() + \
-                           self.third_tip_var_key.get() + self.fourth_tip_var_key.get() + \
-                           self.fifth_tip_var_key.get() + self.sixth_tip_var_key.get()
+        if sum(sum_tips_key) != 3:
+            for i in range(6):
+                sum_tips_key[i] = self.tips_var_key_list[i].get()
         # print(sum_tips_key)
 
-        if sum_tips_key == 3:
-            if self.first_tip_var_key.get() == 1:
-                show_key_list.append([0, key_answer_list[0]])
-            if self.second_tip_var_key.get() == 1:
-                show_key_list.append([1, key_answer_list[1]])
-            if self.third_tip_var_key.get() == 1:
-                show_key_list.append([2, key_answer_list[2]])
-            if self.fourth_tip_var_key.get() == 1:
-                show_key_list.append([3, key_answer_list[3]])
-            if self.fifth_tip_var_key.get() == 1:
-                show_key_list.append([4, key_answer_list[4]])
-            if self.sixth_tip_var_key.get() == 1:
-                show_key_list.append([5, key_answer_list[5]])
+        if sum(sum_tips_key) == 3:
+            for i in range(6):
+                if self.tips_var_key_list[i].get() == 1:
+                    show_key_list.append([i, key_answer_list[i]])
+                self.tips_key_list[i].config(state=tk.DISABLED)
 
-            self.first_tip_key.config(state=tk.DISABLED)
-            self.second_tip_key.config(state=tk.DISABLED)
-            self.third_tip_key.config(state=tk.DISABLED)
-            self.fourth_tip_key.config(state=tk.DISABLED)
-            self.fifth_tip_key.config(state=tk.DISABLED)
-            self.sixth_tip_key.config(state=tk.DISABLED)
-
-        if sum_tips_filled == 3:
-            if self.first_tip_var_filled.get() == 1:
-                for i in range(len(some_tips_list)):
-                    if some_tips_list[i][1] == 0:
-                        first_column_filled_list.append(some_tips_list[i])
-            if self.second_tip_var_filled.get() == 1:
-                for i in range(len(some_tips_list)):
-                    if some_tips_list[i][1] == 1:
-                        second_column_filled_list.append(some_tips_list[i])
-            if self.third_tip_var_filled.get() == 1:
-                for i in range(len(some_tips_list)):
-                    if some_tips_list[i][1] == 2:
-                        third_column_filled_list.append(some_tips_list[i])
-            if self.fourth_tip_var_filled.get() == 1:
-                for i in range(len(some_tips_list)):
-                    if some_tips_list[i][1] == 3:
-                        fourth_column_filled_list.append(some_tips_list[i])
-            if self.fifth_tip_var_filled.get() == 1:
-                for i in range(len(some_tips_list)):
-                    if some_tips_list[i][1] == 4:
-                        fifth_column_filled_list.append(some_tips_list[i])
-            if self.sixth_tip_var_filled.get() == 1:
-                for i in range(len(some_tips_list)):
-                    if some_tips_list[i][1] == 5:
-                        sixth_column_filled_list.append(some_tips_list[i])
-            all_columns_filled_list.append(first_column_filled_list)
-            all_columns_filled_list.append(second_column_filled_list)
-            all_columns_filled_list.append(third_column_filled_list)
-            all_columns_filled_list.append(fourth_column_filled_list)
-            all_columns_filled_list.append(fifth_column_filled_list)
-            all_columns_filled_list.append(sixth_column_filled_list)
-            self.first_tip_filled.config(state=tk.DISABLED)
-            self.second_tip_filled.config(state=tk.DISABLED)
-            self.third_tip_filled.config(state=tk.DISABLED)
-            self.fourth_tip_filled.config(state=tk.DISABLED)
-            self.fifth_tip_filled.config(state=tk.DISABLED)
-            self.sixth_tip_filled.config(state=tk.DISABLED)
+        if sum(sum_tips_filled) == 3:
+            for i in range(6):
+                arr = []
+                for j in range(len(some_tips_list)):
+                    if some_tips_list[j][1] == i and self.tips_var_filled_list[i].get() == 1:
+                        arr.append(some_tips_list[j])
+                all_columns_filled_list.append(arr)
+                self.tips_filled_list[i].config(state=tk.DISABLED)
 
 
 def filling_squares_with_tips(canvas, canvas_fill_squares_list, canvas_symbols_list):
@@ -737,13 +617,13 @@ class MainWindow(tk.Tk):
         self.mainloop()
 
     def exit_function(self):
-        global current_file_open
         try:
             os.remove('Keys.txt')  # deleting keys file, 'cause no one should know your keys
         except FileNotFoundError:
             pass
-        if current_file_open != '':
-            self.change_task_file(current_file_open)
+        self.change_task_file('task1')
+        self.change_task_file('task2')
+        self.change_task_file('task3')
         self.destroy()
 
     def update_current_function(self, _function_number):  # choosing the right function
