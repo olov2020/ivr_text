@@ -13,6 +13,9 @@ filled_answer_list = []  # all filled squares
 show_filled_list = []  # filled positions which should be shown
 show_key_list = []  # key positions which should be shown
 current_file_open = ''
+task1_answer = 'Привет, меня зовут Кот Василий'
+task2_answer = 'А это лучший криптоалгоритм'
+task3_answer = 'Который я когда-либо намурлыкал'
 xor_text = "Игровые смартфоны сейчас в тренде, а уж модели ASUS всегда привлекали внимание и получали" \
            " одобрение аудитории. Сегодня на обзоре — геймерский телефон линейки Republic of Gamers нового" \
            " поколения, оснащённый по последнему слову мобильной техники. Протестируем новинку всесторонне." \
@@ -109,10 +112,10 @@ xor_text = "Игровые смартфоны сейчас в тренде, а �
 def choose_directory():  # uploading file
     global current_file_open
 
-    filetypes = (("Текстовый файл", "*.txt"),
-                 ("Любой", "*.txt"))
-    my_file = fd.askopenfile(title="Открыть файл", initialdir="",
-                             filetypes=filetypes)  # here you can type path to your directory
+    filetypes = (("Текстовый файл", "*.txt"), ("Любой", "*.txt"))
+    my_file = fd.askopenfile(title="Открыть файл", initialdir="", filetypes=filetypes)
+    # here you can type path to your directory
+
     if my_file:  # if file is open
         # working with file
         # print(*my_file.readlines())
@@ -272,8 +275,6 @@ def working_with_files(file_text, main_text_entry, key_entry):
         if s1 == -1:
             break
     print(filled_answer_list)
-
-    # additional printing
     # print(result_output)
     # print(main_text)
     # print(key_text)
@@ -587,6 +588,25 @@ class Tips(tk.Tk):
             show_filled_list.append(arr)
 
 
+class Answer(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        # settings for the window
+        self.title('Answer')
+        self.geometry('300x400+100+100')
+        self.protocol("WM_DELETE_WINDOW", lambda: self.destroy())
+
+        self.header = tk.Label(self, text='Проверь свой ответ!', pady=5)
+        self.answer_label = tk.Label(self, text='Введи свой ответ')
+        self.answer_entry = tk.Entry(self, width=40, bg='#aaf')
+
+        # show widgets
+        self.header.pack()
+        self.answer_label.pack()
+        self.answer_entry.pack()
+
+
 class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -689,61 +709,23 @@ class MainWindow(tk.Tk):
                 # print(widget.winfo_name())
 
     def home_show(self):  # function to show welcome page
-        welcome = tk.Label(
-            self,
-            text='Hello, world!\n'
-                 'Welcome to my application for Cryptography :)\n'
-                 'Here you can have some practise in it...',
-        )
+        welcome = tk.Label(self, text='Hello, world!\nWelcome to my application for Cryptography :)\n'
+                                      'Here you can have some practise in it...')
 
         welcome.pack()
 
     def xor_show(self):  # xor show function
         # all widgets
-        header_label = tk.Label(
-            self,
-            text="XOR between 2 strings",
-            pady=10,
-        )
-        first_arg_label = tk.Label(
-            self,
-            text="Write down text",
-            pady=10,
-        )
-        first_arg_entry = tk.Entry(
-            self,
-            width=80,
-        )
-        second_arg_label = tk.Label(
-            self,
-            text="Write down the key",
-            pady=10,
-        )
-        second_arg_entry = tk.Entry(
-            self,
-            width=80,
-        )
-        result_entry = tk.Entry(
-            self,
-            text='',
-            width=80,
-            bg='#aaf',
-        )
-        separate1 = tk.Label(
-            self,
-            pady=5,
-            text='',
-        )
-        separate2 = tk.Label(
-            self,
-            pady=5,
-            text='',
-        )
-        function = tk.Button(
-            self,
-            text="Calculate the result",
-            command=lambda: xor_function(first_arg_entry, second_arg_entry, result_entry),
-        )
+        header_label = tk.Label(self, text="XOR between 2 strings", pady=5)
+        first_arg_label = tk.Label(self, text="Write down text", pady=5)
+        first_arg_entry = tk.Entry(self, width=80)
+        second_arg_label = tk.Label(self, text="Write down the key", pady=5)
+        second_arg_entry = tk.Entry(self, width=80)
+        result_entry = tk.Entry(self, text='', width=80, bg='#aaf')
+        separate1 = tk.Label(self, pady=5, text='')
+        separate2 = tk.Label(self, pady=5, text='')
+        function = tk.Button(self, text="Calculate the result",
+                             command=lambda: xor_function(first_arg_entry, second_arg_entry, result_entry))
 
         # showing widgets
         header_label.pack()
@@ -759,60 +741,20 @@ class MainWindow(tk.Tk):
 
     def replacement_show(self):  # replacement show function
         # all widgets
-        header_label = tk.Label(
-            self,
-            text="Замена",
-            pady=10,
-        )
-        first_arg_label = tk.Label(
-            self,
-            text="Напишите ваш алфавит, состоящий из уникальных символов",
-            pady=10,
-        )
-        first_arg_entry = tk.Entry(
-            self,
-            width=80,
-        )
-        second_arg_label = tk.Label(
-            self,
-            text="Напишите алфавит, на который будут заменяться буквы первого алфавита,\n"
-                 "алфавит также должен состоять из уникальных символов",
-            pady=10,
-        )
-        second_arg_entry = tk.Entry(
-            self,
-            width=80,
-        )
-        third_arg_entry = tk.Entry(
-            self,
-            width=80,
-        )
-        third_arg_label = tk.Label(
-            self,
-            text="Напишите сообщение",
-            pady=10,
-        )
-        result_label = tk.Entry(
-            self,
-            text='',
-            width=80,
-            bg='#aaf',
-        )
-        separate1 = tk.Label(
-            self,
-            pady=5,
-            text='',
-        )
-        separate2 = tk.Label(
-            self,
-            pady=5,
-            text='',
-        )
-        function = tk.Button(
-            self,
-            text="Calculate the result",
-            command=lambda: replacement_function(first_arg_entry, second_arg_entry, third_arg_entry, result_label),
-        )
+        header_label = tk.Label(self, text="Замена", pady=5)
+        first_arg_label = tk.Label(self, text="Напишите ваш алфавит, состоящий из уникальных символов", pady=5)
+        first_arg_entry = tk.Entry(self, width=80)
+        second_arg_label = tk.Label(self, text="Напишите алфавит, на который будут заменяться буквы первого алфавита,\n"
+                                               "алфавит также должен состоять из уникальных символов", pady=5)
+        second_arg_entry = tk.Entry(self, width=80)
+        third_arg_entry = tk.Entry(self, width=80)
+        third_arg_label = tk.Label(self, text="Напишите сообщение", pady=5)
+        result_label = tk.Entry(self, text='', width=80, bg='#aaf')
+        separate1 = tk.Label(self, pady=5, text='')
+        separate2 = tk.Label(self, pady=5, text='')
+        function = tk.Button(self, text="Calculate the result",
+                             command=lambda: replacement_function(first_arg_entry, second_arg_entry, third_arg_entry,
+                                                                  result_label))
 
         # showing widgets
         header_label.pack()
@@ -830,11 +772,7 @@ class MainWindow(tk.Tk):
 
     def rsa_show(self):  # rsa show function
         # all widgets
-        header_label = tk.Label(
-            self,
-            text='Rsa encryption',
-            pady=10,
-        )
+        header_label = tk.Label(self, text='Rsa encryption', pady=5)
         button_generating_keys = tk.Button(self, text='Сгенерировать пару ключей',
                                            command=lambda: self.generating_keys(button_generating_keys))
 
@@ -857,33 +795,17 @@ class MainWindow(tk.Tk):
         keys_file.close()
 
         # all widgets
-        explanation_label = tk.Label(
-            self,
-            text='Теперь у тебя есть открытый и закртый ключи.\n'
-                 'Они сохранились в папку, из которой была запущена эта программа.\n'
-                 'Найди и открой этот файл, он тебе понадобится.',
-            pady=10,
-        )
-        message_label = tk.Label(
-            self,
-            text='Введите сообщение которое хотите зашифровать / расшифровать',
-            pady=5
-        )
-        message_text = tk.Text(
-            self,
-            width=40,
-            height=7,
-        )
+        explanation_label = tk.Label(self, text='Теперь у тебя есть открытый и закртый ключи.\n'
+                                                'Они сохранились в папку, из которой была запущена эта программа.\n'
+                                                'Найди и открой этот файл, он тебе понадобится.', pady=5)
+        message_label = tk.Label(self, text='Введите сообщение которое хотите зашифровать / расшифровать', pady=5)
+        message_text = tk.Text(self, width=40, height=7)
         drop_down_encryption_list = [
             "Зашифровать",
             "Расшифровать",
         ]
 
-        result_text = tk.Text(
-            self,
-            width=40,
-            height=7,
-        )
+        result_text = tk.Text(self, width=40, height=7)
 
         # drop-down menu function
         def callback(*args):
@@ -901,8 +823,7 @@ class MainWindow(tk.Tk):
         variable.trace("w", callback)
 
         drop_down_encryption_menu = tk.OptionMenu(self, variable, *drop_down_encryption_list)
-        result_button = tk.Button(self, text='Поменять',
-                                  command=lambda: swap_texts(message_text, result_text))
+        result_button = tk.Button(self, text='Поменять', command=lambda: swap_texts(message_text, result_text))
 
         # showing widgets
         explanation_label.pack()
@@ -931,26 +852,10 @@ class MainWindow(tk.Tk):
 
     def table_algorithm_show(self, typo_algorithm, file_text):  # table algorithm show function
         # all widgets
-        header_label = tk.Label(
-            self,
-            pady=5,
-            text='Это табличный алгоритм',
-        )
-        main_text_label = tk.Label(
-            self,
-            pady=5,
-            text='Исходный текст',
-        )
-        separate1 = tk.Label(
-            self,
-            text='',
-        )
+        header_label = tk.Label(self, pady=5, text='Это табличный алгоритм')
+        main_text_label = tk.Label(self, pady=5, text='Исходный текст')
+        separate1 = tk.Label(self, text='')
         main_text_entry = tk.Entry(self, width=60)
-
-        # *preset*
-        # if you need preset text
-        # main_text_entry.delete(0, tk.END)
-        # main_text_entry.insert(0, 'Привет, меня зовут Кот Василий')
 
         key_label = tk.Label(self, pady=5, text='Ключ')
         key_entry = tk.Entry(self, width=20)
@@ -986,24 +891,10 @@ class MainWindow(tk.Tk):
             working_with_files(file_text, main_text_entry, key_entry)
             self.menu.entryconfig('Выберете функцию', state='disabled')
 
-        # *preset*
-        # key_entry.delete(0, tk.END)
-        # key_entry.insert(0, '213456')
-
         # area where text will be placed and shown
         canvas = tk.Canvas(self)
-        canvas.create_rectangle(
-            250, 60, 430, 240,
-            outline="#aaf", fill="#aaf"
-        )
+        canvas.create_rectangle(250, 60, 430, 240, outline="#aaf", fill="#aaf")
         result_entry = tk.Entry(self, bg='#aaf', width=60)
-
-        # *preset*
-        # result_entry.delete(0, tk.END)
-        # if typo_algorithm == 4:
-        #     result_entry.insert(0, 'р зКсП,  аимооивевтлену итятВй')
-        # elif typo_algorithm == 5:
-        #     result_entry.insert(0, ',П  а рзКсмиооиеввтлнеу ияттВй')
 
         result_button = tk.Button(self, text='Получить результат',
                                   command=lambda: working_with_table_algorithm(main_text_entry,
@@ -1015,13 +906,10 @@ class MainWindow(tk.Tk):
                                                                                typo_algorithm))
 
         # horizontal lines
+        for i in range(5):
+            canvas.create_line(250, 90 + i * 30, 430, 90 + i * 30)
         canvas.create_line(250, 59, 430, 59)
         canvas.create_line(250, 241, 430, 241)
-        canvas.create_line(250, 90, 430, 90)
-        canvas.create_line(250, 120, 430, 120)
-        canvas.create_line(250, 150, 430, 150)
-        canvas.create_line(250, 180, 430, 180)
-        canvas.create_line(250, 211, 430, 211)
 
         # useful lists
         canvas_key_list = [0 for _ in range(6)]  # key numbers
@@ -1035,12 +923,9 @@ class MainWindow(tk.Tk):
                 canvas_symbols_list[i][j] = canvas.create_text(265 + j * 30, 75 + i * 30, text='a')
 
         # vertical lines
+        for i in range(5):
+            canvas.create_line(280 + i * 30, 50, 280 + i * 30, 240)
         canvas.create_line(249, 50, 249, 240)
-        canvas.create_line(280, 50, 280, 240)
-        canvas.create_line(310, 50, 310, 240)
-        canvas.create_line(340, 50, 340, 240)
-        canvas.create_line(370, 50, 370, 240)
-        canvas.create_line(400, 50, 400, 240)
         canvas.create_line(431, 50, 431, 240)
 
         # show widgets
@@ -1053,11 +938,19 @@ class MainWindow(tk.Tk):
         result_button.pack()
         separate1.pack()
         result_entry.pack()
+
         if typo_algorithm == 6:
             global current_file_open
 
+            answer_button = tk.Button(self, text='Проверьте ответ', command=Answer)
             exit_button = tk.Button(self, text='Завершить дешифрование',
                                     command=lambda: self.change_task_file(current_file_open))
+            separate2 = tk.Label(self)
+            separate3 = tk.Label(self)
+
+            separate2.pack()
+            answer_button.pack()
+            separate3.pack()
             exit_button.pack()
 
     def change_task_file(self, task_number):
