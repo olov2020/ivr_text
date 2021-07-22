@@ -8,6 +8,7 @@ import os
 # global variables
 sum_tips_filled = [0 for _ in range(6)]
 sum_tips_key = [0 for _ in range(6)]
+symbol_show = [0 for _ in range(2)]
 key_answer_list = []  # true key
 filled_answer_list = []  # all filled squares
 show_filled_list = []  # filled positions which should be shown
@@ -443,9 +444,11 @@ def filling_squares_with_tips(canvas, canvas_fill_squares_list, canvas_symbols_l
 
 
 def clear_global_variables():
-    global sum_tips_filled, sum_tips_key, key_answer_list, filled_answer_list, show_filled_list, show_key_list
+    global sum_tips_filled, sum_tips_key, symbol_show, key_answer_list, \
+        filled_answer_list, show_filled_list, show_key_list
     sum_tips_filled = [0 for _ in range(6)]
     sum_tips_key = [0 for _ in range(6)]
+    symbol_show = [0 for _ in range(2)]
     key_answer_list = []  # true key
     filled_answer_list = []  # all filled squares
     show_filled_list = []  # filled positions which should be shown
@@ -458,11 +461,20 @@ class Tips(tk.Tk):
 
         # settings for the window
         self.title('Tips')
-        self.geometry('300x400+100+100')
+        self.geometry('300x440+100+100')
         self.protocol("WM_DELETE_WINDOW", lambda: self.destroy())
 
+        self.symbol_first_var = tk.IntVar()
+        self.symbol_last_var = tk.IntVar()
+        self.symbol_first_show = tk.Checkbutton(self, text='Показать первые 4 символа', variable=self.symbol_first_var,
+                                                onvalue=1, offvalue=0, command=lambda: self.symbol_show(0))
+        self.symbol_last_show = tk.Checkbutton(self, text='Показать последние 4 символа', variable=self.symbol_last_var,
+                                               onvalue=1, offvalue=0, command=lambda: self.symbol_show(1))
+        self.symbol_first_show_entry = tk.Entry(self, width=40)
+        self.symbol_last_show_entry = tk.Entry(self, width=40)
+
         # filled answer
-        self.label_tip_filled = tk.Label(self, text='Показать запрещенные ячейки в:')
+        self.filled_tip_label = tk.Label(self, text='Показать запрещенные ячейки в:')
 
         # all variables for filled squares
         self.tips_var_filled_list = [tk.IntVar() for _ in range(6)]
@@ -485,7 +497,7 @@ class Tips(tk.Tk):
                                                     onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 5)))
 
         # key answer
-        self.label_tip_key = tk.Label(self, text='Показать правильное расположение столбцов:')
+        self.key_tip_label = tk.Label(self, text='Показать правильное расположение столбцов:')
 
         # all variables for key answer
         self.tips_var_key_list = [tk.IntVar() for _ in range(6)]
@@ -504,7 +516,7 @@ class Tips(tk.Tk):
         self.tips_key_list.append(tk.Checkbutton(self, text='шестой столбец', variable=self.tips_var_key_list[5],
                                                  onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(1, 5)))
 
-        global sum_tips_key, sum_tips_filled
+        global sum_tips_key, sum_tips_filled, symbol_show
         if sum(sum_tips_filled) < 3:
             for i in range(len(sum_tips_filled)):
                 if sum_tips_filled[i] == 1:
@@ -525,12 +537,36 @@ class Tips(tk.Tk):
             for i in range(len(sum_tips_key)):
                 self.tips_key_list[i].config(state=tk.DISABLED)
 
-        self.label_tip_filled.pack()
+        if symbol_show[0] == 1:
+            self.symbol_first_show.config(state=tk.DISABLED)
+            self.symbol_first_show_entry.delete(0, tk.END)
+            self.symbol_first_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][:4])
+        if symbol_show[1] == 1:
+            self.symbol_last_show.config(state=tk.DISABLED)
+            self.symbol_last_show_entry.delete(0, tk.END)
+            self.symbol_last_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][-4:])
+
+        self.symbol_first_show.pack()
+        self.symbol_first_show_entry.pack()
+        self.symbol_last_show.pack()
+        self.symbol_last_show_entry.pack()
+        self.filled_tip_label.pack()
         for i in self.tips_filled_list:
             i.pack()
-        self.label_tip_key.pack()
+        self.key_tip_label.pack()
         for i in self.tips_key_list:
             i.pack()
+
+    def symbol_show(self, which_symbol):
+        global tasks_answer_list, current_file_open, symbol_show
+        if which_symbol == 0:
+            self.symbol_first_show_entry.delete(0, tk.END)
+            self.symbol_first_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][:4])
+            symbol_show[0] = 1
+        elif which_symbol == 1:
+            self.symbol_last_show_entry.delete(0, tk.END)
+            self.symbol_last_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][-4:])
+            symbol_show[1] = 1
 
     def toggle_click_tip(self, which_list, place):
         global sum_tips_key, sum_tips_filled
@@ -549,39 +585,19 @@ class Tips(tk.Tk):
                 sum_tips_key[place] = 0
         self.check_click_tip()
 
-        if sum(sum_tips_filled) < 3:
-            for i in range(len(sum_tips_filled)):
-                if sum_tips_filled[i] == 1:
-                    self.tips_filled_list[i].config(state=tk.DISABLED)
-                elif sum_tips_filled[i] == 0:
-                    self.tips_filled_list[i].config(state=tk.NORMAL)
-        elif sum(sum_tips_filled) == 3:
-            for i in range(len(sum_tips_filled)):
-                self.tips_filled_list[i].config(state=tk.DISABLED)
-
-        if sum(sum_tips_key) < 3:
-            for i in range(len(sum_tips_key)):
-                if sum_tips_key[i] == 1:
-                    self.tips_key_list[i].config(state=tk.DISABLED)
-                elif sum_tips_key[i] == 0:
-                    self.tips_key_list[i].config(state=tk.NORMAL)
-        elif sum(sum_tips_key) == 3:
-            for i in range(len(sum_tips_key)):
-                self.tips_key_list[i].config(state=tk.DISABLED)
-
     def check_click_tip(self):
-        global show_filled_list, show_key_list
+        global show_filled_list, show_key_list, sum_tips_key, sum_tips_filled
 
         show_filled_list = []
 
         for i in range(6):
-            if self.tips_var_key_list[i].get() == 1:
+            if sum_tips_key[i] == 1:
                 show_key_list.append([i, key_answer_list[i]])
 
         for i in range(6):
             arr = []
             for j in range(len(filled_answer_list)):
-                if filled_answer_list[j][1] == i and self.tips_var_filled_list[i].get() == 1:
+                if filled_answer_list[j][1] == i and sum_tips_filled[i] == 1:
                     arr.append(filled_answer_list[j])
             show_filled_list.append(arr)
 
@@ -592,7 +608,7 @@ class Answer(tk.Tk):
 
         # settings for the window
         self.title('Answer')
-        self.geometry('300x400+100+100')
+        self.geometry('300x440+100+100')
         self.protocol("WM_DELETE_WINDOW", lambda: self.destroy())
 
         self.header = tk.Label(self, text='Проверь свой ответ!', pady=5)
@@ -609,12 +625,13 @@ class Answer(tk.Tk):
         self.answer_button.pack()
 
     def check_answer(self):
-        global tasks_answer_list, current_file_open, sum_tips_key, sum_tips_filled
+        global tasks_answer_list, current_file_open, sum_tips_key, sum_tips_filled, symbol_show
         # print(current_file_open)
         # print(tasks_answer_list[int(current_file_open[-1])])
         if self.answer_entry.get() == tasks_answer_list[int(current_file_open[-1]) - 1]:
             messagebox.showinfo('Ураа', f'Поздравляю, твой ответ верный\n'
-                                        f'Твоя оценка: {5 - (sum(sum_tips_key) + sum(sum_tips_filled)) // 2}')
+                                        f'Твоя оценка:'
+                                        f'{5 - (sum(sum_tips_key) + sum(sum_tips_filled) + sum(symbol_show)) // 2}')
         else:
             messagebox.showinfo('Упс', 'Попробуй еще раз, твой ответ неверный')
 
