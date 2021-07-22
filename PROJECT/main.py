@@ -119,7 +119,7 @@ def choose_directory():  # uploading file
         # working with file
         # print(*my_file.readlines())
         current_file_open = os.path.basename(my_file.name)[:-4]
-        print(current_file_open)
+        # print(current_file_open)
         return my_file.read()
     return ''
 
@@ -259,7 +259,7 @@ def working_with_files(file_text, main_text_entry, key_entry):
     while not result_output[s1 + 1].isdigit():
         s1 = result_output.find(f'%')
     key_answer = result_output[s1 + 1: s1 + 7]
-    print(key_answer)
+    # print(key_answer)
     for i in range(6):
         key_answer_list.append(int(key_answer[i]))
 
@@ -273,7 +273,7 @@ def working_with_files(file_text, main_text_entry, key_entry):
         result_output = after_keyword
         if s1 == -1:
             break
-    print(filled_answer_list)
+    # print(filled_answer_list)
     # print(result_output)
     # print(main_text)
     # print(key_text)
@@ -576,6 +576,17 @@ class Tips(tk.Tk):
             self.symbol_last_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][-4:])
             symbol_show[1] = 1
 
+        if symbol_show[0] == 1:
+            self.symbol_first_show.config(state=tk.DISABLED)
+            self.symbol_first_show.select()
+            self.symbol_first_show_entry.delete(0, tk.END)
+            self.symbol_first_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][:4])
+        if symbol_show[1] == 1:
+            self.symbol_last_show.config(state=tk.DISABLED)
+            self.symbol_last_show.select()
+            self.symbol_last_show_entry.delete(0, tk.END)
+            self.symbol_last_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][-4:])
+
     def toggle_click_tip(self, which_list, place):
         global sum_tips_key, sum_tips_filled
 
@@ -592,6 +603,32 @@ class Tips(tk.Tk):
             elif self.tips_var_key_list[place].get() == 0:
                 sum_tips_key[place] = 0
         self.check_click_tip()
+
+        if sum(sum_tips_filled) < 3:
+            for i in range(len(sum_tips_filled)):
+                if sum_tips_filled[i] == 1:
+                    self.tips_filled_list[i].config(state=tk.DISABLED)
+                    self.tips_filled_list[i].select()
+                elif sum_tips_filled[i] == 0:
+                    self.tips_filled_list[i].config(state=tk.NORMAL)
+        elif sum(sum_tips_filled) == 3:
+            for i in range(len(sum_tips_filled)):
+                self.tips_filled_list[i].config(state=tk.DISABLED)
+                if sum_tips_filled[i] == 1:
+                    self.tips_filled_list[i].select()
+
+        if sum(sum_tips_key) < 3:
+            for i in range(len(sum_tips_key)):
+                if sum_tips_key[i] == 1:
+                    self.tips_key_list[i].config(state=tk.DISABLED)
+                    self.tips_key_list[i].select()
+                elif sum_tips_key[i] == 0:
+                    self.tips_key_list[i].config(state=tk.NORMAL)
+        elif sum(sum_tips_key) == 3:
+            for i in range(len(sum_tips_key)):
+                self.tips_key_list[i].config(state=tk.DISABLED)
+                if sum_tips_key[i] == 1:
+                    self.tips_key_list[i].select()
 
     def check_click_tip(self):
         global show_filled_list, show_key_list, sum_tips_key, sum_tips_filled
@@ -669,7 +706,7 @@ class MainWindow(tk.Tk):
         self.file = Menu(self.menu, tearoff=0)
         self.file.add_command(label='Uploading file', command=lambda: choose_directory())
         self.file.add_separator()
-        self.file.add_command(label='Exit', command=lambda: self.exit_function())  # add messagebox to exit
+        self.file.add_command(label='Exit', command=lambda: self.exit_and_change_all_files())
 
         # choose function tab
         self.choosing_function = Menu(self.menu, tearoff=0)
@@ -702,14 +739,20 @@ class MainWindow(tk.Tk):
         # running program
         self.mainloop()
 
+    def exit_and_change_all_files(self):
+        self.change_task_file('task1')
+        self.change_task_file('task2')
+        self.change_task_file('task3')
+        self.destroy()
+
     def exit_function(self):
+        global current_file_open
         try:
             os.remove('Keys.txt')  # deleting keys file, 'cause no one should know your keys
         except FileNotFoundError:
             pass
-        self.change_task_file('task1')
-        self.change_task_file('task2')
-        self.change_task_file('task3')
+        if current_file_open != '':
+            self.change_task_file(current_file_open)
         self.destroy()
 
     def update_current_function(self, _function_number):  # choosing the right function
@@ -747,21 +790,21 @@ class MainWindow(tk.Tk):
 
     def home_show(self):  # function to show welcome page
         welcome = tk.Label(self, text='Hello, world!\nWelcome to my application for Cryptography :)\n'
-                                      'Here you can have some practise in it...')
+                                      'Here you can have some practise ...')
 
         welcome.pack()
 
     def xor_show(self):  # xor show function
         # all widgets
-        header_label = tk.Label(self, text="XOR between 2 strings", pady=5)
-        first_arg_label = tk.Label(self, text="Write down text", pady=5)
+        header_label = tk.Label(self, text="XOR между 2 строками", pady=5)
+        first_arg_label = tk.Label(self, text="Введите текст", pady=5)
         first_arg_entry = tk.Entry(self, width=80)
-        second_arg_label = tk.Label(self, text="Write down the key", pady=5)
+        second_arg_label = tk.Label(self, text="Введите ключ", pady=5)
         second_arg_entry = tk.Entry(self, width=80)
         result_entry = tk.Entry(self, text='', width=80, bg='#aaf')
         separate1 = tk.Label(self, pady=5, text='')
         separate2 = tk.Label(self, pady=5, text='')
-        function = tk.Button(self, text="Calculate the result",
+        function = tk.Button(self, text="Получить результат",
                              command=lambda: xor_function(first_arg_entry, second_arg_entry, result_entry))
 
         # showing widgets
@@ -789,7 +832,7 @@ class MainWindow(tk.Tk):
         result_label = tk.Entry(self, text='', width=80, bg='#aaf')
         separate1 = tk.Label(self, pady=5, text='')
         separate2 = tk.Label(self, pady=5, text='')
-        function = tk.Button(self, text="Calculate the result",
+        function = tk.Button(self, text="Получить результат",
                              command=lambda: replacement_function(first_arg_entry, second_arg_entry, third_arg_entry,
                                                                   result_label))
 
@@ -809,7 +852,7 @@ class MainWindow(tk.Tk):
 
     def rsa_show(self):  # rsa show function
         # all widgets
-        header_label = tk.Label(self, text='Rsa encryption', pady=5)
+        header_label = tk.Label(self, text='Rsa', pady=5)
         button_generating_keys = tk.Button(self, text='Сгенерировать пару ключей',
                                            command=lambda: self.generating_keys(button_generating_keys))
 
@@ -874,14 +917,14 @@ class MainWindow(tk.Tk):
     def encryption(self, message, result):  # зашифрование rsa
         message = message.encode()
         crypto = rsa.encrypt(message, self.pubkey)
-        print(crypto)
+        # print(crypto)
         result.delete(1.0, tk.END)
         result.insert(1.0, crypto)
 
     def decryption(self, crypto, result):  # расшифрование rsa
         # need fix!
         crypto = crypto.encode()
-        print(crypto)
+        # print(crypto)
         message = rsa.decrypt(crypto, self.privkey)
         message = message.decode()
         result.delete(1.0, tk.END)
@@ -1477,10 +1520,10 @@ class MainWindow(tk.Tk):
                 file1.close()
                 break
 
-        print(task_number)
-        print(random_choice)
-        print(main_key_text[random_choice])
-        print()
+        # print(task_number)
+        # print(random_choice)
+        # print(main_key_text[random_choice])
+        # print()
 
         for i in range(num_of_strings):
             random_main_text_list[random_place[i]] = main_key_text[random_choice][random_text[i]]
