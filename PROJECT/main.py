@@ -13,9 +13,7 @@ filled_answer_list = []  # all filled squares
 show_filled_list = []  # filled positions which should be shown
 show_key_list = []  # key positions which should be shown
 current_file_open = ''
-task1_answer = 'Привет, меня зовут Кот Василий'
-task2_answer = 'А это лучший криптоалгоритм'
-task3_answer = 'Который я когда-либо намурлыкал'
+tasks_answer_list = ['Привет, меня зовут Кот Василий', 'А это лучший криптоалгоритм', 'Который я когда-либо намурлыкал']
 xor_text = "Игровые смартфоны сейчас в тренде, а уж модели ASUS всегда привлекали внимание и получали" \
            " одобрение аудитории. Сегодня на обзоре — геймерский телефон линейки Republic of Gamers нового" \
            " поколения, оснащённый по последнему слову мобильной техники. Протестируем новинку всесторонне." \
@@ -598,13 +596,27 @@ class Answer(tk.Tk):
         self.protocol("WM_DELETE_WINDOW", lambda: self.destroy())
 
         self.header = tk.Label(self, text='Проверь свой ответ!', pady=5)
-        self.answer_label = tk.Label(self, text='Введи свой ответ')
+        self.answer_label = tk.Label(self, text='Введи свой ответ', pady=5)
         self.answer_entry = tk.Entry(self, width=40, bg='#aaf')
+        self.separate1 = tk.Label(self, text='')
+        self.answer_button = tk.Button(self, text='Проверить ответ', command=lambda: self.check_answer())
 
         # show widgets
         self.header.pack()
         self.answer_label.pack()
         self.answer_entry.pack()
+        self.separate1.pack()
+        self.answer_button.pack()
+
+    def check_answer(self):
+        global tasks_answer_list, current_file_open, sum_tips_key, sum_tips_filled
+        # print(current_file_open)
+        # print(tasks_answer_list[int(current_file_open[-1])])
+        if self.answer_entry.get() == tasks_answer_list[int(current_file_open[-1]) - 1]:
+            messagebox.showinfo('Ураа', f'Поздравляю, твой ответ верный\n'
+                                        f'Твоя оценка: {5 - (sum(sum_tips_key) + sum(sum_tips_filled)) // 2}')
+        else:
+            messagebox.showinfo('Упс', 'Попробуй еще раз, твой ответ неверный')
 
 
 class MainWindow(tk.Tk):
@@ -613,7 +625,7 @@ class MainWindow(tk.Tk):
 
         # settings for the window
         self.title('Cryptography')
-        self.geometry('700x500+10+10')
+        self.geometry('700x570+10+10')
         self.protocol("WM_DELETE_WINDOW", lambda: self.exit_function())
 
         # some variables
