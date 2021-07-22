@@ -521,28 +521,36 @@ class Tips(tk.Tk):
             for i in range(len(sum_tips_filled)):
                 if sum_tips_filled[i] == 1:
                     self.tips_filled_list[i].config(state=tk.DISABLED)
+                    self.tips_filled_list[i].select()
                 elif sum_tips_filled[i] == 0:
                     self.tips_filled_list[i].config(state=tk.NORMAL)
         elif sum(sum_tips_filled) == 3:
             for i in range(len(sum_tips_filled)):
                 self.tips_filled_list[i].config(state=tk.DISABLED)
+                if sum_tips_filled[i] == 1:
+                    self.tips_filled_list[i].select()
 
         if sum(sum_tips_key) < 3:
             for i in range(len(sum_tips_key)):
                 if sum_tips_key[i] == 1:
                     self.tips_key_list[i].config(state=tk.DISABLED)
+                    self.tips_key_list[i].select()
                 elif sum_tips_key[i] == 0:
                     self.tips_key_list[i].config(state=tk.NORMAL)
         elif sum(sum_tips_key) == 3:
             for i in range(len(sum_tips_key)):
                 self.tips_key_list[i].config(state=tk.DISABLED)
+                if sum_tips_key[i] == 1:
+                    self.tips_key_list[i].select()
 
         if symbol_show[0] == 1:
             self.symbol_first_show.config(state=tk.DISABLED)
+            self.symbol_first_show.select()
             self.symbol_first_show_entry.delete(0, tk.END)
             self.symbol_first_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][:4])
         if symbol_show[1] == 1:
             self.symbol_last_show.config(state=tk.DISABLED)
+            self.symbol_last_show.select()
             self.symbol_last_show_entry.delete(0, tk.END)
             self.symbol_last_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][-4:])
 
