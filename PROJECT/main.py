@@ -9,8 +9,8 @@ import os
 sum_tips_filled = [0 for _ in range(6)]
 sum_tips_key = [0 for _ in range(6)]
 key_answer_list = []  # true key
-some_tips_list = []  # all filled squares
-all_columns_filled_list = []  # filled positions which should be shown
+filled_answer_list = []  # all filled squares
+show_filled_list = []  # filled positions which should be shown
 show_key_list = []  # key positions which should be shown
 current_file_open = ''
 xor_text = "Игровые смартфоны сейчас в тренде, а уж модели ASUS всегда привлекали внимание и получали" \
@@ -227,9 +227,9 @@ def swap_texts(message, result):  # related to rsa function
 
 
 def working_with_files(file_text, main_text_entry, key_entry):
-    global xor_text, key_answer_list, some_tips_list
+    global xor_text, key_answer_list, filled_answer_list
     key_answer_list = []
-    some_tips_list = []
+    filled_answer_list = []
 
     trash_text = file_text.split('/')
 
@@ -266,12 +266,12 @@ def working_with_files(file_text, main_text_entry, key_entry):
         s1 = result_output.find(f'&')
         if result_output[s1 + 1].isdigit() and result_output[s1 + 2].isdigit():
             pair_of_coordinates = result_output[s1 + 1: s1 + 3]
-            some_tips_list.append([int(pair_of_coordinates[0]), int(pair_of_coordinates[1])])
+            filled_answer_list.append([int(pair_of_coordinates[0]), int(pair_of_coordinates[1])])
         before_keyword, keyword, after_keyword = result_output.partition('&')
         result_output = after_keyword
         if s1 == -1:
             break
-    print(some_tips_list)
+    print(filled_answer_list)
 
     # additional printing
     # print(result_output)
@@ -432,6 +432,27 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
         result.insert(0, result_str)
 
 
+def filling_squares_with_tips(canvas, canvas_fill_squares_list, canvas_symbols_list):
+    global show_filled_list
+    for i in range(len(show_filled_list)):
+        for j in range(len(show_filled_list[i])):
+            a = show_filled_list[i][j][0]
+            b = show_filled_list[i][j][1]
+            if canvas_fill_squares_list[a][b] == 0:
+                canvas.itemconfigure(canvas_symbols_list[a][b], text='*')
+                canvas_fill_squares_list[a][b] = 1
+
+
+def clear_global_variables():
+    global sum_tips_filled, sum_tips_key, key_answer_list, filled_answer_list, show_filled_list, show_key_list
+    sum_tips_filled = [0 for _ in range(6)]
+    sum_tips_key = [0 for _ in range(6)]
+    key_answer_list = []  # true key
+    filled_answer_list = []  # all filled squares
+    show_filled_list = []  # filled positions which should be shown
+    show_key_list = []  # key positions which should be shown
+
+
 class Tips(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -448,9 +469,10 @@ class Tips(tk.Tk):
         self.tips_var_filled_list = [tk.IntVar() for _ in range(6)]
         self.tips_filled_list = []
 
+        # toggle_click_tip(which_list, which_place)
+        # which_list == 0  ->  self.tips_filled_list, which_list == 1  ->  self.tips_key_list
         self.tips_filled_list.append(tk.Checkbutton(self, text='первом столбце', variable=self.tips_var_filled_list[0],
                                                     onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 0)))
-        # toggle_click_tip(which list, which place)
         self.tips_filled_list.append(tk.Checkbutton(self, text='втором столбце', variable=self.tips_var_filled_list[1],
                                                     onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 1)))
         self.tips_filled_list.append(tk.Checkbutton(self, text='третьем столбце', variable=self.tips_var_filled_list[2],
@@ -462,16 +484,6 @@ class Tips(tk.Tk):
                                                     onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 4)))
         self.tips_filled_list.append(tk.Checkbutton(self, text='шестом столбце', variable=self.tips_var_filled_list[5],
                                                     onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 5)))
-
-        if sum(sum_tips_filled) < 3:
-            for i in range(len(sum_tips_filled)):
-                if sum_tips_filled[i] == 1:
-                    self.tips_filled_list[i].config(state=tk.DISABLED)
-                elif sum_tips_filled[i] == 0:
-                    self.tips_filled_list[i].config(state=tk.NORMAL)
-        elif sum(sum_tips_filled) == 3:
-            for i in range(len(sum_tips_filled)):
-                self.tips_filled_list[i].config(state=tk.DISABLED)
 
         # key answer
         self.label_tip_key = tk.Label(self, text='Показать правильное расположение столбцов:')
@@ -493,6 +505,17 @@ class Tips(tk.Tk):
         self.tips_key_list.append(tk.Checkbutton(self, text='шестой столбец', variable=self.tips_var_key_list[5],
                                                  onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(1, 5)))
 
+        global sum_tips_key, sum_tips_filled
+        if sum(sum_tips_filled) < 3:
+            for i in range(len(sum_tips_filled)):
+                if sum_tips_filled[i] == 1:
+                    self.tips_filled_list[i].config(state=tk.DISABLED)
+                elif sum_tips_filled[i] == 0:
+                    self.tips_filled_list[i].config(state=tk.NORMAL)
+        elif sum(sum_tips_filled) == 3:
+            for i in range(len(sum_tips_filled)):
+                self.tips_filled_list[i].config(state=tk.DISABLED)
+
         if sum(sum_tips_key) < 3:
             for i in range(len(sum_tips_key)):
                 if sum_tips_key[i] == 1:
@@ -511,51 +534,57 @@ class Tips(tk.Tk):
             i.pack()
 
     def toggle_click_tip(self, which_list, place):
+        global sum_tips_key, sum_tips_filled
+
         if which_list == 0:
             self.tips_var_filled_list[place].set(not self.tips_var_filled_list[place].get())
+            if self.tips_var_filled_list[place].get() == 1:
+                sum_tips_filled[place] = 1
+            elif self.tips_var_filled_list[place].get() == 0:
+                sum_tips_filled[place] = 0
         elif which_list == 1:
             self.tips_var_key_list[place].set(not self.tips_var_key_list[place].get())
+            if self.tips_var_key_list[place].get() == 1:
+                sum_tips_key[place] = 1
+            elif self.tips_var_key_list[place].get() == 0:
+                sum_tips_key[place] = 0
         self.check_click_tip()
 
-    def check_click_tip(self):
-        global all_columns_filled_list, show_key_list
-
-        all_columns_filled_list = []
-
-        if sum(sum_tips_filled) != 3:
-            for i in range(6):
-                sum_tips_filled[i] = self.tips_var_filled_list[i].get()
-        # print(sum_tips_filled)
-        if sum(sum_tips_key) != 3:
-            for i in range(6):
-                sum_tips_key[i] = self.tips_var_key_list[i].get()
-        # print(sum_tips_key)
-
-        if sum(sum_tips_key) == 3:
-            for i in range(6):
-                if self.tips_var_key_list[i].get() == 1:
-                    show_key_list.append([i, key_answer_list[i]])
-                self.tips_key_list[i].config(state=tk.DISABLED)
-
-        if sum(sum_tips_filled) == 3:
-            for i in range(6):
-                arr = []
-                for j in range(len(some_tips_list)):
-                    if some_tips_list[j][1] == i and self.tips_var_filled_list[i].get() == 1:
-                        arr.append(some_tips_list[j])
-                all_columns_filled_list.append(arr)
+        if sum(sum_tips_filled) < 3:
+            for i in range(len(sum_tips_filled)):
+                if sum_tips_filled[i] == 1:
+                    self.tips_filled_list[i].config(state=tk.DISABLED)
+                elif sum_tips_filled[i] == 0:
+                    self.tips_filled_list[i].config(state=tk.NORMAL)
+        elif sum(sum_tips_filled) == 3:
+            for i in range(len(sum_tips_filled)):
                 self.tips_filled_list[i].config(state=tk.DISABLED)
 
+        if sum(sum_tips_key) < 3:
+            for i in range(len(sum_tips_key)):
+                if sum_tips_key[i] == 1:
+                    self.tips_key_list[i].config(state=tk.DISABLED)
+                elif sum_tips_key[i] == 0:
+                    self.tips_key_list[i].config(state=tk.NORMAL)
+        elif sum(sum_tips_key) == 3:
+            for i in range(len(sum_tips_key)):
+                self.tips_key_list[i].config(state=tk.DISABLED)
 
-def filling_squares_with_tips(canvas, canvas_fill_squares_list, canvas_symbols_list):
-    global all_columns_filled_list
-    for i in range(len(all_columns_filled_list)):
-        for j in range(len(all_columns_filled_list[i])):
-            a = all_columns_filled_list[i][j][0]
-            b = all_columns_filled_list[i][j][1]
-            if canvas_fill_squares_list[a][b] == 0:
-                canvas.itemconfigure(canvas_symbols_list[a][b], text='*')
-                canvas_fill_squares_list[a][b] = 1
+    def check_click_tip(self):
+        global show_filled_list, show_key_list
+
+        show_filled_list = []
+
+        for i in range(6):
+            if self.tips_var_key_list[i].get() == 1:
+                show_key_list.append([i, key_answer_list[i]])
+
+        for i in range(6):
+            arr = []
+            for j in range(len(filled_answer_list)):
+                if filled_answer_list[j][1] == i and self.tips_var_filled_list[i].get() == 1:
+                    arr.append(filled_answer_list[j])
+            show_filled_list.append(arr)
 
 
 class MainWindow(tk.Tk):
@@ -1220,7 +1249,7 @@ class MainWindow(tk.Tk):
                 [  # 2
                     f'${6}Ашроо{6}$',
                     f'${1} оир{1}$',
-                    f'${5} иа{5}$',
+                    f'${5} ий{5}$',
                     f'${4}элйпли{4}$',
                     f'${2}у гт{2}$',
                     f'${3}тиктм{3}$',
@@ -1349,7 +1378,7 @@ class MainWindow(tk.Tk):
                     f'${2}Кйолнл{2}$',
                     f'${6}огиа{6}$',
                     f'${1}т дмы{1}$',
-                    f'${5}оаябук{5}$',
+                    f'${5}ояабук{5}$',
                     f'${4}р ора{4}$',
                     f'${3}ык- л{3}$',
                     f'%261543%',
@@ -1397,7 +1426,7 @@ class MainWindow(tk.Tk):
                     f'%251634%',
                     f'&01&',
                     f'&13&',
-                    f'&42&',
+                    f'&32&',
                     f'&45&',
                     f'&54&',
                 ],
@@ -1689,6 +1718,7 @@ class MainWindow(tk.Tk):
         file1.close()
 
         self.menu.entryconfig('Выберете функцию', state='normal')
+        clear_global_variables()
         self.update_current_function(0)
 
 
