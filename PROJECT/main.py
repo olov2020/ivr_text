@@ -140,10 +140,13 @@ def xor_function(_first_arg_entry, _second_arg_entry, _result_entry):  # working
         _second_arg_entry.focus()
         return
     result_list = []
-    for i in range(len(first_arg)):
-        xored_arg = ord(first_arg[i % len(first_arg)]) ^ ord(second_arg[i % len(second_arg)])
-        # additional check ^ ord(second_arg[i % len(second_arg)])
-        result_list.append(f'{hex(xored_arg)} ')  # result in hex format for unicode, not ascii!
+    first_arg_list = first_arg.encode('cp1251')
+    second_arg_list = second_arg.encode('cp1251')
+    for i in range(len(first_arg_list)):
+        xored_arg = first_arg_list[i % len(first_arg_list)] ^ second_arg_list[i % len(second_arg_list)]
+        # additional check ^ second_arg[i % len(second_arg)].encode('cp1251')
+        append_object = len(str(hex(xored_arg))[2:]) % 2 * '0' + str(hex(xored_arg))[2:]
+        result_list.append(f'0x{append_object} ')  # result in hex format for unicode, not ascii!
     result_output = ''.join(result_list)
     _result_entry.delete(0, tk.END)
     _result_entry.insert(0, result_output)
@@ -293,6 +296,11 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
         return
     if key == '':
         messagebox.showwarning('Warning!', 'Please, enter your key')
+        return
+    if len(main_text) > 36:
+        messagebox.showwarning('Warning!', 'Please, enter valid text')
+        main_text_entry.delete(0, tk.END)
+        main_text_entry.focus()
         return
     check_len_key = 0
     for i in range(len(key)):
