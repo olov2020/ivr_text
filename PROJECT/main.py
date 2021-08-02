@@ -255,6 +255,8 @@ def working_with_files(file_text, main_text_entry, key_entry):
     for i in range(6):
         s1 = result_output.find(f'${i + 1}')
         s2 = result_output.find(f'{i + 1}$')
+        if s1 == -1:
+            return -1
         text = result_output[s1 + 2: s2 + 1]
         # print(text)
         key_text += text[-1]
@@ -264,8 +266,10 @@ def working_with_files(file_text, main_text_entry, key_entry):
     s1 = result_output.find(f'%')
     while not result_output[s1 + 1].isdigit():
         s1 = result_output.find(f'%')
+    if s1 == -1:
+        return -1
     key_answer = result_output[s1 + 1: s1 + 7]
-    print(key_answer)
+    # print(key_answer)
     for i in range(6):
         key_answer_list.append(int(key_answer[i]))
 
@@ -288,6 +292,8 @@ def working_with_files(file_text, main_text_entry, key_entry):
     main_text_entry.insert(0, main_text)
     main_text_entry['state'] = 'disable'
     key_entry.insert(0, key_text)
+
+    return 1
 
 
 def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_list, canvas_symbols_list,
@@ -662,7 +668,7 @@ class Tips(tk.Tk):
                 if filled_answer_list[j][1] == i and sum_tips_filled[i] == 1:
                     arr.append(filled_answer_list[j])
             show_filled_list.append(arr)
-        print(show_filled_list)
+        # print(show_filled_list)
 
 
 class Answer(tk.Tk):
@@ -1001,7 +1007,10 @@ class MainWindow(tk.Tk):
             main_text_label['text'] = 'Шифротекст'
             header_label['text'] = 'Это табличный алгоритм для дешифрования'
             self.bind('<Double-Button-1>', filling_squares)  # detecting double left click
-            working_with_files(file_text, main_text_entry, key_entry)
+            check = working_with_files(file_text, main_text_entry, key_entry)
+            if check == -1:
+                self.update_current_function(0)
+                return
             self.menu.entryconfig('Выберете функцию', state='disabled')
 
         # area where text will be placed and shown
