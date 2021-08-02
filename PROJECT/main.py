@@ -957,16 +957,32 @@ class MainWindow(tk.Tk):
         result_button.pack()
 
     def encryption(self, message, result):  # зашифрование rsa
+        if len(message.encode()) > 53:
+            messagebox.showwarning('Warning!', f'Your text should be under 53 bytes\n'
+                                               f'Yout text is now about {len(message.encode())} bytes')
+            return
         message = message.encode()
         crypto = rsa.encrypt(message, self.pubkey)
         # print(crypto)
-        answer = crypto.hex()
-        # print(answer)
+        hex_list = crypto.hex()
+        print(hex_list)
+        answer = ''
+        for i in range(0, len(hex_list), 2):
+            answer += '0x'
+            answer += str(hex_list[i])
+            answer += str(hex_list[i + 1])
+            answer += ' '
         result.delete(1.0, tk.END)
         result.insert(1.0, answer)
         # self.decryption(crypto, result)
 
     def decryption(self, crypto, result):  # расшифрование rsa
+        text = crypto
+        crypto = ''
+        for i in range(len(text)):
+            if text[i] == 'x':
+                crypto += text[i + 1]
+                crypto += text[i + 2]
         crypto = bytes.fromhex(crypto)
         message = rsa.decrypt(crypto, self.privkey)
         message = message.decode()
