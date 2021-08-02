@@ -342,11 +342,15 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
     if typo_algorithm == 4:  # зашифровать
         # filling table (canvas) by adding key and text
         result_str = ''
+        check_fill = 0
         for i in range(6):
             canvas.itemconfigure(canvas_key_list[i], text=key_list[i])
             for j in range(6):
-                if len(main_text) > i * 6 + j:
-                    canvas.itemconfigure(canvas_symbols_list[i][j], text=main_text[i * 6 + j])
+                if len(main_text) > i * 6 + j - check_fill:
+                    if canvas_fill_squares_list[i][j] == 1:
+                        check_fill += 1
+                    elif canvas_fill_squares_list[i][j] == 0:
+                        canvas.itemconfigure(canvas_symbols_list[i][j], text=main_text[i * 6 + j - check_fill])
                 else:
                     canvas.itemconfigure(canvas_symbols_list[i][j], text='')
 
@@ -375,6 +379,7 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
         # filling table (canvas) by adding key and text
         result_str = ''
         result_list = []
+        check_fill = 0
         for i in range(6):
             prom_res = []
             canvas.itemconfigure(canvas_key_list[i], text=key_list[i])
@@ -383,9 +388,13 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
                 if key_list[j] - 1 == i:
                     t = j
             for j in range(6):
-                if len(main_text) > i * 6 + j:
-                    canvas.itemconfigure(canvas_symbols_list[j][t], text=main_text[i * 6 + j])
-                    prom_res.append(main_text[i * 6 + j])
+                if len(main_text) > i * 6 + j - check_fill:
+                    if canvas_fill_squares_list[j][t] == 1:
+                        check_fill += 1
+                        prom_res.append('')
+                    elif canvas_fill_squares_list[j][t] == 0:
+                        canvas.itemconfigure(canvas_symbols_list[j][t], text=main_text[i * 6 + j - check_fill])
+                        prom_res.append(main_text[i * 6 + j - check_fill])
                 else:
                     canvas.itemconfigure(canvas_symbols_list[j][t], text='')
                     prom_res.append('')
@@ -748,6 +757,9 @@ class MainWindow(tk.Tk):
         self.choosing_table_algorithm.add_command(label='Расшифровать', command=lambda: self.update_current_function(5))
         self.choosing_table_algorithm.add_separator()
         self.choosing_table_algorithm.add_command(label='Дешифровать', command=lambda: self.update_current_function(6))
+        self.choosing_table_algorithm.add_separator()
+        self.choosing_table_algorithm.add_command(label='Режим демонстрации',
+                                                  command=lambda: self.update_current_function(7))
 
         self.choosing_function.add_separator()
         self.choosing_function.add_cascade(label='Табличный алгоритм', menu=self.choosing_table_algorithm)
@@ -809,6 +821,8 @@ class MainWindow(tk.Tk):
                     self.update_current_function(0)
                     return
                 self.table_algorithm_show(6, file_text)  # дешифровать
+            # elif self.function_number == 7:
+                # self.table_algorithm_show(7, '')
 
     def destroy_everything(self):  # deleting previous function -> this is it
         for widget in self.winfo_children():
@@ -970,39 +984,40 @@ class MainWindow(tk.Tk):
 
         # replacing symbols by <*> after double left button click
         def filling_squares(event):
-            if typo_algorithm == 6:
-                # getting coordinates of double tap
-                global red_squares_list
-                x = event.x
-                y = event.y
-                if 250 < x < 430 and 60 < y < 240:  # checking if they are fit the area
-                    a = (y - 60) // 30
-                    b = (x - 250) // 30
-                    y = 250 + 30 * b
-                    x = 60 + 30 * a
-                    # 0 - we should replace <symbol> to <*>
-                    # 1 - we should replace <*> to <>
-                    if canvas_fill_squares_list[a][b] == 0:
-                        red_squares_list.append([canvas.create_rectangle(y, x, y + 30, x + 30, fill='#f00'), y, x])
-                        canvas_fill_squares_list[a][b] = 1
-                    elif canvas_fill_squares_list[a][b] == 1:
-                        id_of_square = 0
-                        for k in range(len(red_squares_list)):
-                            if red_squares_list[k][1] == y and red_squares_list[k][2] == x:
-                                id_of_square = k
-                                break
-                        canvas.delete(red_squares_list[id_of_square][0])
-                        del red_squares_list[id_of_square]
-                        canvas.itemconfigure(canvas_symbols_list[a][b], text='')
-                        canvas_fill_squares_list[a][b] = 0
+            # getting coordinates of double tap
+            global red_squares_list
+            x = event.x
+            y = event.y
+            if 250 < x < 430 and 60 < y < 240:  # checking if they are fit the area
+                a = (y - 60) // 30
+                b = (x - 250) // 30
+                y = 250 + 30 * b
+                x = 60 + 30 * a
+                # 0 - we should replace <symbol> to <*>
+                # 1 - we should replace <*> to <>
+                if canvas_fill_squares_list[a][b] == 0:
+                    red_squares_list.append([canvas.create_rectangle(y, x, y + 30, x + 30, fill='#f00'), y, x])
+                    canvas_fill_squares_list[a][b] = 1
+                elif canvas_fill_squares_list[a][b] == 1:
+                    id_of_square = 0
+                    for k in range(len(red_squares_list)):
+                        if red_squares_list[k][1] == y and red_squares_list[k][2] == x:
+                            id_of_square = k
+                            break
+                    canvas.delete(red_squares_list[id_of_square][0])
+                    del red_squares_list[id_of_square]
+                    canvas.itemconfigure(canvas_symbols_list[a][b], text='')
+                    canvas_fill_squares_list[a][b] = 0
 
         # checking which algorithm user chooses
         if typo_algorithm == 4:
             main_text_label['text'] = 'Исходный текст'
             header_label['text'] = 'Это табличный алгоритм для зашифрования'
+            self.bind('<Double-Button-1>', filling_squares)  # detecting double left click
         elif typo_algorithm == 5:
             main_text_label['text'] = 'Шифротекст'
             header_label['text'] = 'Это табличный алгоритм для расшифрования'
+            self.bind('<Double-Button-1>', filling_squares)  # detecting double left click
         elif typo_algorithm == 6:
             main_text_label['text'] = 'Шифротекст'
             header_label['text'] = 'Это табличный алгоритм для дешифрования'
