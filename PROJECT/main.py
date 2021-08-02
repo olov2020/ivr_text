@@ -757,9 +757,9 @@ class MainWindow(tk.Tk):
         self.choosing_table_algorithm.add_command(label='Расшифровать', command=lambda: self.update_current_function(5))
         self.choosing_table_algorithm.add_separator()
         self.choosing_table_algorithm.add_command(label='Дешифровать', command=lambda: self.update_current_function(6))
-        self.choosing_table_algorithm.add_separator()
-        self.choosing_table_algorithm.add_command(label='Режим демонстрации',
-                                                  command=lambda: self.update_current_function(7))
+        # self.choosing_table_algorithm.add_separator()
+        # self.choosing_table_algorithm.add_command(label='Режим демонстрации',
+        # command=lambda: self.update_current_function(7))
 
         self.choosing_function.add_separator()
         self.choosing_function.add_cascade(label='Табличный алгоритм', menu=self.choosing_table_algorithm)
@@ -822,7 +822,7 @@ class MainWindow(tk.Tk):
                     return
                 self.table_algorithm_show(6, file_text)  # дешифровать
             # elif self.function_number == 7:
-                # self.table_algorithm_show(7, '')
+            # self.table_algorithm_show(7, '')
 
     def destroy_everything(self):  # deleting previous function -> this is it
         for widget in self.winfo_children():
@@ -960,13 +960,14 @@ class MainWindow(tk.Tk):
         message = message.encode()
         crypto = rsa.encrypt(message, self.pubkey)
         # print(crypto)
+        answer = crypto.hex()
+        # print(answer)
         result.delete(1.0, tk.END)
-        result.insert(1.0, crypto)
+        result.insert(1.0, answer)
+        # self.decryption(crypto, result)
 
     def decryption(self, crypto, result):  # расшифрование rsa
-        # need fix!
-        crypto = crypto.encode()
-        # print(crypto)
+        crypto = bytes.fromhex(crypto)
         message = rsa.decrypt(crypto, self.privkey)
         message = message.decode()
         result.delete(1.0, tk.END)
