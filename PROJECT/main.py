@@ -1922,6 +1922,7 @@ class MainWindow(tk.Tk):
         self.mainloop()
 
     def about_author(self):
+        self.destroy_everything()
         about_me = tk.Label(self, text=f"Привет, друг! Возможно, тебе интересно, кто написал эту программу\n"
                                        f"В таком случае, рад с тобой познакомиться, меня зовут Виноградов Владимир :)\n"
                                        f"Я являюсь выпускником Московской Школы Программистов. "
@@ -1934,6 +1935,7 @@ class MainWindow(tk.Tk):
                                        f"Желаю тебе удачи в решении сложных задач, которые ждут тебя\nне только в "
                                        f"рамках этого курса, но и в жизни!", width=80, bg='#aaf')
         about_me.pack(expand=True, fill=tk.X)
+        self.menu.entryconfig('Об авторе', state='disabled')
 
     def exit_function(self):
         global current_file_open
@@ -1951,6 +1953,7 @@ class MainWindow(tk.Tk):
         self.destroy()
 
     def update_current_function(self, _function_number):  # choosing the right function
+        self.menu.entryconfig('Об авторе', state='normal')
         if self.function_number != _function_number:
             self.destroy_everything()  # deleting previous function
             self.function_number = _function_number
@@ -2199,7 +2202,7 @@ class MainWindow(tk.Tk):
             if check == -1:
                 self.update_current_function(0)
                 return
-            self.menu.entryconfig('Выберете функцию', state='disabled')
+            self.menu.entryconfig('Выбери функцию', state='disabled')
 
         # area where text will be placed and shown
         canvas = tk.Canvas(self)
@@ -2266,7 +2269,7 @@ class MainWindow(tk.Tk):
     def exit_from_table_algorithm(self):
         global current_file_open
         change_task_file(current_file_open)
-        self.menu.entryconfig('Выберете функцию', state='normal')
+        self.menu.entryconfig('Выбери функцию', state='normal')
         clear_global_variables()
         self.update_current_function(0)
 
