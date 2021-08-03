@@ -142,6 +142,7 @@ def xor_function(_first_arg_entry, _second_arg_entry, _result_entry):  # working
         _second_arg_entry.delete(0, tk.END)
         _second_arg_entry.focus()
         return
+
     result_list = []
     first_arg_list = first_arg.encode('cp1251')
     second_arg_list = second_arg.encode('cp1251')
@@ -277,15 +278,12 @@ def working_with_files(file_text, main_text_entry, key_entry):
             result_output = after_keyword
         elif s1 == -1:
             break
+
     # print(filled_answer_list)
-    # print(result_output)
-    # print(main_text)
-    # print(key_text)
 
     main_text_entry.insert(0, main_text)
     main_text_entry['state'] = 'disable'
     key_entry.insert(0, key_text)
-
     return 1
 
 
@@ -405,7 +403,7 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
         # separator
     elif typo_algorithm == 6:  # дешифровать
         global show_key_list
-        filling_squares_with_tips(canvas, canvas_fill_squares_list, canvas_symbols_list)
+        filling_squares_with_tips(canvas, canvas_fill_squares_list)
 
         check_fill = 0
         result_str = ''
@@ -456,17 +454,21 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
         result.insert(0, result_str)
 
 
-def filling_squares_with_tips(canvas, canvas_fill_squares_list, canvas_symbols_list):
+def filling_squares_with_tips(canvas, canvas_fill_squares_list):
     global show_filled_list, red_squares_list
+
+    # print(show_filled_list)
     for i in range(len(show_filled_list)):
         for j in range(len(show_filled_list[i])):
-            a = show_filled_list[i][j][0]
-            b = show_filled_list[i][j][1]
-            y = 250 + 30 * b
-            x = 60 + 30 * a
+            # show_filled_list[which column][which square][coordinate (y, x)]
+            a = show_filled_list[i][j][0]  # y-coordinates
+            b = show_filled_list[i][j][1]  # x-coordinates
+            x = 250 + 30 * b
+            y = 60 + 30 * a
+            # canvas_fill_squares_list[y-coordinates][x-coordinates]
             if canvas_fill_squares_list[a][b] == 0:
-                red_squares_list.append([canvas.create_rectangle(y, x, y + 30, x + 30, fill='#f00'), y, x])
-                canvas.itemconfigure(canvas_symbols_list[a][b], text='*')
+                red_squares_list.append([canvas.create_rectangle(x, y, x + 30, y + 30, fill='#f00'), x, y])
+                # .append([rectangle, y-coordinate, x-coordinate])
                 canvas_fill_squares_list[a][b] = 1
 
 
@@ -484,10 +486,9 @@ def clear_global_variables():
 
 
 def check_click_tip():
-    global show_filled_list, show_key_list, sum_tips_key, sum_tips_filled, red_squares_list
+    global show_filled_list, show_key_list, sum_tips_key, sum_tips_filled
 
     show_filled_list = []
-    red_squares_list = []
 
     for i in range(6):
         if sum_tips_key[i] == 1:
@@ -514,6 +515,7 @@ def encryption(message_text, result, pubkey_pem):  # зашифрование rs
     elif len(message) == 0:
         messagebox.showwarning('Warning!', f'Please, write your text')
         return
+
     message = message.encode()
     crypto = rsa.encrypt(message, pubkey)
     # print(crypto)
@@ -2054,7 +2056,7 @@ class MainWindow(tk.Tk):
 
     def rsa_show(self):  # rsa show function
         # all widgets
-        header_label = tk.Label(self, text='Асимметричное шифрование', pady=5)
+        header_label = tk.Label(self, text='RSA - Асимметричное шифрование', pady=5)
         button_generating_keys = tk.Button(self, text='Сгенерировать пару ключей',
                                            command=lambda: self.generating_keys(button_generating_keys))
 
@@ -2166,28 +2168,30 @@ class MainWindow(tk.Tk):
         def filling_squares(event):
             # getting coordinates of double tap
             global red_squares_list
-            x = event.x
-            y = event.y
-            if 250 < x < 430 and 60 < y < 240:  # checking if they are fit the area
-                a = (y - 60) // 30
-                b = (x - 250) // 30
-                y = 250 + 30 * b
-                x = 60 + 30 * a
+            p = event.x
+            q = event.y
+            if 250 < p < 430 and 60 < q < 240:  # checking if they are fit the area
+                b = (p - 250) // 30  # x-coordinates
+                a = (q - 60) // 30  # y-coordinates
+                x = 250 + 30 * b
+                y = 60 + 30 * a
                 # 0 - we should replace <symbol> to <*>
                 # 1 - we should replace <*> to <>
+                # canvas_fill_squares_list[y-coordinates][x-coordinates]
                 if canvas_fill_squares_list[a][b] == 0:
-                    red_squares_list.append([canvas.create_rectangle(y, x, y + 30, x + 30, fill='#f00'), y, x])
+                    red_squares_list.append([canvas.create_rectangle(x, y, x + 30, y + 30, fill='#f00'), x, y])
                     canvas_fill_squares_list[a][b] = 1
                 elif canvas_fill_squares_list[a][b] == 1:
                     id_of_square = 0
                     for k in range(len(red_squares_list)):
-                        if red_squares_list[k][1] == y and red_squares_list[k][2] == x:
+                        if red_squares_list[k][1] == x and red_squares_list[k][2] == y:
                             id_of_square = k
                             break
                     canvas.delete(red_squares_list[id_of_square][0])
                     del red_squares_list[id_of_square]
                     canvas.itemconfigure(canvas_symbols_list[a][b], text='')
                     canvas_fill_squares_list[a][b] = 0
+                print(red_squares_list)
 
         # checking which algorithm user chooses
         if typo_algorithm == 4:
