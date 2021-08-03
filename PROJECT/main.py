@@ -227,13 +227,6 @@ def replacement_function(_first_arg_entry, _second_arg_entry, _third_arg_entry, 
     _result_repl_label.insert(0, result)
 
 
-def swap_texts(message, result):  # related to rsa function
-    # use this instead of copying text
-    crypto = result.get(1.0, tk.END)
-    message.delete(1.0, tk.END)
-    message.insert(1.0, crypto)
-
-
 def working_with_files(file_text, main_text_entry, key_entry):
     global xor_text, key_answer_list, filled_answer_list
     key_answer_list = []
@@ -727,7 +720,7 @@ class MainWindow(tk.Tk):
         self.function_number = -1
 
         # generating keys
-        (pubkey, privkey) = rsa.newkeys(512)
+        (pubkey, privkey) = rsa.newkeys(1024)
         self.pubkey = pubkey
         self.privkey = privkey
 
@@ -789,7 +782,12 @@ class MainWindow(tk.Tk):
         global current_file_open
         try:
             os.remove('Keys.txt')  # deleting keys file, 'cause no one should know your keys
+            os.remove('Public_keys.txt')
         except FileNotFoundError:
+            try:
+                os.remove('Public_keys.txt')
+            except FileNotFoundError:
+                pass
             pass
         if current_file_open != '':
             self.change_task_file(current_file_open)
@@ -902,6 +900,10 @@ class MainWindow(tk.Tk):
         header_label.pack()
         button_generating_keys.pack()
 
+        if os.path.isfile("Keys.txt"):
+            button_generating_keys['state'] = 'disable'
+            self.working_with_keys()
+
     def generating_keys(self, button_generating_keys):  # generating keys function
         # disable button, 'cause only one pair can be generated and used
         button_generating_keys['state'] = 'disable'
@@ -910,16 +912,23 @@ class MainWindow(tk.Tk):
 
     def working_with_keys(self):  # working with keys function
         # writing keys to the file in the same directory where this program runs
-        keys_file = open("Keys.txt", "w+")
-        keys_file.write(
-            f"Это твой публичный ключ. Поделись им с друзьями :)\n{self.pubkey.save_pkcs1()}\n"
-            f"\nЭто твой приватный ключ. Сохрани его в секрете\n{self.privkey.save_pkcs1()}\n")
-        keys_file.close()
+        if not os.path.isfile("Keys.txt"):
+            keys_file = open("Keys.txt", "w+")
+            keys_file.write(
+                f"Это твой публичный ключ. Поделись им с друзьями :)\n{self.pubkey.save_pkcs1()}\n"
+                f"\nЭто твой приватный ключ. Сохрани его в секрете\n{self.privkey.save_pkcs1()}\n"
+                f"\nА это твой публичный ключ в удобном формате для программы\n{self.pubkey.save_pkcs1().hex()}\n")
+            keys_file.close()
+            public_keys_file = open('Public_keys.txt', 'w+')
+            public_keys_file.close()
 
         # all widgets
-        explanation_label = tk.Label(self, text='Теперь у тебя есть открытый и закртый ключи.\n'
-                                                'Они сохранились в папку, из которой была запущена эта программа.\n'
-                                                'Найди и открой этот файл, он тебе понадобится.', pady=5)
+        explanation_label = tk.Label(self, text='Теперь у тебя есть открытый и закртый ключи - файл Keys.txt\n'
+                                                'Они сохранились в папку, из которой была запущена эта программа\n'
+                                                'Найди этот файл, он тебе пригодится\n'
+                                                'Помимо этого, тебе понадобится файл Public_keys.txt\n'
+                                                'В него тебе будет необходимо вставлять ключ того человека, '
+                                                'сообщение для которого тебе нужно зашифровать', pady=5)
         message_label = tk.Label(self, text='Введите сообщение которое хотите зашифровать / расшифровать', pady=5)
         message_text = tk.Text(self, width=40, height=7)
         drop_down_encryption_list = [
@@ -934,9 +943,19 @@ class MainWindow(tk.Tk):
             result_label.configure(text=f'Результутат команды {variable.get()}')
             # print(variable.get())
             if variable.get() == 'Зашифровать':
-                self.encryption(message_text.get(1.0, tk.END), result_text)
+                try:
+                    pubkey_file = open('Public_keys.txt', 'r')
+                except FileNotFoundError:
+                    pubkey_file = open('Public_keys.txt', 'w+')
+                pubkey_pem = bytes.fromhex(pubkey_file.readline())
+                pubkey_file.close()
+                if len(pubkey_pem) != 0 and len(message_text.get(1.0, tk.END)) != 0:
+                    self.encryption(message_text, result_text, pubkey_pem)
+                else:
+                    messagebox.showwarning('Warning!', f'Please, write your text or put pubkey into the right file')
+                    return
             elif variable.get() == 'Расшифровать':
-                self.decryption(message_text.get(1.0, tk.END), result_text)
+                self.decryption(message_text, result_text)
 
         # drop-down menu
         result_label = tk.Label(self, pady=5, text=f'Здесь будет твой ответ')
@@ -945,7 +964,6 @@ class MainWindow(tk.Tk):
         variable.trace("w", callback)
 
         drop_down_encryption_menu = tk.OptionMenu(self, variable, *drop_down_encryption_list)
-        result_button = tk.Button(self, text='Поменять', command=lambda: swap_texts(message_text, result_text))
 
         # showing widgets
         explanation_label.pack()
@@ -954,18 +972,24 @@ class MainWindow(tk.Tk):
         drop_down_encryption_menu.pack()
         result_label.pack()
         result_text.pack()
-        result_button.pack()
 
-    def encryption(self, message, result):  # зашифрование rsa
+    def encryption(self, message_text, result, pubkey_pem):  # зашифрование rsa
+        pubkey = rsa.PublicKey.load_pkcs1(pubkey_pem, 'PEM')
+        message = message_text.get(1.0, tk.END)
         if len(message.encode()) > 53:
             messagebox.showwarning('Warning!', f'Your text should be under 53 bytes\n'
                                                f'Yout text is now about {len(message.encode())} bytes')
+            message_text.delete(1.0, tk.END)
+            message_text.focus()
+            return
+        elif len(message) == 0:
+            messagebox.showwarning('Warning!', f'Please, write your text')
             return
         message = message.encode()
-        crypto = rsa.encrypt(message, self.pubkey)
+        crypto = rsa.encrypt(message, pubkey)
         # print(crypto)
         hex_list = crypto.hex()
-        print(hex_list)
+        # print(hex_list)
         answer = ''
         for i in range(0, len(hex_list), 2):
             answer += '0x'
@@ -976,7 +1000,11 @@ class MainWindow(tk.Tk):
         result.insert(1.0, answer)
         # self.decryption(crypto, result)
 
-    def decryption(self, crypto, result):  # расшифрование rsa
+    def decryption(self, message_text, result):  # расшифрование rsa
+        crypto = message_text.get(1.0, tk.END)
+        if len(crypto) == 0:
+            messagebox.showwarning('Warning!', f'Please, write your text')
+            return
         text = crypto
         crypto = ''
         for i in range(len(text)):
@@ -2235,4 +2263,3 @@ class MainWindow(tk.Tk):
 
 if __name__ == '__main__':  # run program
     MainWindow()  # call window showing class
-    
