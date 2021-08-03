@@ -2191,7 +2191,7 @@ class MainWindow(tk.Tk):
                     del red_squares_list[id_of_square]
                     canvas.itemconfigure(canvas_symbols_list[a][b], text='')
                     canvas_fill_squares_list[a][b] = 0
-                print(red_squares_list)
+                # print(red_squares_list)
 
         # checking which algorithm user chooses
         if typo_algorithm == 4:
