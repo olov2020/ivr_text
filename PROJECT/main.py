@@ -1953,8 +1953,8 @@ class MainWindow(tk.Tk):
         self.destroy()
 
     def update_current_function(self, _function_number):  # choosing the right function
-        self.menu.entryconfig('Об авторе', state='normal')
-        if self.function_number != _function_number:
+        if self.function_number != _function_number or self.menu.entrycget('Об авторе', 'state') == 'disabled':
+            self.menu.entryconfig('Об авторе', state='normal')
             self.destroy_everything()  # deleting previous function
             self.function_number = _function_number
             self.menu.entryconfig('Подсказки', state='disabled')
