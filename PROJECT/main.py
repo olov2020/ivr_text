@@ -133,12 +133,12 @@ def xor_function(_first_arg_entry, _second_arg_entry, _result_entry):  # working
 
     # all necessary checks
     if first_arg == '':
-        messagebox.showwarning('Warning!', 'Please, type your text')
+        messagebox.showwarning('Warning!', 'Please, type your first text')
         _first_arg_entry.delete(0, tk.END)
         _first_arg_entry.focus()
         return
     if second_arg == '':
-        messagebox.showwarning('Warning!', 'Please, type your text')
+        messagebox.showwarning('Warning!', 'Please, type your second text')
         _second_arg_entry.delete(0, tk.END)
         _second_arg_entry.focus()
         return
@@ -167,22 +167,22 @@ def replacement_function(_first_arg_entry, _second_arg_entry, _third_arg_entry, 
 
     # all necessary checks
     if first_arg == '':
-        messagebox.showwarning('Warning!', 'Please, write some text')
+        messagebox.showwarning('Warning!', 'Please, write first alphabet')
         _first_arg_entry.delete(0, tk.END)
         _first_arg_entry.focus()
         return
     if second_arg == '':
-        messagebox.showwarning('Warning!', 'Please, write some text')
+        messagebox.showwarning('Warning!', 'Please, write second alphabet')
         _second_arg_entry.delete(0, tk.END)
         _second_arg_entry.focus()
         return
     if third_arg == '':
-        messagebox.showwarning('Warning!', 'Please, write some text')
+        messagebox.showwarning('Warning!', 'Please, write your text')
         _third_arg_entry.delete(0, tk.END)
         _third_arg_entry.focus()
         return
     if len(first_arg) != len(second_arg):
-        messagebox.showwarning('Warning!', 'Please, write valid lines')
+        messagebox.showwarning('Warning!', 'Please, write same length alphabets')
         if len(first_arg) > len(second_arg):
             _first_arg_entry.delete(0, tk.END)
             _first_arg_entry.focus()
@@ -197,7 +197,7 @@ def replacement_function(_first_arg_entry, _second_arg_entry, _third_arg_entry, 
             if first_arg[j] == third_arg[i]:
                 t += 1
         if t != 1:
-            messagebox.showwarning('Warning!', 'Please, write valid text')
+            messagebox.showwarning('Warning!', 'Please, write your text using letters\nonly from first alphabet')
             _third_arg_entry.delete(0, tk.END)
             _third_arg_entry.focus()
             return
@@ -205,12 +205,12 @@ def replacement_function(_first_arg_entry, _second_arg_entry, _third_arg_entry, 
     for i in range(len(first_arg)):
         for j in range(len(first_list)):
             if first_arg[i] == first_list[j]:
-                messagebox.showwarning('Warning!', 'Please, write different symbols')
+                messagebox.showwarning('Warning!', 'Please, write different symbols in the first alphabet')
                 _first_arg_entry.delete(0, tk.END)
                 _first_arg_entry.focus()
                 return
             if second_list[j] == second_arg[i]:
-                messagebox.showwarning('Warning!', 'Please, write different symbols')
+                messagebox.showwarning('Warning!', 'Please, write different symbols in the second alphabet')
                 _second_arg_entry.delete(0, tk.END)
                 _second_arg_entry.focus()
                 return
@@ -301,7 +301,7 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
         messagebox.showwarning('Warning!', 'Please, enter your key')
         return
     if len(main_text) > 36:
-        messagebox.showwarning('Warning!', 'Please, enter valid text')
+        messagebox.showwarning('Warning!', 'Please, enter text within 36 symbols (including spaces)')
         main_text_entry.delete(0, tk.END)
         main_text_entry.focus()
         return
@@ -310,7 +310,8 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
         if key[i].isdigit():
             check_len_key += 1
             if key[i] == '0' or key[i] == '7' or key[i] == '8' or key[i] == '9':
-                messagebox.showwarning('Warning!', 'Please, enter valid key')
+                messagebox.showwarning('Warning!', 'Please, enter key only using [1, 2, 3, 4, 5, 6] numbers'
+                                                   '\n(without repetition)')
                 key_entry.delete(0, tk.END)
                 key_entry.focus()
                 return
@@ -318,7 +319,8 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
         # else:
         #     check_len_key -= 1
     if check_len_key != 6:  # *key_not_digit* and check_len_key != -6:
-        messagebox.showwarning('Warning!', 'Please, enter valid key')
+        messagebox.showwarning('Warning!', 'Please, enter key only using [1, 2, 3, 4, 5, 6] numbers'
+                                           '\n(without repetition)')
         key_entry.delete(0, tk.END)
         key_entry.focus()
         return
@@ -326,7 +328,8 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
     for i in range(6):
         for j in range(len(key_list)):
             if int(key[i]) == key_list[j]:
-                messagebox.showwarning('Warning!', 'Please, enter valid key')
+                messagebox.showwarning('Warning!', 'Please, enter key only using [1, 2, 3, 4, 5, 6] numbers'
+                                                   '\n(without repetition)')
                 key_entry.delete(0, tk.END)
                 key_entry.focus()
                 return
@@ -413,7 +416,8 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
         for i in range(6):
             for j in range(i + 1, 6):
                 if key_list[i] == key_list[j]:
-                    messagebox.showwarning('Warning!', 'Please, enter valid key')
+                    messagebox.showwarning('Warning!', 'Please, enter key only using [1, 2, 3, 4, 5, 6] numbers'
+                                                       '\n(without repetition)')
                     key_entry.delete(0, tk.END)
                     key_entry.focus()
                     return
@@ -503,7 +507,7 @@ def encryption(message_text, result, pubkey_pem):  # зашифрование rs
     message = message_text.get(1.0, tk.END)
     if len(message.encode()) > 53:
         messagebox.showwarning('Warning!', f'Your text should be under 53 bytes\n'
-                                           f'Yout text is now about {len(message.encode())} bytes')
+                                           f'Now your text is about {len(message.encode())} bytes')
         message_text.delete(1.0, tk.END)
         message_text.focus()
         return
