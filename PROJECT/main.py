@@ -241,9 +241,9 @@ def working_with_files(file_text, main_text_entry, key_entry):
     # working with trash text
     result_list = []
     for i in range(len(trash_text)):
-        xored_arg = ord(chr(int(trash_text[i % len(trash_text)], 16))) ^ ord(xor_text[i % len(xor_text)]) \
+        xored_arg = ord(chr(int(trash_text[i % len(trash_text)], 2))) ^ ord(xor_text[i % len(xor_text)]) \
             # ^ ord(xor_text[i % len(xor_text)]) - for check
-        result_list.append(f'{chr(int(hex(xored_arg), 16))}')  # (f'{chr(int(hex(xored_arg), 16))}') - for check
+        result_list.append(f'{chr(int(bin(xored_arg), 2))}')  # (f'{chr(int(bin(xored_arg), 2))}') - for check
     result_output = ''.join(result_list)
 
     # finding main text and key text
@@ -1645,7 +1645,7 @@ def change_task_file(task_number):
     for i in range(len(trash_text)):
         xored_arg = ord(trash_text[i % len(trash_text)]) ^ ord(xor_text[i % len(xor_text)]) \
             # ^ ord(xor_text[i % len(xor_text)]) - for check
-        result_list.append(f'{hex(xored_arg)}')  # (f'{chr(int(hex(xored_arg), 16))}') - for check
+        result_list.append(f'{bin(xored_arg)}')  # (f'{chr(int(bin(xored_arg), 2))}') - for check
     result_output = '/'.join(result_list)
     # print(result_output)
     # print(trash_text)
