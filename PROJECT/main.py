@@ -243,7 +243,7 @@ def working_with_files(file_text, main_text_entry, key_entry):
     for i in range(len(trash_text)):
         xored_arg = ord(chr(int(trash_text[i % len(trash_text)], 2))) ^ ord(xor_text[i % len(xor_text)]) \
             # ^ ord(xor_text[i % len(xor_text)]) - for check
-        result_list.append(f'{chr(int(bin(xored_arg), 2))}')  # (f'{chr(int(bin(xored_arg), 2))}') - for check
+        result_list.append(f'{chr(xored_arg)}')  # (f'{chr(int(bin(xored_arg), 2))}') - for check
     result_output = ''.join(result_list)
 
     # finding main text and key text
@@ -253,6 +253,9 @@ def working_with_files(file_text, main_text_entry, key_entry):
         s1 = result_output.find(f'${i + 1}')
         s2 = result_output.find(f'{i + 1}$')
         if s1 == -1:
+            return -1
+        if s1 > s2:
+            change_task_file(current_file_open)
             return -1
         text = result_output[s1 + 2: s2 + 1]
         # print(text)
@@ -1645,7 +1648,7 @@ def change_task_file(task_number):
     for i in range(len(trash_text)):
         xored_arg = ord(trash_text[i % len(trash_text)]) ^ ord(xor_text[i % len(xor_text)]) \
             # ^ ord(xor_text[i % len(xor_text)]) - for check
-        result_list.append(f'{bin(xored_arg)}')  # (f'{chr(int(bin(xored_arg), 2))}') - for check
+        result_list.append(f'{bin(xored_arg)[2:]}')  # (f'{chr(int(bin(xored_arg), 2))}') - for check
     result_output = '/'.join(result_list)
     # print(result_output)
     # print(trash_text)
@@ -1978,7 +1981,7 @@ class MainWindow(tk.Tk):
             elif self.function_number == 2:
                 self.replacement_show()
             # elif self.function_number == 3:
-                # self.rsa_show()
+            # self.rsa_show()
             elif self.function_number == 4:
                 self.table_algorithm_show(4, '')  # зашифровать
             elif self.function_number == 5:
@@ -2246,6 +2249,10 @@ class MainWindow(tk.Tk):
             canvas_key_list[i] = canvas.create_text(265 + i * 30, 50, text=f'{i + 1}')
             for j in range(6):
                 canvas_symbols_list[i][j] = canvas.create_text(265 + j * 30, 75 + i * 30, text='a')
+
+        if typo_algorithm == 6:
+            working_with_table_algorithm(main_text_entry, key_entry, result_entry, canvas_key_list,
+                                         canvas_symbols_list, canvas_fill_squares_list, canvas, typo_algorithm)
 
         # vertical lines
         for i in range(5):
