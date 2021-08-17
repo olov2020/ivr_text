@@ -196,8 +196,8 @@ def replacement_function(_first_arg_entry, _second_arg_entry, _third_arg_entry, 
         t = 0
         for j in range(len(first_arg)):
             if first_arg[j] == third_arg[i]:
-                t += 1
-        if t != 1:
+                t = 1
+        if t != 1 and third_arg[i] != ' ':
             messagebox.showwarning('Warning!', 'Please, write your text using letters\nonly from first alphabet')
             _third_arg_entry.delete(0, tk.END)
             _third_arg_entry.focus()
@@ -223,6 +223,9 @@ def replacement_function(_first_arg_entry, _second_arg_entry, _third_arg_entry, 
 
     result = ''
     for i in range(len(third_list)):
+        if third_arg[i] == ' ':
+            result += ' '
+            continue
         result += all_changes.get(third_list[i])
     _result_repl_label.delete(0, tk.END)
     _result_repl_label.insert(0, result)
@@ -1902,8 +1905,9 @@ class MainWindow(tk.Tk):
         self.choosing_function.add_command(label='XOR', command=lambda: self.update_current_function(1))
         self.choosing_function.add_separator()
         self.choosing_function.add_command(label='Replacement', command=lambda: self.update_current_function(2))
-        self.choosing_function.add_separator()
-        self.choosing_function.add_command(label='RSA', command=lambda: self.update_current_function(3))
+        # hidden rsa for alpha test
+        # self.choosing_function.add_separator()
+        # self.choosing_function.add_command(label='RSA', command=lambda: self.update_current_function(3))
 
         self.choosing_table_algorithm = Menu(self.menu, tearoff=0)
         self.choosing_table_algorithm.add_command(label='Зашифровать', command=lambda: self.update_current_function(4))
@@ -1973,8 +1977,8 @@ class MainWindow(tk.Tk):
                 self.xor_show()
             elif self.function_number == 2:
                 self.replacement_show()
-            elif self.function_number == 3:
-                self.rsa_show()
+            # elif self.function_number == 3:
+                # self.rsa_show()
             elif self.function_number == 4:
                 self.table_algorithm_show(4, '')  # зашифровать
             elif self.function_number == 5:
