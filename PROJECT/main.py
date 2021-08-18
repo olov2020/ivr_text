@@ -1725,7 +1725,7 @@ class MainWindow(tk.Tk):
         self.choosing_function.add_cascade(label='Табличный алгоритм', menu=self.choosing_table_algorithm)
 
         # adding tabs to menu
-        self.menu.add_command(label="Поменять task'и", command=change_all_task_files)
+        # self.menu.add_command(label="Поменять task'и", command=change_all_task_files)
         self.menu.add_cascade(label='Выбери функцию', menu=self.choosing_function)
         self.menu.add_command(label='Подсказки', state='disabled', command=self.Tips)
         self.menu.add_command(label='Об авторе', command=self.about_author)
