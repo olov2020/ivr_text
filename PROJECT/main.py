@@ -547,6 +547,10 @@ def encryption(message_text, result, pubkey_pem):  # зашифрование rs
 
 
 def change_task_file(task_number):
+    if task_number != 'task1' and task_number != 'task2' and task_number != 'task3' and task_number != 'task4' and \
+            task_number != 'task5' and task_number != 'task6' and task_number != 'task7':
+        return
+
     import random
 
     # setting variables
