@@ -405,6 +405,27 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
             key_list[show_key_list[i][0]] = show_key_list[i][1]
             canvas.itemconfigure(canvas_key_list[show_key_list[i][0]], text=key_list[show_key_list[i][0]])
         for i in range(6):
+            for j in range(len(show_key_list)):
+                if key_list[i] == show_key_list[j][1] and i != show_key_list[j][0]:
+                    t = 1
+                    key_list[i] = t
+                    while t != 0:
+                        for k in range(6):
+                            if key_list[i] == key_list[k] and k != i:
+                                t += 1
+                                break
+                            if k == 5:
+                                t = 0
+                        if t != 0:
+                            key_list[i] = t
+                    canvas.itemconfigure(canvas_key_list[i], text=key_list[i])
+        str1 = ''
+        for i in range(6):
+            str1 += str(key_list[i])
+        key_entry.delete(0, tk.END)
+        key_entry.insert(0, str1)
+
+        for i in range(6):
             for j in range(i + 1, 6):
                 if key_list[i] == key_list[j]:
                     messagebox.showwarning('Warning!', 'Please, enter key only using [1, 2, 3, 4, 5, 6] numbers'
@@ -1976,6 +1997,8 @@ class MainWindow(tk.Tk):
                     canvas.itemconfigure(canvas_symbols_list[a][b], text='')
                     canvas_fill_squares_list[a][b] = 0
                 # print(red_squares_list)
+            working_with_table_algorithm(main_text_entry, key_entry, result_entry, canvas_key_list,
+                                         canvas_symbols_list, canvas_fill_squares_list, canvas, typo_algorithm)
 
         # checking which algorithm user chooses
         if typo_algorithm == 4:
