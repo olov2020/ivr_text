@@ -148,7 +148,7 @@ def xor_function(_first_arg_entry, _second_arg_entry, _result_entry):  # working
     second_arg_list = second_arg.encode('cp1251')
     for i in range(len(first_arg_list)):
         xored_arg = first_arg_list[i % len(first_arg_list)] ^ second_arg_list[i % len(second_arg_list)]
-        # additional check ^ second_arg[i % len(second_arg)].encode('cp1251')
+        # additional check ^ second_arg_list[i % len(second_arg)]
         append_object = len(str(hex(xored_arg))[2:]) % 2 * '0' + str(hex(xored_arg))[2:]
         result_list.append(f'0x{append_object} ')  # result in hex format for unicode, not ascii!
     result_output = ''.join(result_list)
@@ -546,9 +546,11 @@ def encryption(message_text, result, pubkey_pem):  # зашифрование rs
     # self.decryption(crypto, result)
 
 
-def change_task_file(task_number):
-    if task_number != 'task1' and task_number != 'task2' and task_number != 'task3' and task_number != 'task4' and \
-            task_number != 'task5' and task_number != 'task6' and task_number != 'task7':
+def change_task_file(real_file):
+    task_number = real_file[0:5]
+    if task_number != 'task1' and task_number != 'task2' and task_number != 'task3' \
+            and task_number != 'task4' and task_number != 'task5' and task_number != 'task6' \
+            and task_number != 'task7':
         return
 
     import random
@@ -739,7 +741,7 @@ def change_task_file(task_number):
             [  # 2
                 f'${6}Ашроо{6}$',
                 f'${1} оир{1}$',
-                f'${5} ий{5}$',
+                f'${5} иа{5}$',
                 f'${4}элйпли{4}$',
                 f'${2}у гт{2}$',
                 f'${3}тиктм{3}$',
@@ -1482,18 +1484,18 @@ def change_task_file(task_number):
         if len(random_text) >= num_of_strings and len(random_place) >= num_of_strings:
             random_choice = random.randint(0, 1000000) % num_of_tasks
             try:
-                file1 = open(f'{task_number}_settings.txt', 'r')
+                file1 = open(f'{real_file}_settings.txt', 'r')
             except FileNotFoundError:
-                file1 = open(f'{task_number}_settings.txt', 'w+')
+                file1 = open(f'{real_file}_settings.txt', 'w+')
                 file1.write(str(99))
                 file1.close()
-                file1 = open(f'{task_number}_settings.txt', 'r')
+                file1 = open(f'{real_file}_settings.txt', 'r')
             s = file1.read()
             file1.close()
             while random_choice == int(s[0]) or random_choice == int(s[1]):
                 random_choice = random.randint(0, 1000000) % num_of_tasks
 
-            file1 = open(f'{task_number}_settings.txt', 'w+')
+            file1 = open(f'{real_file}_settings.txt', 'w+')
             s_new = ''
             s_new += s[1]
             s_new += str(random_choice)
@@ -1666,7 +1668,7 @@ def change_task_file(task_number):
     # print(trash_text)
 
     # working with output file
-    file1 = open(f'{task_number}.txt', 'w+')
+    file1 = open(f'{real_file}.txt', 'w+')
     file1.write(result_output)
 
     file1.close()
