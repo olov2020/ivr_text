@@ -357,8 +357,13 @@ def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_
 
         # showing the result
         for i in range(6):
+            t = 0
             for j in range(6):
-                result_str += result_list[j * 6 + i]
+                if key_list[j] == i + 1:
+                    t = j
+                    break
+            for j in range(6):
+                result_str += result_list[j * 6 + t]
         result.delete(0, tk.END)
         result.insert(0, result_str)
         # separator
@@ -1707,7 +1712,7 @@ class MainWindow(tk.Tk):
         # different tabs
         # choose function tab
         self.choosing_function = Menu(self.menu, tearoff=0)
-        self.choosing_function.add_command(label='Home', command=lambda: self.update_current_function(0))
+        self.choosing_function.add_command(label='ASCII', command=lambda: self.update_current_function(0))
         self.choosing_function.add_separator()
         self.choosing_function.add_command(label='XOR', command=lambda: self.update_current_function(1))
         self.choosing_function.add_separator()
@@ -1727,7 +1732,7 @@ class MainWindow(tk.Tk):
         self.choosing_function.add_cascade(label='Табличный алгоритм', menu=self.choosing_table_algorithm)
 
         # adding tabs to menu
-        # self.menu.add_command(label="Поменять task'и", command=change_all_task_files)
+        self.menu.add_command(label="Поменять task'и", command=change_all_task_files)
         self.menu.add_cascade(label='Выбери функцию', menu=self.choosing_function)
         self.menu.add_command(label='Подсказки', state='disabled', command=self.Tips)
         self.menu.add_command(label='Об авторе', command=self.about_author)
@@ -1804,10 +1809,17 @@ class MainWindow(tk.Tk):
                 # print(widget.winfo_name())
 
     def home_show(self):  # function to show welcome page
-        welcome = tk.Label(self, text='Hello, world!\nWelcome to my application for Cryptography :)\n'
+        # need fixes
+        canvas_image = tk.Canvas(self, width=400, height=400)
+        img = tk.PhotoImage(file='Ascii_table.png')
+        canvas_image.create_image(0, 0, image=img, anchor='nw', tags="image")
+
+        canvas_image.pack()
+
+        """welcome = tk.Label(self, text='Hello, world!\nWelcome to my application for Cryptography :)\n'
                                       'Here you can have some practise ...')
 
-        welcome.pack(expand=True)
+        welcome.pack(expand=True)"""
 
     def xor_show(self):  # xor show function
         # all widgets
