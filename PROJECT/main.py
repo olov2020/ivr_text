@@ -17,7 +17,8 @@ show_key_list = []  # key positions which should be shown
 current_file_open = ''
 tasks_answer_list = ['Привет, меня зовут Кот Василий', 'А это лучший криптоалгоритм', 'Который я когда-либо намурлыкал',
                      'Ты, друг мой, избран не случайно', 'Только ты можешь дешифровать это',
-                     'И отыскать секретное послание!', 'Now you are the king of cryptography']
+                     'И отыскать секретное послание!', 'Now you are the king of cryptography',
+                     'A0D13EFB754CD890A21D47EF3', '870331564912034778546922122']
 xor_text = "Игровые смартфоны сейчас в тренде, а уж модели ASUS всегда привлекали внимание и получали" \
            " одобрение аудитории. Сегодня на обзоре — геймерский телефон линейки Republic of Gamers нового" \
            " поколения, оснащённый по последнему слову мобильной техники. Протестируем новинку всесторонне." \
@@ -553,9 +554,13 @@ def encryption(message_text, result, pubkey_pem):  # зашифрование rs
 
 def change_task_file(real_file):
     task_number = real_file[0:5]
+    if real_file[:6] == 'try_it':
+        task_number = 'try_it'
+    elif real_file[:4] == 'nunu':
+        task_number = 'nunu'
     if task_number != 'task1' and task_number != 'task2' and task_number != 'task3' \
             and task_number != 'task4' and task_number != 'task5' and task_number != 'task6' \
-            and task_number != 'task7':
+            and task_number != 'task7' and task_number != 'try_it' and task_number != 'nunu':
         return
 
     import random
@@ -569,6 +574,370 @@ def change_task_file(real_file):
     # linker--key_text--main_text--key_text--linker
     # different variations of message that should be decoded
     all_main_key_text = {
+        'try_it': [
+            [  # 0
+                f'${3}358A7{3}$',
+                f'${4}A42{4}$',
+                f'${2}E91E{2}$',
+                f'${1}0FD{1}$',
+                f'${5}DBC4F{5}$',
+                f'${6}17D03{6}$',
+                f'%342156%',
+                f'&00&',
+                f'&02&',
+                f'&11&',
+                f'&22&',
+                f'&23&',
+                f'&31&',
+                f'&33&',
+                f'&34&',
+                f'&45&',
+                f'&51&',
+                f'&53&',
+            ],
+            [  # 1
+                f'${6}A717{6}$',
+                f'${2}0E59D{2}$',
+                f'${1}DF44E{1}$',
+                f'${5}BC0F{5}$',
+                f'${4}1DA{4}$',
+                f'${3}3823{3}$',
+                f'%621543%',
+                f'&03&',
+                f'&10&',
+                f'&14&',
+                f'&15&',
+                f'&30&',
+                f'&32&',
+                f'&43&',
+                f'&44&',
+                f'&45&',
+                f'&51&',
+                f'&54&',
+            ],
+            [  # 2
+                f'${3}A352{3}$',
+                f'${2}E81E{2}$',
+                f'${4}F4D{4}$',
+                f'${5}0C94F{5}$',
+                f'${6}DB03{6}$',
+                f'${1}17DA7{1}$',
+                f'%324561%',
+                f'&01&',
+                f'&02&',
+                f'&13&',
+                f'&21&',
+                f'&24&',
+                f'&30&',
+                f'&32&',
+                f'&44&',
+                f'&50&',
+                f'&52&',
+                f'&55&',
+            ],
+            [  # 3
+                f'${2}AE7D{2}$',
+                f'${1}0F54{1}$',
+                f'${4}DBA7{4}$',
+                f'${5}82E{5}$',
+                f'${6}1491F{6}$',
+                f'${3}3C0D3{3}$',
+                f'%214563%',
+                f'&03&',
+                f'&13&',
+                f'&14&',
+                f'&15&',
+                f'&22&',
+                f'&23&',
+                f'&31&',
+                f'&32&',
+                f'&40&',
+                f'&41&',
+                f'&50&',
+            ],
+            [  # 4
+                f'${5}591{5}$',
+                f'${4}AE4DE{4}$',
+                f'${6}0F0F{6}$',
+                f'${2}DBCA3{2}$',
+                f'${1}1D4{1}$',
+                f'${3}37827{3}$',
+                f'%546213%',
+                f'&00&',
+                f'&10&',
+                f'&14&',
+                f'&22&',
+                f'&31&',
+                f'&34&',
+                f'&42&',
+                f'&43&',
+                f'&50&',
+                f'&54&',
+                f'&55&',
+            ],
+            [  # 5
+                f'${3}A782E{3}$',
+                f'${1}0E591{1}$',
+                f'${4}D4D{4}$',
+                f'${2}1F04{2}$',
+                f'${6}3C7F{6}$',
+                f'${5}BDA3{5}$',
+                f'%314265%',
+                f'&05&',
+                f'&10&',
+                f'&12&',
+                f'&14&',
+                f'&23&',
+                f'&32&',
+                f'&34&',
+                f'&45&',
+                f'&51&',
+                f'&52&',
+                f'&53&',
+            ],
+            [  # 6
+                f'${2}150D{2}$',
+                f'${5}AF44{5}$',
+                f'${1}3CA7{1}$',
+                f'${3}0BD2E{3}$',
+                f'${6}E8F{6}$',
+                f'${4}D7913{4}$',
+                f'%251364%',
+                f'&00&',
+                f'&02&',
+                f'&04&',
+                f'&11&',
+                f'&13&',
+                f'&15&',
+                f'&20&',
+                f'&22&',
+                f'&24&',
+                f'&41&',
+                f'&44&',
+            ],
+            [  # 7
+                f'${6}AE524{6}$',
+                f'${4}087{4}$',
+                f'${1}DF49E{1}$',
+                f'${5}10F{5}$',
+                f'${3}3BC13{3}$',
+                f'${2}7DAD{2}$',
+                f'%641532%',
+                f'&05&',
+                f'&11&',
+                f'&13&',
+                f'&21&',
+                f'&23&',
+                f'&30&',
+                f'&34&',
+                f'&41&',
+                f'&42&',
+                f'&43&',
+                f'&55&',
+            ],
+            [  # 8
+                f'${6}A37DD{6}$',
+                f'${1}E5A4{1}$',
+                f'${5}0827{5}$',
+                f'${2}91E{2}$',
+                f'${3}DF4F{3}$',
+                f'${4}1BC03{4}$',
+                f'%615234%',
+                f'&01&',
+                f'&03&',
+                f'&12&',
+                f'&13&',
+                f'&22&',
+                f'&23&',
+                f'&31&',
+                f'&34&',
+                f'&40&',
+                f'&44&',
+                f'&45&',
+            ],
+        ],
+        'nunu': [
+            [  # 0
+                f'${3}358A7{3}$',
+                f'${4}A42{4}$',
+                f'${2}E91E{2}$',
+                f'${1}0FD{1}$',
+                f'${5}DBC4F{5}$',
+                f'${6}17D03{6}$',
+                f'%342156%',
+                f'&00&',
+                f'&02&',
+                f'&11&',
+                f'&22&',
+                f'&23&',
+                f'&31&',
+                f'&33&',
+                f'&34&',
+                f'&45&',
+                f'&51&',
+                f'&53&',
+            ],
+            [  # 1
+                f'${6}A717{6}$',
+                f'${2}0E59D{2}$',
+                f'${1}DF44E{1}$',
+                f'${5}BC0F{5}$',
+                f'${4}1DA{4}$',
+                f'${3}3823{3}$',
+                f'%621543%',
+                f'&03&',
+                f'&10&',
+                f'&14&',
+                f'&15&',
+                f'&30&',
+                f'&32&',
+                f'&43&',
+                f'&44&',
+                f'&45&',
+                f'&51&',
+                f'&54&',
+            ],
+            [  # 2
+                f'${3}A352{3}$',
+                f'${2}E81E{2}$',
+                f'${4}F4D{4}$',
+                f'${5}0C94F{5}$',
+                f'${6}DB03{6}$',
+                f'${1}17DA7{1}$',
+                f'%324561%',
+                f'&01&',
+                f'&02&',
+                f'&13&',
+                f'&21&',
+                f'&24&',
+                f'&30&',
+                f'&32&',
+                f'&44&',
+                f'&50&',
+                f'&52&',
+                f'&55&',
+            ],
+            [  # 3
+                f'${2}AE7D{2}$',
+                f'${1}0F54{1}$',
+                f'${4}DBA7{4}$',
+                f'${5}82E{5}$',
+                f'${6}1491F{6}$',
+                f'${3}3C0D3{3}$',
+                f'%214563%',
+                f'&03&',
+                f'&13&',
+                f'&14&',
+                f'&15&',
+                f'&22&',
+                f'&23&',
+                f'&31&',
+                f'&32&',
+                f'&40&',
+                f'&41&',
+                f'&50&',
+            ],
+            [  # 4
+                f'${5}591{5}$',
+                f'${4}AE4DE{4}$',
+                f'${6}0F0F{6}$',
+                f'${2}DBCA3{2}$',
+                f'${1}1D4{1}$',
+                f'${3}37827{3}$',
+                f'%546213%',
+                f'&00&',
+                f'&10&',
+                f'&14&',
+                f'&22&',
+                f'&31&',
+                f'&34&',
+                f'&42&',
+                f'&43&',
+                f'&50&',
+                f'&54&',
+                f'&55&',
+            ],
+            [  # 5
+                f'${3}A782E{3}$',
+                f'${1}0E591{1}$',
+                f'${4}D4D{4}$',
+                f'${2}1F04{2}$',
+                f'${6}3C7F{6}$',
+                f'${5}BDA3{5}$',
+                f'%314265%',
+                f'&05&',
+                f'&10&',
+                f'&12&',
+                f'&14&',
+                f'&23&',
+                f'&32&',
+                f'&34&',
+                f'&45&',
+                f'&51&',
+                f'&52&',
+                f'&53&',
+            ],
+            [  # 6
+                f'${2}150D{2}$',
+                f'${5}AF44{5}$',
+                f'${1}3CA7{1}$',
+                f'${3}0BD2E{3}$',
+                f'${6}E8F{6}$',
+                f'${4}D7913{4}$',
+                f'%251364%',
+                f'&00&',
+                f'&02&',
+                f'&04&',
+                f'&11&',
+                f'&13&',
+                f'&15&',
+                f'&20&',
+                f'&22&',
+                f'&24&',
+                f'&41&',
+                f'&44&',
+            ],
+            [  # 7
+                f'${6}AE524{6}$',
+                f'${4}087{4}$',
+                f'${1}DF49E{1}$',
+                f'${5}10F{5}$',
+                f'${3}3BC13{3}$',
+                f'${2}7DAD{2}$',
+                f'%641532%',
+                f'&05&',
+                f'&11&',
+                f'&13&',
+                f'&21&',
+                f'&23&',
+                f'&30&',
+                f'&34&',
+                f'&41&',
+                f'&42&',
+                f'&43&',
+                f'&55&',
+            ],
+            [  # 8
+                f'${6}A37DD{6}$',
+                f'${1}E5A4{1}$',
+                f'${5}0827{5}$',
+                f'${2}91E{2}$',
+                f'${3}DF4F{3}$',
+                f'${4}1BC03{4}$',
+                f'%615234%',
+                f'&01&',
+                f'&03&',
+                f'&12&',
+                f'&13&',
+                f'&22&',
+                f'&23&',
+                f'&31&',
+                f'&34&',
+                f'&40&',
+                f'&44&',
+                f'&45&',
+            ],
+        ],
         'task1': [
             [  # 0
                 f'${1}Птеооа{1}$',
@@ -1687,6 +2056,8 @@ def change_all_task_files():
     change_task_file('task5')
     change_task_file('task6')
     change_task_file('task7')
+    change_task_file('nunu')
+    change_task_file('try_it')
 
 
 class MainWindow(tk.Tk):
@@ -2218,12 +2589,26 @@ class MainWindow(tk.Tk):
                 self.symbol_first_show.config(state=tk.DISABLED)
                 self.symbol_first_show.select()
                 self.symbol_first_show_entry.delete(0, tk.END)
-                self.symbol_first_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][:4])
+                index = 0
+                if current_file_open == 'nunu':
+                    index = len(tasks_answer_list)
+                elif current_file_open == 'try_it':
+                    index = len(tasks_answer_list) - 1
+                else:
+                    index = int(current_file_open[-1])
+                self.symbol_first_show_entry.insert(0, tasks_answer_list[index - 1][:4])
             if symbols_to_show[1] == 1:
                 self.symbol_last_show.config(state=tk.DISABLED)
                 self.symbol_last_show.select()
                 self.symbol_last_show_entry.delete(0, tk.END)
-                self.symbol_last_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][-4:])
+                index = 0
+                if current_file_open == 'nunu':
+                    index = len(tasks_answer_list)
+                elif current_file_open == 'try_it':
+                    index = len(tasks_answer_list) - 1
+                else:
+                    index = int(current_file_open[-1])
+                self.symbol_last_show_entry.insert(0, tasks_answer_list[index - 1][-4:])
 
             self.symbol_first_show.pack()
             self.symbol_first_show_entry.pack()
@@ -2238,25 +2623,32 @@ class MainWindow(tk.Tk):
 
         def symbol_show(self, which_symbol):
             global tasks_answer_list, current_file_open, symbols_to_show
+            index = 0
+            if current_file_open == 'nunu':
+                index = len(tasks_answer_list)
+            elif current_file_open == 'try_it':
+                index = len(tasks_answer_list) - 1
+            else:
+                index = int(current_file_open[-1])
             if which_symbol == 0:
                 self.symbol_first_show_entry.delete(0, tk.END)
-                self.symbol_first_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][:4])
+                self.symbol_first_show_entry.insert(0, tasks_answer_list[index - 1][:4])
                 symbols_to_show[0] = 1
             elif which_symbol == 1:
                 self.symbol_last_show_entry.delete(0, tk.END)
-                self.symbol_last_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][-4:])
+                self.symbol_last_show_entry.insert(0, tasks_answer_list[index - 1][-4:])
                 symbols_to_show[1] = 1
 
             if symbols_to_show[0] == 1:
                 self.symbol_first_show.config(state=tk.DISABLED)
                 self.symbol_first_show.select()
                 self.symbol_first_show_entry.delete(0, tk.END)
-                self.symbol_first_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][:4])
+                self.symbol_first_show_entry.insert(0, tasks_answer_list[index - 1][:4])
             if symbols_to_show[1] == 1:
                 self.symbol_last_show.config(state=tk.DISABLED)
                 self.symbol_last_show.select()
                 self.symbol_last_show_entry.delete(0, tk.END)
-                self.symbol_last_show_entry.insert(0, tasks_answer_list[int(current_file_open[-1]) - 1][-4:])
+                self.symbol_last_show_entry.insert(0, tasks_answer_list[index - 1][-4:])
 
         def toggle_click_tip(self, which_list, place):
             global sum_tips_key, sum_tips_filled
@@ -2327,7 +2719,14 @@ class MainWindow(tk.Tk):
             global tasks_answer_list, current_file_open, sum_tips_key, sum_tips_filled, symbols_to_show
             # print(current_file_open)
             # print(tasks_answer_list[int(current_file_open[-1])])
-            if self.answer_entry.get() == tasks_answer_list[int(current_file_open[-1]) - 1]:
+            index = 0
+            if current_file_open == 'nunu':
+                index = len(tasks_answer_list)
+            elif current_file_open == 'try_it':
+                index = len(tasks_answer_list) - 1
+            else:
+                index = int(current_file_open[-1])
+            if self.answer_entry.get() == tasks_answer_list[index - 1]:
                 messagebox.showinfo('Ураа', f'Поздравляю, твой ответ верный\n'
                                             f'Твоя оценка:'
                                             f'{5 - (sum(sum_tips_key) + sum(sum_tips_filled) + sum(symbols_to_show)) // 2}')
