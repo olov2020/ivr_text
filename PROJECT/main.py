@@ -1810,16 +1810,15 @@ class MainWindow(tk.Tk):
 
     def home_show(self):  # function to show welcome page
         # need fixes
-        canvas_image = tk.Canvas(self, width=400, height=400)
-        img = tk.PhotoImage(file='Ascii_table.png')
-        canvas_image.create_image(0, 0, image=img, anchor='nw', tags="image")
+        from PIL import Image, ImageTk
 
-        canvas_image.pack()
+        image1 = Image.open("Ascii_table.png")
+        test = ImageTk.PhotoImage(image1)
 
-        """welcome = tk.Label(self, text='Hello, world!\nWelcome to my application for Cryptography :)\n'
-                                      'Here you can have some practise ...')
+        label1 = tk.Label(image=test)
+        label1.image = test
 
-        welcome.pack(expand=True)"""
+        label1.pack()
 
     def xor_show(self):  # xor show function
         # all widgets
