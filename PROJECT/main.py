@@ -237,12 +237,14 @@ def working_with_files(file_text, main_text_entry, key_entry):
     key_answer_list = []
     filled_answer_list = []
 
-    trash_text = file_text.split('/')
+    trash_text = []
+    for i in range(len(file_text) // 16):
+        trash_text.append(file_text[i * 16: i * 16 + 16])
 
     # working with trash text
     result_list = []
     for i in range(len(trash_text)):
-        xored_arg = ord(chr(int(trash_text[i % len(trash_text)], 2))) ^ ord(xor_text[i % len(xor_text)]) \
+        xored_arg = int(trash_text[i % len(trash_text)], 2) ^ ord(xor_text[i % len(xor_text)]) \
             # ^ ord(xor_text[i % len(xor_text)]) - for check
         result_list.append(f'{chr(xored_arg)}')  # (f'{chr(int(bin(xored_arg), 2))}') - for check
     result_output = ''.join(result_list)
@@ -553,7 +555,7 @@ def encryption(message_text, result, pubkey_pem):  # зашифрование rs
 
 
 def change_task_file(real_file):
-    task_number = real_file[0:5]
+    task_number = real_file[:5]
     if real_file[:6] == 'try_it':
         task_number = 'try_it'
     elif real_file[:4] == 'nunu':
@@ -2015,11 +2017,14 @@ def change_task_file(real_file):
 
     # working with trash text
     result_list = []
+    get_bin = lambda x, n: format(x, 'b').zfill(n)
     for i in range(len(trash_text)):
         xored_arg = ord(trash_text[i % len(trash_text)]) ^ ord(xor_text[i % len(xor_text)]) \
             # ^ ord(xor_text[i % len(xor_text)]) - for check
-        result_list.append(f'{bin(xored_arg)[2:]}')  # (f'{chr(int(bin(xored_arg), 2))}') - for check
-    result_output = '/'.join(result_list)
+        result_list.append(f'{get_bin(xored_arg, 16)}')  # (f'{chr(int(bin(xored_arg), 2))}') - for check
+        # ord returns unicode number of the symbol
+    result_output = ''.join(result_list)
+    # print(result_list)
     # print(result_output)
     # print(trash_text)
 
@@ -2116,12 +2121,11 @@ class MainWindow(tk.Tk):
         global current_file_open
         try:
             os.remove('Keys.txt')  # deleting keys file, 'cause no one should know your keys
+        except FileNotFoundError:
+            pass
+        try:
             os.remove('Public_keys.txt')
         except FileNotFoundError:
-            try:
-                os.remove('Public_keys.txt')
-            except FileNotFoundError:
-                pass
             pass
         if current_file_open != '':
             change_task_file(current_file_open)
@@ -2572,24 +2576,24 @@ class MainWindow(tk.Tk):
                 self.symbol_first_show.select()
                 self.symbol_first_show_entry.delete(0, tk.END)
                 index = 0
-                if current_file_open == 'nunu':
+                if current_file_open[:4] == 'nunu':
                     index = len(tasks_answer_list)
-                elif current_file_open == 'try_it':
+                elif current_file_open[:6] == 'try_it':
                     index = len(tasks_answer_list) - 1
                 else:
-                    index = int(current_file_open[-1])
+                    index = int(current_file_open[:5][-1])
                 self.symbol_first_show_entry.insert(0, tasks_answer_list[index - 1][:4])
             if symbols_to_show[1] == 1:
                 self.symbol_last_show.config(state=tk.DISABLED)
                 self.symbol_last_show.select()
                 self.symbol_last_show_entry.delete(0, tk.END)
                 index = 0
-                if current_file_open == 'nunu':
+                if current_file_open[:4] == 'nunu':
                     index = len(tasks_answer_list)
-                elif current_file_open == 'try_it':
+                elif current_file_open[:6] == 'try_it':
                     index = len(tasks_answer_list) - 1
                 else:
-                    index = int(current_file_open[-1])
+                    index = int(current_file_open[:5][-1])
                 self.symbol_last_show_entry.insert(0, tasks_answer_list[index - 1][-4:])
 
             self.symbol_first_show.pack()
@@ -2606,12 +2610,12 @@ class MainWindow(tk.Tk):
         def symbol_show(self, which_symbol):
             global tasks_answer_list, current_file_open, symbols_to_show
             index = 0
-            if current_file_open == 'nunu':
+            if current_file_open[:4] == 'nunu':
                 index = len(tasks_answer_list)
-            elif current_file_open == 'try_it':
+            elif current_file_open[:6] == 'try_it':
                 index = len(tasks_answer_list) - 1
             else:
-                index = int(current_file_open[-1])
+                index = int(current_file_open[:5][-1])
             if which_symbol == 0:
                 self.symbol_first_show_entry.delete(0, tk.END)
                 self.symbol_first_show_entry.insert(0, tasks_answer_list[index - 1][:4])
@@ -2702,12 +2706,12 @@ class MainWindow(tk.Tk):
             # print(current_file_open)
             # print(tasks_answer_list[int(current_file_open[-1])])
             index = 0
-            if current_file_open == 'nunu':
+            if current_file_open[:4] == 'nunu':
                 index = len(tasks_answer_list)
-            elif current_file_open == 'try_it':
+            elif current_file_open[:6] == 'try_it':
                 index = len(tasks_answer_list) - 1
             else:
-                index = int(current_file_open[-1])
+                index = int(current_file_open[:5][-1])
             if self.answer_entry.get() == tasks_answer_list[index - 1]:
                 messagebox.showinfo('Ураа', f'Поздравляю, твой ответ верный\n'
                                             f'Твоя оценка:'
