@@ -2164,6 +2164,8 @@ class MainWindow(tk.Tk):
             self.destroy_everything()  # deleting previous function
             self.function_number = _function_number
             self.menu.entryconfig('Подсказки', state='disabled')
+            clear_global_variables()
+
             if self.function_number == 6:
                 self.menu.entryconfig('Подсказки', state='normal')
 
@@ -2400,6 +2402,7 @@ class MainWindow(tk.Tk):
                 a = (q - 60) // 30  # y-coordinates
                 x = 260 + 30 * b
                 y = 60 + 30 * a
+                # print(x, y)
                 # 0 - we should replace <symbol> to <*>
                 # 1 - we should replace <*> to <>
                 # canvas_fill_squares_list[y-coordinates][x-coordinates]
@@ -2513,9 +2516,6 @@ class MainWindow(tk.Tk):
         self.menu.entryconfig('Выбери функцию', state='normal')
         clear_global_variables()
         self.update_current_function(0)
-        # need fix!
-        # self.Tips.destroy(self.Tips())
-        # self.Answer.destroy(self.Answer())
 
     class Tips(tk.Tk):
         def __init__(self):
