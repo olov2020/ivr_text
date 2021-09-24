@@ -485,7 +485,7 @@ def filling_squares_with_tips(canvas, canvas_fill_squares_list):
             # show_filled_list[which column][which square][coordinate (y, x)]
             a = show_filled_list[i][j][0]  # y-coordinates
             b = show_filled_list[i][j][1]  # x-coordinates
-            x = 250 + 30 * b
+            x = 260 + 30 * b
             y = 60 + 30 * a
             # canvas_fill_squares_list[y-coordinates][x-coordinates]
             if canvas_fill_squares_list[a][b] == 0:
@@ -1074,7 +1074,7 @@ def change_task_file(real_file):
                 f'&22&',
                 f'&23&',
                 f'&42&',
-                f'&44&',
+                f'&45&',
                 f'&52&',
                 f'&55&',
             ],
@@ -1277,7 +1277,7 @@ def change_task_file(real_file):
                 f'&01&',
                 f'&13&',
                 f'&32&',
-                f'&45&',
+                f'&35&',
                 f'&54&',
             ],
             [  # 4
@@ -1546,7 +1546,7 @@ def change_task_file(real_file):
                 f'%362514%',
                 f'&03&',
                 f'&10&',
-                f'&21&',
+                f'&31&',
                 f'&44&',
             ],
             [  # 6
@@ -1569,7 +1569,7 @@ def change_task_file(real_file):
                 f'${3}ьыевэ{3}$',
                 f'${6}к шшт{6}$',
                 f'${1}омьиао{1}$',
-                f'%254316%',
+                f'%254361%',
                 f'&10&',
                 f'&21&',
                 f'&33&',
@@ -1653,7 +1653,7 @@ def change_task_file(real_file):
             [  # 4
                 f'${4}с е а{4}$',
                 f'${1}Икспн{1}$',
-                f'${5} аетол{5}$',
+                f'${5} аетои{5}$',
                 f'${3}отне{3}$',
                 f'${6}ткос!{6}$',
                 f'${2}ыьрел{2}$',
@@ -2117,7 +2117,7 @@ class MainWindow(tk.Tk):
         self.menu.add_command(label="Поменять task'и", command=change_all_task_files)
         self.menu.add_cascade(label='Выбери функцию', menu=self.choosing_function)
         self.menu.add_command(label='Подсказки', state='disabled', command=self.Tips)
-        self.menu.add_command(label='Об авторе', command=self.about_author)
+        self.menu.add_command(label='О программе', command=self.about_author)
 
         # adding menu to the window
         self.config(menu=self.menu)
@@ -2142,7 +2142,7 @@ class MainWindow(tk.Tk):
                                        f"2021 год", width=80, bg='#aaf')
         about_me.pack(pady=75)
         label1.pack()
-        self.menu.entryconfig('Об авторе', state='disabled')
+        self.menu.entryconfig('О программе', state='disabled')
 
     def exit_function(self):
         global current_file_open
@@ -2159,8 +2159,8 @@ class MainWindow(tk.Tk):
         self.destroy()
 
     def update_current_function(self, _function_number):  # choosing the right function
-        if self.function_number != _function_number or self.menu.entrycget('Об авторе', 'state') == 'disabled':
-            self.menu.entryconfig('Об авторе', state='normal')
+        if self.function_number != _function_number or self.menu.entrycget('О программе', 'state') == 'disabled':
+            self.menu.entryconfig('О программе', state='normal')
             self.destroy_everything()  # deleting previous function
             self.function_number = _function_number
             self.menu.entryconfig('Подсказки', state='disabled')
@@ -2395,10 +2395,10 @@ class MainWindow(tk.Tk):
             global red_squares_list
             p = event.x
             q = event.y
-            if 250 < p < 430 and 60 < q < 240:  # checking if they are fit the area
-                b = (p - 250) // 30  # x-coordinates
+            if 260 < p < 440 and 60 < q < 240:  # checking if they are fit the area
+                b = (p - 260) // 30  # x-coordinates
                 a = (q - 60) // 30  # y-coordinates
-                x = 250 + 30 * b
+                x = 260 + 30 * b
                 y = 60 + 30 * a
                 # 0 - we should replace <symbol> to <*>
                 # 1 - we should replace <*> to <>
@@ -2438,10 +2438,11 @@ class MainWindow(tk.Tk):
                 self.update_current_function(0)
                 return
             self.menu.entryconfig('Выбери функцию', state='disabled')
+            self.menu.entryconfig('О программе', state='disabled')
 
         # area where text will be placed and shown
         canvas = tk.Canvas(self)
-        canvas.create_rectangle(250, 60, 430, 240, outline="#aaf", fill="#aaf")
+        canvas.create_rectangle(260, 60, 440, 240, outline="#aaf", fill="#aaf")
         result_entry = tk.Entry(self, bg='#aaf', width=60)
 
         result_button = tk.Button(self, text='Получить результат',
@@ -2455,9 +2456,9 @@ class MainWindow(tk.Tk):
 
         # horizontal lines
         for i in range(5):
-            canvas.create_line(250, 90 + i * 30, 430, 90 + i * 30)
-        canvas.create_line(250, 59, 430, 59)
-        canvas.create_line(250, 241, 430, 241)
+            canvas.create_line(260, 90 + i * 30, 440, 90 + i * 30)
+        canvas.create_line(260, 59, 440, 59)
+        canvas.create_line(260, 241, 440, 241)
 
         # useful lists
         canvas_key_list = [0 for _ in range(6)]  # key numbers
@@ -2466,9 +2467,10 @@ class MainWindow(tk.Tk):
 
         # default filling canvas
         for i in range(6):
-            canvas_key_list[i] = canvas.create_text(265 + i * 30, 50, text=f'{i + 1}')
+            canvas_key_list[i] = canvas.create_text(275 + i * 30, 50, text=f'{i + 1}')
             for j in range(6):
-                canvas_symbols_list[i][j] = canvas.create_text(265 + j * 30, 75 + i * 30, text='a')
+                canvas_symbols_list[i][j] = canvas.create_text(275 + j * 30, 75 + i * 30,
+                                                               text='a')
 
         if typo_algorithm == 6:
             working_with_table_algorithm(main_text_entry, key_entry, result_entry, canvas_key_list,
@@ -2476,9 +2478,9 @@ class MainWindow(tk.Tk):
 
         # vertical lines
         for i in range(5):
-            canvas.create_line(280 + i * 30, 50, 280 + i * 30, 240)
-        canvas.create_line(249, 50, 249, 240)
-        canvas.create_line(431, 50, 431, 240)
+            canvas.create_line(290 + i * 30, 50, 290 + i * 30, 240)
+        canvas.create_line(259, 50, 259, 240)
+        canvas.create_line(441, 50, 441, 240)
 
         # show widgets
         header_label.pack()
