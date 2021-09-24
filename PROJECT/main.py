@@ -2047,6 +2047,30 @@ def change_all_task_files():
     change_task_file('try_it')
 
 
+def hex_to_char_func(hex_input_entry, char_result_entry):
+    hex_input_list = hex_input_entry.get().split()
+    char_result_entry.delete(0, tk.END)
+    char_result_list = []
+
+    for symbol in hex_input_list:
+        if symbol[:2] != '0x' or len(symbol[2:]) != 2:
+            messagebox.showwarning('Warning!', f'Please, write hex numbers in 0x00 | 0xaa format')
+            hex_input_entry.delete(0, tk.END)
+            hex_input_entry.focus()
+            return
+        try:
+            byte_array = bytearray.fromhex(symbol[2:])
+            char_result_list.append(byte_array.decode('cp1251'))
+        except ValueError:
+            messagebox.showwarning('Warning!', f'Please, write hex numbers in 0x00 | 0xaa format')
+            hex_input_entry.delete(0, tk.END)
+            hex_input_entry.focus()
+            return
+    char_result_text = ''.join(char_result_list)
+    char_result_entry.delete(0, tk.END)
+    char_result_entry.insert(0, char_result_text)
+
+
 class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -2103,18 +2127,21 @@ class MainWindow(tk.Tk):
 
     def about_author(self):
         self.destroy_everything()
-        about_me = tk.Label(self, text=f"Привет, друг! Возможно, тебе интересно, кто написал эту программу\n"
-                                       f"В таком случае, рад с тобой познакомиться, меня зовут Виноградов Владимир :)\n"
-                                       f"Я являюсь выпускником Московской Школы Программистов. "
-                                       f"Отучился я в ней 3 года\n"
-                                       f"Что касается школы, то на момент окончания написания данной программы, "
-                                       f"я учусь в 11 классе Лицея НИУ ВШЭ\n"
-                                       f"Если хочещь узнать больше обо мне, поговорить о программировании, "
-                                       f"криптографии или IT в целом,\nили о чем-либо другом, то ты можешь найти меня "
-                                       f"в Instagram под ником @vova_vinodrad\n"
-                                       f"Желаю тебе удачи в решении сложных задач, которые ждут тебя\nне только в "
-                                       f"рамках этого курса, но и в жизни!", width=80, bg='#aaf')
-        about_me.pack(expand=True, fill=tk.X)
+        from PIL import Image, ImageTk
+
+        image1 = Image.open("static/shp_logo.jpg")
+        image1 = image1.resize((450, 200), Image.ANTIALIAS)
+        test = ImageTk.PhotoImage(image1)
+
+        label1 = tk.Label(image=test)
+        label1.image = test
+
+        about_me = tk.Label(self, text=f"Программа для изучения некоторых алгоритмов кодирования и шифрования.\n"
+                                       f"Сделано для Московской Школы Программистов\n"
+                                       f"Виноградовым Владимиром Андреевичем\n"
+                                       f"2021 год", width=80, bg='#aaf')
+        about_me.pack(pady=75)
+        label1.pack()
         self.menu.entryconfig('Об авторе', state='disabled')
 
     def exit_function(self):
@@ -2139,6 +2166,11 @@ class MainWindow(tk.Tk):
             self.menu.entryconfig('Подсказки', state='disabled')
             if self.function_number == 6:
                 self.menu.entryconfig('Подсказки', state='normal')
+
+            if self.function_number == 0:
+                self.geometry('900x670+10+10')
+            else:
+                self.geometry('700x570+10+10')
 
             if self.function_number == 0:
                 self.home_show()
@@ -2169,7 +2201,7 @@ class MainWindow(tk.Tk):
         # need fixes
         from PIL import Image, ImageTk
 
-        image1 = Image.open("Ascii_table.png")
+        image1 = Image.open("static/Ascii_table.png")
         test = ImageTk.PhotoImage(image1)
 
         label1 = tk.Label(image=test)
@@ -2187,8 +2219,16 @@ class MainWindow(tk.Tk):
         result_entry = tk.Entry(self, text='', width=80, bg='#aaf')
         separate1 = tk.Label(self, pady=5, text='')
         separate2 = tk.Label(self, pady=5, text='')
+        separate3 = tk.Label(self, pady=5, text='')
+        separate4 = tk.Label(self, pady=5, text='')
         function = tk.Button(self, text="Получить результат",
                              command=lambda: xor_function(first_arg_entry, second_arg_entry, result_entry))
+
+        hex_to_char_label = tk.Label(self, text='Перевод из hex в char')
+        hex_input_entry = tk.Entry(self, width=80)
+        char_result_entry = tk.Entry(self, width=80, bg='#aaf')
+        char_result_button = tk.Button(self, text='Перевести',
+                                       command=lambda: hex_to_char_func(hex_input_entry, char_result_entry))
 
         # showing widgets
         header_label.pack()
@@ -2201,6 +2241,12 @@ class MainWindow(tk.Tk):
         function.pack()
         separate2.pack()
         result_entry.pack()
+        separate3.pack()
+        separate4.pack()
+        hex_to_char_label.pack()
+        hex_input_entry.pack(pady=15)
+        char_result_entry.pack()
+        char_result_button.pack(pady=15)
 
     def replacement_show(self):  # replacement show function
         # all widgets
