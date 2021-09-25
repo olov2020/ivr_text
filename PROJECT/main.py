@@ -485,7 +485,7 @@ def filling_squares_with_tips(canvas, canvas_fill_squares_list):
             # show_filled_list[which column][which square][coordinate (y, x)]
             a = show_filled_list[i][j][0]  # y-coordinates
             b = show_filled_list[i][j][1]  # x-coordinates
-            x = 260 + 30 * b
+            x = 100 + 30 * b
             y = 60 + 30 * a
             # canvas_fill_squares_list[y-coordinates][x-coordinates]
             if canvas_fill_squares_list[a][b] == 0:
@@ -2129,8 +2129,8 @@ class MainWindow(tk.Tk):
         self.destroy_everything()
         from PIL import Image, ImageTk
 
-        image1 = Image.open("static/shp_logo.jpg")
-        image1 = image1.resize((450, 200), Image.ANTIALIAS)
+        image1 = Image.open("static/shp_logo.png")
+        image1 = image1.resize((430, 145), Image.ANTIALIAS)
         test = ImageTk.PhotoImage(image1)
 
         label1 = tk.Label(image=test)
@@ -2139,9 +2139,10 @@ class MainWindow(tk.Tk):
         about_me = tk.Label(self, text=f"Программа для изучения некоторых алгоритмов кодирования и шифрования.\n"
                                        f"Сделано для Московской Школы Программистов\n"
                                        f"Виноградовым Владимиром Андреевичем\n"
-                                       f"2021 год", width=80, bg='#aaf')
-        about_me.pack(pady=75)
-        label1.pack()
+                                       f"2021 год", width=80)
+
+        label1.pack(pady=50)
+        about_me.pack()
         self.menu.entryconfig('О программе', state='disabled')
 
     def exit_function(self):
@@ -2397,10 +2398,10 @@ class MainWindow(tk.Tk):
             global red_squares_list
             p = event.x
             q = event.y
-            if 260 < p < 440 and 60 < q < 240:  # checking if they are fit the area
-                b = (p - 260) // 30  # x-coordinates
+            if 100 < p < 280 and 60 < q < 240:  # checking if they are fit the area
+                b = (p - 100) // 30  # x-coordinates
                 a = (q - 60) // 30  # y-coordinates
-                x = 260 + 30 * b
+                x = 100 + 30 * b
                 y = 60 + 30 * a
                 # print(x, y)
                 # 0 - we should replace <symbol> to <*>
@@ -2445,7 +2446,7 @@ class MainWindow(tk.Tk):
 
         # area where text will be placed and shown
         canvas = tk.Canvas(self)
-        canvas.create_rectangle(260, 60, 440, 240, outline="#aaf", fill="#aaf")
+        canvas.create_rectangle(100, 60, 280, 240, outline="#aaf", fill="#aaf")
         result_entry = tk.Entry(self, bg='#aaf', width=60)
 
         result_button = tk.Button(self, text='Получить результат',
@@ -2459,9 +2460,9 @@ class MainWindow(tk.Tk):
 
         # horizontal lines
         for i in range(5):
-            canvas.create_line(260, 90 + i * 30, 440, 90 + i * 30)
-        canvas.create_line(260, 59, 440, 59)
-        canvas.create_line(260, 241, 440, 241)
+            canvas.create_line(100, 90 + i * 30, 280, 90 + i * 30)
+        canvas.create_line(100, 59, 280, 59)
+        canvas.create_line(100, 241, 280, 241)
 
         # useful lists
         canvas_key_list = [0 for _ in range(6)]  # key numbers
@@ -2470,9 +2471,9 @@ class MainWindow(tk.Tk):
 
         # default filling canvas
         for i in range(6):
-            canvas_key_list[i] = canvas.create_text(275 + i * 30, 50, text=f'{i + 1}')
+            canvas_key_list[i] = canvas.create_text(115 + i * 30, 50, text=f'{i + 1}')
             for j in range(6):
-                canvas_symbols_list[i][j] = canvas.create_text(275 + j * 30, 75 + i * 30,
+                canvas_symbols_list[i][j] = canvas.create_text(115 + j * 30, 75 + i * 30,
                                                                text='a')
 
         if typo_algorithm == 6:
@@ -2481,9 +2482,9 @@ class MainWindow(tk.Tk):
 
         # vertical lines
         for i in range(5):
-            canvas.create_line(290 + i * 30, 50, 290 + i * 30, 240)
-        canvas.create_line(259, 50, 259, 240)
-        canvas.create_line(441, 50, 441, 240)
+            canvas.create_line(130 + i * 30, 50, 130 + i * 30, 240)
+        canvas.create_line(99, 50, 99, 240)
+        canvas.create_line(281, 50, 281, 240)
 
         # show widgets
         header_label.pack()
@@ -2491,7 +2492,7 @@ class MainWindow(tk.Tk):
         main_text_entry.pack()
         key_label.pack()
         key_entry.pack()
-        canvas.pack(fill=tk.BOTH)
+        canvas.pack()
         result_button.pack()
         separate1.pack()
         result_entry.pack()
