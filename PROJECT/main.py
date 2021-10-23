@@ -19,97 +19,6 @@ tasks_answer_list = ['Привет, меня зовут Кот Василий', 
                      'Ты, друг мой, избран не случайно', 'Только ты можешь дешифровать это',
                      'И отыскать секретное послание!', 'Now you are the king of cryptography',
                      'A0D13EFB754CD890A21D47EF3', '870331564912034778546922122']
-xor_text = "Игровые смартфоны сейчас в тренде, а уж модели ASUS всегда привлекали внимание и получали" \
-           " одобрение аудитории. Сегодня на обзоре — геймерский телефон линейки Republic of Gamers нового" \
-           " поколения, оснащённый по последнему слову мобильной техники. Протестируем новинку всесторонне." \
-           " Индивидуальность во всём. В дизайне ROG Phone 5 видна манера ASUS: рубленные линии, цепляющие" \
-           " глаз яркие элементы. С первых минут использования замечаешь увесистость модели (целых 238 грамм)" \
-           " и чрезвычайно скользкую поверхность, главным образом из-за качественного олеофобного покрытия" \
-           " с обеих сторон. Так что лучше сразу облачить устройство в комплектный чехол. Заодно чехол скроет" \
-           " слегка выступающий из корпуса блок камер, а небольшие бортики над дисплеем уберегут стекло" \
-           " Gorilla Glass Victus от повреждений. У кейса есть и недостатки — он не защищает правый торец" \
-           " аппарата, а через две недели использования начинает люфтить. Под стеклом на тыльной стороне" \
-           " смартфона — логотип ROG c RGB-подсветкой. Отметим, что в версиях Pro и Ultimate вместо него" \
-           " установлен небольшой PMOLED-дисплей. Рамка аппарата выполнена из алюминия, помогающего отводить" \
-           " тепло от компонентов при интенсивной работе. На левом торце — дополнительный разъём USB Type-C" \
-           " и контактная площадка из пяти пинов для подключения внешнего кулера. Если в них нет необходимости," \
-           " они прикрываются резиновой заглушкой, которая легко слетает даже при обычном хвате телефона." \
-           " Велика вероятность её потерять. Ниже находится лоток для двух симок, так что возможности расширить" \
-           " память нет. Геймерские аксессуары. Какой игровой телефон сегодня можно представить без активной" \
-           " системы охлаждения? У ROG Phone 5 есть внешний вентилятор — он может быть или отсутствовать" \
-           " в комплекте в зависимости от версии устройства. Чтобы прикрепить кулер к смартфону, аппарат не" \
-           " обязательно вынимать из чехла. Достаточно совместить контакты на корпусе гаджета и вентилятора," \
-           " затем надавить на телефон до характерного щелчка. Проделать это с первого раза удаётся не всегда," \
-           " к тому же кажется, что так можно поцарапать алюминиевую рамку корпуса. Уж лучше бы производитель" \
-           " сохранил более удачные крепления кулера от предшественника. Из плюсов — на корпусе вертушки" \
-           " красуются две дополнительные настраиваемые кнопки, удобная ножка-подставка и собственная" \
-           " RGB-подсветка. Эффективность работы вентилятора мы решили продемонстрировать с помощью двух" \
-           " бенчмарков. Ещё из геймерских аксессуаров производитель представил вакуумные наушники" \
-           " ROG Centa II. Подключаются они через старый добрый аудиоджек. «Уши» могут похвастать технологией" \
-           " активного шумоподавления и большим разнообразием комплектных амбушюр, среди которых каждый найдёт" \
-           " вариант себе по размеру. В остальном затычки ничем не выделяются. Безупречный дисплей. Экран" \
-           " ROG Phone 5 представлен 6,78-дюймовой матрицей AMOLED с разрешением FHD+. К углам обзора не" \
-           " придраться, максимальной яркости хватает, чтобы отчётливо видеть информацию даже под прямыми" \
-           " лучами солнца. С цветопередачей всё в порядке, более того, панель поддерживает технологию HDR10+." \
-           " ШИМ незаметен, но на всякий случай есть функция DC Dimming. Частота опроса сенсорного слоя" \
-           " составляет 300 раз в секунду, поддерживаются варианты развёртки в 60, 120 и 144 Гц. Радует, что" \
-           " ASUS не стала делать в дисплее вырезы. Фронтальную камеру спрятали в небольшую рамку над матрицей," \
-           " а снизу есть симметричный отступ того же размера, поэтому перфекционисты могут спать спокойно." \
-           " Для индикации пропущенных уведомлений используется маленький светодиод, расположенный над экраном," \
-           " или функция Always on Display. Для безопасной разблокировки гаджета под дисплеем разместился" \
-           " быстрый сканер отпечатков пальцев, работающий, за редким исключением, без ошибок. Максимальная" \
-           " производительность и специальный софт. В ROG Phone 5 установили новый топовый восьмиядерный" \
-           " 5-нанометровый чипсет Qualcomm Snapdragon 888. Максимальная частота большого ядра достигает" \
-           " 2,84 ГГц. За графику отвечает ускоритель Adreno 660. Тестовый экземпляр получил 16 ГБ оперативной" \
-           " памяти типа LPDDR5 и 256 ГБ постоянного хранилища стандарта UFS 3.1. Аппарат функционирует под" \
-           " управлением ОС Android 11 с оболочкой ROG UI. При первой настройке прошивка предлагает выбрать" \
-           " одну из двух тем оформления: фирменный лончер или интерфейс чистой версии Android. Из" \
-           " предустановленного софта выделим специализированное ПО Armoury Crate, возможности которого" \
-           " рассмотрим на скриншотах. Далее мы приступили к тестированию игр. Каждое приложение запускали" \
-           " с наилучшими графическими настройками. Аппарат всегда работал в режиме «X»" \
-           " (максимальная производительность) с подключённым кулером. Замеры fps осуществлялись с помощью" \
-           " утилиты PerfDog. Универсальный набор камер. Прошлогодний ROG Phone 3, будучи геймерским" \
-           " смартфоном, всё-таки удивил своими способностями по части фото и видео. Поэтому в ASUS решили" \
-           " не изобретать велосипед и оснастили новинку аналогичным с предшественником блоком камер из трёх" \
-           " модулей. Основной объектив представлен сенсором Sony IMX686 на 64 Мп со светосилой f/1.8. Его" \
-           " дополняют ширик на 13 Мп со 125-градусным углом обзора и макросенсор на 5 Мп. Предлагаем" \
-           " ознакомиться с примерами снимков. ROG Phone 5 способен снимать 4K-видео на 60 fps. В таком режиме" \
-           " прекрасно себя демонстрирует электронная стабилизация — тряска практически незаметна. Четыре" \
-           " микрофона здорово отсекают шум сильного морского ветра. Автофокус за редкими исключениями" \
-           " срабатывает корректно и быстро. Производительности гаджета достаточно, чтобы снимать ускоренные" \
-           " 4K-видео. Надо лишь установить смартфон на штатив и оставить его на несколько минут. Съёмка" \
-           " 8K-видео доступна только на 30 fps. В таком случае отключается стабилизация, но автофокус остаётся" \
-           " моментальным. Передовые технологии на каждый день. Скоростной интернет в ROG Phone 5" \
-           " обеспечивается модулем Wi-Fi 6E, а на будущее заложена поддержка сетей 5G. Также есть NFC-чип" \
-           " для бесконтактной оплаты. Смартфон способен улавливать спутники GPS, Glonass, Galileo и BeiDou," \
-           " так что с ним вы точно не потеряетесь. Для меломанов станут полезными встроенный" \
-           " ЦАП ESS SABRE ES9280AC, кодек Bluetooth aptX и аудиоджек. Насладиться прослушиванием любимых" \
-           " композиций или просмотром контента помогут едва ли не лучшие стереодинамики в классе. Звучат они" \
-           " громко, чисто и басовито. Ещё понравился приятный вибромоторчик, который выводит ощущения от" \
-           " использования гаджета на новый уровень. Из интересных функций в прошивке выделим возможность" \
-           " дублирования приложений, что особенно удобно, если у вас несколько аккаунтов в одном сервисе." \
-           " Доступна настройка различных жестов, например, двойного постукивания для пробуждения смартфона" \
-           " и рисования символов на заблокированном экране для запуска определённых задач. А в холодное" \
-           " время года станет незаменимым режим работы в перчатках. Двойная батарея. Аппарат оборудован двумя" \
-           " аккумуляторами по 3000 мАч. На автономность сильно влияют выбранные режимы работы дисплея и" \
-           " производительности. При активации «сверхустойчивого» пресета функционирования ЦП частота обновления" \
-           " дисплея блокируется на 60 Гц. Так смартфон с лёгкостью выдержит полтора дня активной эксплуатации." \
-           " Тогда как в режиме «X» и с развёрткой 144 Гц проценты будут таять на глазах. Тестовый ролик Full HD" \
-           " на среднем уровне яркости в авиарежиме ROG Phone 5 непрерывно крутит 20 часов. Практически" \
-           " аналогичный результат получился и при воспроизведении 1080p-видео на YouTube. Играть в Genshin" \
-           " Impact с подключённым вентилятором и режимом максимальной производительности можно всего 2 часа," \
-           " а в этой же игре без кулера и в «Динамичном» режиме смартфон проработал 3 часа. В комплекте с" \
-           " устройством поставляется блок питания на 65 Вт. Заряжать новинку можно через любой разъём, но не" \
-           " одновременно. Гаджет поддерживает быструю зарядку: первые 25% восполняются за 7 минут, до 50%" \
-           " ROG Phone 5 подпитывается за 16 минут, а 75% он набирает за 29 минут. Таким образом до 100% аппарат" \
-           " заряжается всего за 53 минуты. Батарея при этом нагревается до 41 градуса. Итоги. ROG Phone 5" \
-           " — универсальный флагман с широкими возможностями для гейминга и повседневного использования." \
-           " Смартфон вместил в себя всё, чего только можно хотеть сегодня: топовое железо, способное тянуть" \
-           " любую игру на максимальных настройках графики, а также передовые технологии вроде Wi-Fi 6E," \
-           " скоростной зарядки, стереодинамиков и отличного дисплея. Аппарат порадовал способностями по части" \
-           " съёмки фото и видео, а также фирменным софтом. Из недостатков выделим разве что быстрый разряд в" \
-           " определённых режимах работы, неудобный способ крепления вентилятора к корпусу и отсутствие" \
-           " влагозащиты. Но эти недочёты меркнут в сравнении с преимуществами новинки."
 
 
 def choose_directory():  # uploading file
@@ -233,21 +142,14 @@ def replacement_function(_first_arg_entry, _second_arg_entry, _third_arg_entry, 
 
 
 def working_with_files(file_text, main_text_entry, key_entry):
-    global xor_text, key_answer_list, filled_answer_list
+    global key_answer_list, filled_answer_list
     key_answer_list = []
     filled_answer_list = []
 
-    trash_text = []
-    for i in range(len(file_text) // 16):
-        trash_text.append(file_text[i * 16: i * 16 + 16])
+    trash_text = list(file_text.split(' '))
 
-    # working with trash text
-    result_list = []
-    for i in range(len(trash_text)):
-        xored_arg = int(trash_text[i % len(trash_text)], 2) ^ ord(xor_text[i % len(xor_text)]) \
-            # ^ ord(xor_text[i % len(xor_text)]) - for check
-        result_list.append(f'{chr(xored_arg)}')  # (f'{chr(int(bin(xored_arg), 2))}') - for check
-    result_output = ''.join(result_list)
+    result_output = ''.join(bytearray.fromhex(hex(int(x, 2))[2:]).decode('cp1251') for x in trash_text)
+    # print(result_output)
 
     # finding main text and key text
     main_text = ''
@@ -277,14 +179,15 @@ def working_with_files(file_text, main_text_entry, key_entry):
         key_answer_list.append(int(key_answer[i]))
 
     # finding filled squares
-    while True:
+    while s1 != -1:
         s1 = result_output.find(f'&')
         if s1 != -1:
             if result_output[s1 + 1].isdigit() and result_output[s1 + 2].isdigit():
                 pair_of_coordinates = result_output[s1 + 1: s1 + 3]
                 filled_answer_list.append([int(pair_of_coordinates[0]), int(pair_of_coordinates[1])])
-            before_keyword, keyword, after_keyword = result_output.partition('&')
-            result_output = after_keyword
+            # before_keyword, keyword, after_keyword = result_output.partition('&')
+            # result_output = after_keyword
+            result_output = result_output[s1 + 1:]
         elif s1 == -1:
             break
 
@@ -294,6 +197,186 @@ def working_with_files(file_text, main_text_entry, key_entry):
     main_text_entry['state'] = 'disable'
     key_entry.insert(0, key_text)
     return 1
+
+
+def working_with_table_algorithm(main_text_entry, key_entry, result, canvas_key_list, canvas_symbols_list,
+                                 canvas_fill_squares_list, canvas, typo_algorithm):
+    # all checks for valid key and text
+    main_text = main_text_entry.get()
+    key = key_entry.get()
+    if main_text == '':
+        messagebox.showwarning('Warning!', 'Please, enter your text')
+        return
+    if key == '':
+        messagebox.showwarning('Warning!', 'Please, enter your key')
+        return
+    if len(main_text) > 36:
+        messagebox.showwarning('Warning!', 'Please, enter text within 36 symbols (including spaces)')
+        main_text_entry.delete(0, tk.END)
+        main_text_entry.focus()
+        return
+    check_len_key = 0
+    for i in range(len(key)):
+        if key[i].isdigit():
+            check_len_key += 1
+            if key[i] == '0' or key[i] == '7' or key[i] == '8' or key[i] == '9':
+                messagebox.showwarning('Warning!', 'Please, enter key only using [1, 2, 3, 4, 5, 6] numbers'
+                                                   '\n(without repetition)')
+                key_entry.delete(0, tk.END)
+                key_entry.focus()
+                return
+    if check_len_key != 6:
+        messagebox.showwarning('Warning!', 'Please, enter key only using [1, 2, 3, 4, 5, 6] numbers'
+                                           '\n(without repetition)')
+        key_entry.delete(0, tk.END)
+        key_entry.focus()
+        return
+    key_list = []
+    for i in range(6):
+        for j in range(len(key_list)):
+            if int(key[i]) == key_list[j]:
+                messagebox.showwarning('Warning!', 'Please, enter key only using [1, 2, 3, 4, 5, 6] numbers'
+                                                   '\n(without repetition)')
+                key_entry.delete(0, tk.END)
+                key_entry.focus()
+                return
+        key_list.append(int(key[i]))
+
+    if typo_algorithm == 4:  # зашифровать
+        # filling table (canvas) by adding key and text
+        result_str = ''
+        check_fill = 0
+        result_list = []
+        for i in range(6):
+            canvas.itemconfigure(canvas_key_list[i], text=key_list[i])
+            for j in range(6):
+                if len(main_text) > i * 6 + j - check_fill:
+                    if canvas_fill_squares_list[i][j] == 1:
+                        check_fill += 1
+                        result_list.append('')
+                    elif canvas_fill_squares_list[i][j] == 0:
+                        canvas.itemconfigure(canvas_symbols_list[i][j], text=main_text[i * 6 + j - check_fill])
+                        result_list.append(main_text[i * 6 + j - check_fill])
+                else:
+                    canvas.itemconfigure(canvas_symbols_list[i][j], text='')
+                    result_list.append('')
+
+        # showing the result
+        for i in range(6):
+            t = 0
+            for j in range(6):
+                if key_list[j] == i + 1:
+                    t = j
+                    break
+            for j in range(6):
+                result_str += result_list[j * 6 + t]
+        result.delete(0, tk.END)
+        result.insert(0, result_str)
+        # separator
+    elif typo_algorithm == 5:  # расшифровать
+        # filling table (canvas) by adding key and text
+        result_str = ''
+        result_list = []
+        check_fill = 0
+        for i in range(6):
+            prom_res = []
+            canvas.itemconfigure(canvas_key_list[i], text=key_list[i])
+            t = 0
+            for j in range(6):
+                if key_list[j] - 1 == i:
+                    t = j
+            for j in range(6):
+                if len(main_text) > i * 6 + j - check_fill:
+                    if canvas_fill_squares_list[j][t] == 1:
+                        check_fill += 1
+                        prom_res.append('')
+                    elif canvas_fill_squares_list[j][t] == 0:
+                        canvas.itemconfigure(canvas_symbols_list[j][t], text=main_text[i * 6 + j - check_fill])
+                        prom_res.append(main_text[i * 6 + j - check_fill])
+                else:
+                    canvas.itemconfigure(canvas_symbols_list[j][t], text='')
+                    prom_res.append('')
+            result_list.append(prom_res)
+
+        # showing the result
+        for i in range(6):
+            for j in range(6):
+                result_str += result_list[key_list[j] - 1][i]
+        result.delete(0, tk.END)
+        result.insert(0, result_str)
+        # separator
+    elif typo_algorithm == 6:  # дешифровать
+        global show_key_list
+        filling_squares_with_tips(canvas, canvas_fill_squares_list)
+
+        check_fill = 0
+        result_str = ''
+        result_list = []
+        for i in range(len(show_key_list)):
+            key_list[show_key_list[i][0]] = show_key_list[i][1]
+            canvas.itemconfigure(canvas_key_list[show_key_list[i][0]], text=key_list[show_key_list[i][0]])
+        for i in range(6):
+            for j in range(len(show_key_list)):
+                if key_list[i] == show_key_list[j][1] and i != show_key_list[j][0]:
+                    t = 1
+                    key_list[i] = t
+                    while t != 0:
+                        for k in range(6):
+                            if key_list[i] == key_list[k] and k != i:
+                                t += 1
+                                break
+                            if k == 5:
+                                t = 0
+                        if t != 0:
+                            key_list[i] = t
+                    canvas.itemconfigure(canvas_key_list[i], text=key_list[i])
+        str1 = ''
+        for i in range(6):
+            str1 += str(key_list[i])
+        key_entry.delete(0, tk.END)
+        key_entry.insert(0, str1)
+
+        for i in range(6):
+            for j in range(i + 1, 6):
+                if key_list[i] == key_list[j]:
+                    messagebox.showwarning('Warning!', 'Please, enter key only using [1, 2, 3, 4, 5, 6] numbers'
+                                                       '\n(without repetition)')
+                    key_entry.delete(0, tk.END)
+                    key_entry.focus()
+                    return
+        for i in range(6):
+            prom_res = []
+            canvas.itemconfigure(canvas_key_list[i], text=key_list[i])
+            t = 0
+            for j in range(6):
+                if key_list[j] - 1 == i:
+                    t = j
+            for j in range(6):
+                # a = (j + check_fill) % 6
+                # b = (t + (j + check_fill) // 6) % 6
+                c = i * 6 + j - check_fill
+                if len(main_text) > c:
+                    if canvas_fill_squares_list[j][t] == 1:
+                        check_fill += 1
+                        prom_res.append('')
+                    elif canvas_fill_squares_list[j][t] == 0:
+                        canvas.itemconfigure(canvas_symbols_list[j][t], text=main_text[c])
+                        prom_res.append(main_text[c])
+                else:
+                    if canvas_fill_squares_list[j][t] == 1:
+                        check_fill += 1
+                        prom_res.append('')
+                    elif canvas_fill_squares_list[j][t] == 0:
+                        canvas.itemconfigure(canvas_symbols_list[j][t], text='')
+                    prom_res.append('')
+            result_list.append(prom_res)
+
+        # showing the result
+        for i in range(6):
+            for j in range(6):
+                result_str += result_list[key_list[j] - 1][i]
+        result.delete(0, tk.END)
+        result.insert(0, result_str)
 
 
 def filling_squares_with_tips(canvas, canvas_fill_squares_list):
@@ -386,9 +469,6 @@ def change_task_file(real_file):
         return
 
     import random
-
-    # setting variables
-    global xor_text
 
     # $ - peaces of main text
     # % - right key
@@ -1810,7 +1890,7 @@ def change_task_file(real_file):
                  f" больш{random_main_text_list[463]}е продукции, {random_key_text_list[354]}чем годом ранее{random_main_text_list[464]}. Здесь{random_key_text_list[355]} виноваты не злые в{random_main_text_list[465]}ендо{random_key_text_list[356]}ры, которые х{random_main_text_list[466]}отят отгружать" \
                  f" комп{random_main_text_list[467]}лектующие втр{random_key_text_list[357]}идорога. Мы бы с{random_main_text_list[468]} радост{random_key_text_list[358]}ью продали втрое бо{random_main_text_list[469]}льше{random_key_text_list[359]}, но в соврем{random_main_text_list[470]}енной экономике всё" \
                  f" вза{random_main_text_list[471]}имосвязано. Вы{random_key_text_list[360]} не можете прост{random_main_text_list[472]}о взять{random_key_text_list[361]} в три раза больше л{random_main_text_list[473]}юде{random_key_text_list[362]}й и оборудова{random_main_text_list[474]}ния, чтобы увеличить" \
-                 f" прои{random_main_text_list[475]}зводительност{random_key_text_list[363]}ь на 200%. Есть {random_main_text_list[476]}цепочки {random_key_text_list[364]}поставок, и они час{random_main_text_list[477]}то {random_key_text_list[365]}ограничивают {random_main_text_list[478]}возможности компаний" \
+                 f" прои{random_main_text_list[475]}зводительност{random_key_text_list[363]}ь в 2 раза. Есть {random_main_text_list[476]}цепочки {random_key_text_list[364]}поставок, и они час{random_main_text_list[477]}то {random_key_text_list[365]}ограничивают {random_main_text_list[478]}возможности компаний" \
                  f" в та{random_main_text_list[479]}ких непростых{random_key_text_list[366]} ситуациях. Рост{random_main_text_list[480]} произво{random_key_text_list[367]}дства ограничен нех{random_main_text_list[481]}ват{random_key_text_list[368]}кой полупрово{random_main_text_list[482]}дников, вызванной" \
                  f" боль{random_main_text_list[483]}шим лагом в п{random_key_text_list[369]}ланировании чипм{random_main_text_list[484]}ейкерами{random_key_text_list[370]} и прошлогодним лок{random_main_text_list[485]}даун{random_key_text_list[371]}ом из-за COV{random_main_text_list[486]}ID-19. С другой" \
                  f" стор{random_main_text_list[487]}оны, криптова{random_key_text_list[372]}лютный бум привё{random_main_text_list[488]}л к взры{random_key_text_list[373]}вному увеличению сп{random_main_text_list[489]}роса{random_key_text_list[374]} на графическ{random_main_text_list[490]}ие адаптеры." \
@@ -1835,19 +1915,7 @@ def change_task_file(real_file):
                  f" урове{random_main_text_list[563]}нь. И если иг{random_key_text_list[429]}ры эволюционируют{random_main_text_list[564]} до пря{random_key_text_list[430]}мого подключения в{random_main_text_list[565]} мозг,{random_key_text_list[431]} то будьте {random_main_text_list[566]}уверены: у ROG" \
                  f" будет{random_main_text_list[567]} самый быстры{random_key_text_list[432]}й и производител{random_main_text_list[568]}ьный инт{random_key_text_list[433]}ерфейс. Мы уж пост{random_main_text_list[569]}ара{random_key_text_list[434]}емс{random_main_text_list[570]}я."
 
-    # working with trash text
-    result_list = []
-    get_bin = lambda x, n: format(x, 'b').zfill(n)
-    for i in range(len(trash_text)):
-        xored_arg = ord(trash_text[i % len(trash_text)]) ^ ord(xor_text[i % len(xor_text)]) \
-            # ^ ord(xor_text[i % len(xor_text)]) - for check
-        result_list.append(f'{get_bin(xored_arg, 16)}')  # (f'{chr(int(bin(xored_arg), 2))}') - for check
-        # ord returns unicode number of the symbol
-    result_output = ''.join(result_list)
-    # print(result_list)
-    # print(result_output)
-    # print(trash_text)
-
+    result_output = ' '.join(format(x, 'b') for x in bytearray(trash_text, 'cp1251'))
     # working with output file
     file1 = open(f'{real_file}.txt', 'w+')
     file1.write(result_output)
@@ -1936,6 +2004,7 @@ class MainWindow(tk.Tk):
         # adding tabs to menu
         self.menu.add_command(label="Поменять task'и", command=change_all_task_files)
         self.menu.add_cascade(label='Выбери функцию', menu=self.choosing_function)
+        self.menu.add_command(label='Подсказки', state='disabled', command=self.Tips)
         self.menu.add_command(label='О программе', command=self.about_author)
 
         # adding menu to the window
@@ -1983,11 +2052,11 @@ class MainWindow(tk.Tk):
             self.menu.entryconfig('О программе', state='normal')
             self.destroy_everything()  # deleting previous function
             self.function_number = _function_number
-            # self.menu.entryconfig('Подсказки', state='disabled')
+            self.menu.entryconfig('Подсказки', state='disabled')
             clear_global_variables()
 
-            # if self.function_number == 6:
-                # self.menu.entryconfig('Подсказки', state='normal')
+            if self.function_number == 6:
+                self.menu.entryconfig('Подсказки', state='normal')
 
             if self.function_number == 0:
                 self.geometry('900x670+10+10')
@@ -2240,7 +2309,8 @@ class MainWindow(tk.Tk):
                     canvas.itemconfigure(canvas_symbols_list[a][b], text='')
                     canvas_fill_squares_list[a][b] = 0
                 # print(red_squares_list)
-            working_with_table_algorithm()
+            working_with_table_algorithm(main_text_entry, key_entry, result_entry, canvas_key_list,
+                                         canvas_symbols_list, canvas_fill_squares_list, canvas, typo_algorithm)
 
         # checking which algorithm user chooses
         if typo_algorithm == 4:
@@ -2259,6 +2329,8 @@ class MainWindow(tk.Tk):
             if check == -1:
                 self.update_current_function(0)
                 return
+            self.menu.entryconfig('Выбери функцию', state='disabled')
+            self.menu.entryconfig('О программе', state='disabled')
 
         # area where text will be placed and shown
         canvas = tk.Canvas(self)
@@ -2266,7 +2338,13 @@ class MainWindow(tk.Tk):
         result_entry = tk.Entry(self, bg='#aaf', width=60)
 
         result_button = tk.Button(self, text='Получить результат',
-                                  command=lambda: working_with_table_algorithm())
+                                  command=lambda: working_with_table_algorithm(main_text_entry,
+                                                                               key_entry, result_entry,
+                                                                               canvas_key_list,
+                                                                               canvas_symbols_list,
+                                                                               canvas_fill_squares_list,
+                                                                               canvas,
+                                                                               typo_algorithm))
 
         # horizontal lines
         for i in range(5):
@@ -2286,6 +2364,10 @@ class MainWindow(tk.Tk):
                 canvas_symbols_list[i][j] = canvas.create_text(115 + j * 30, 75 + i * 30,
                                                                text='a')
 
+        if typo_algorithm == 6:
+            working_with_table_algorithm(main_text_entry, key_entry, result_entry, canvas_key_list,
+                                         canvas_symbols_list, canvas_fill_squares_list, canvas, typo_algorithm)
+
         # vertical lines
         for i in range(5):
             canvas.create_line(130 + i * 30, 50, 130 + i * 30, 240)
@@ -2303,411 +2385,12 @@ class MainWindow(tk.Tk):
         separate1.pack()
         result_entry.pack()
 
-        def working_with_table_algorithm():
-            # all checks for valid key and text
-            main_text = main_text_entry.get()
-            key = key_entry.get()
-            if main_text == '':
-                messagebox.showwarning('Warning!', 'Please, enter your text')
-                return
-            if key == '':
-                messagebox.showwarning('Warning!', 'Please, enter your key')
-                return
-            if len(main_text) > 36:
-                messagebox.showwarning('Warning!', 'Please, enter text within 36 symbols (including spaces)')
-                main_text_entry.delete(0, tk.END)
-                main_text_entry.focus()
-                return
-            check_len_key = 0
-            for i in range(len(key)):
-                if key[i].isdigit():
-                    check_len_key += 1
-                    if key[i] == '0' or key[i] == '7' or key[i] == '8' or key[i] == '9':
-                        messagebox.showwarning('Warning!', 'Please, enter key only using [1, 2, 3, 4, 5, 6] numbers'
-                                                           '\n(without repetition)')
-                        key_entry.delete(0, tk.END)
-                        key_entry.focus()
-                        return
-            if check_len_key != 6:
-                messagebox.showwarning('Warning!', 'Please, enter key only using [1, 2, 3, 4, 5, 6] numbers'
-                                                   '\n(without repetition)')
-                key_entry.delete(0, tk.END)
-                key_entry.focus()
-                return
-            key_list = []
-            for i in range(6):
-                for j in range(len(key_list)):
-                    if int(key[i]) == key_list[j]:
-                        messagebox.showwarning('Warning!', 'Please, enter key only using [1, 2, 3, 4, 5, 6] numbers'
-                                                           '\n(without repetition)')
-                        key_entry.delete(0, tk.END)
-                        key_entry.focus()
-                        return
-                key_list.append(int(key[i]))
-
-            if typo_algorithm == 4:  # зашифровать
-                # filling table (canvas) by adding key and text
-                result_str = ''
-                check_fill = 0
-                result_list = []
-                for i in range(6):
-                    canvas.itemconfigure(canvas_key_list[i], text=key_list[i])
-                    for j in range(6):
-                        if len(main_text) > i * 6 + j - check_fill:
-                            if canvas_fill_squares_list[i][j] == 1:
-                                check_fill += 1
-                                result_list.append('')
-                            elif canvas_fill_squares_list[i][j] == 0:
-                                canvas.itemconfigure(canvas_symbols_list[i][j], text=main_text[i * 6 + j - check_fill])
-                                result_list.append(main_text[i * 6 + j - check_fill])
-                        else:
-                            canvas.itemconfigure(canvas_symbols_list[i][j], text='')
-                            result_list.append('')
-
-                # showing the result
-                for i in range(6):
-                    t = 0
-                    for j in range(6):
-                        if key_list[j] == i + 1:
-                            t = j
-                            break
-                    for j in range(6):
-                        result_str += result_list[j * 6 + t]
-                result_entry.delete(0, tk.END)
-                result_entry.insert(0, result_str)
-                # separator
-            elif typo_algorithm == 5:  # расшифровать
-                # filling table (canvas) by adding key and text
-                result_str = ''
-                result_list = []
-                check_fill = 0
-                for i in range(6):
-                    prom_res = []
-                    canvas.itemconfigure(canvas_key_list[i], text=key_list[i])
-                    t = 0
-                    for j in range(6):
-                        if key_list[j] - 1 == i:
-                            t = j
-                    for j in range(6):
-                        if len(main_text) > i * 6 + j - check_fill:
-                            if canvas_fill_squares_list[j][t] == 1:
-                                check_fill += 1
-                                prom_res.append('')
-                            elif canvas_fill_squares_list[j][t] == 0:
-                                canvas.itemconfigure(canvas_symbols_list[j][t], text=main_text[i * 6 + j - check_fill])
-                                prom_res.append(main_text[i * 6 + j - check_fill])
-                        else:
-                            canvas.itemconfigure(canvas_symbols_list[j][t], text='')
-                            prom_res.append('')
-                    result_list.append(prom_res)
-
-                # showing the result
-                for i in range(6):
-                    for j in range(6):
-                        result_str += result_list[key_list[j] - 1][i]
-                result_entry.delete(0, tk.END)
-                result_entry.insert(0, result_str)
-                # separator
-            elif typo_algorithm == 6:  # дешифровать
-                global show_key_list
-                filling_squares_with_tips(canvas, canvas_fill_squares_list)
-
-                check_fill = 0
-                result_str = ''
-                result_list = []
-                for i in range(len(show_key_list)):
-                    key_list[show_key_list[i][0]] = show_key_list[i][1]
-                    canvas.itemconfigure(canvas_key_list[show_key_list[i][0]], text=key_list[show_key_list[i][0]])
-                for i in range(6):
-                    for j in range(len(show_key_list)):
-                        if key_list[i] == show_key_list[j][1] and i != show_key_list[j][0]:
-                            t = 1
-                            key_list[i] = t
-                            while t != 0:
-                                for k in range(6):
-                                    if key_list[i] == key_list[k] and k != i:
-                                        t += 1
-                                        break
-                                    if k == 5:
-                                        t = 0
-                                if t != 0:
-                                    key_list[i] = t
-                            canvas.itemconfigure(canvas_key_list[i], text=key_list[i])
-                str1 = ''
-                for i in range(6):
-                    str1 += str(key_list[i])
-                key_entry.delete(0, tk.END)
-                key_entry.insert(0, str1)
-
-                for i in range(6):
-                    for j in range(i + 1, 6):
-                        if key_list[i] == key_list[j]:
-                            messagebox.showwarning('Warning!', 'Please, enter key only using [1, 2, 3, 4, 5, 6] numbers'
-                                                               '\n(without repetition)')
-                            key_entry.delete(0, tk.END)
-                            key_entry.focus()
-                            return
-                for i in range(6):
-                    prom_res = []
-                    canvas.itemconfigure(canvas_key_list[i], text=key_list[i])
-                    t = 0
-                    for j in range(6):
-                        if key_list[j] - 1 == i:
-                            t = j
-                    for j in range(6):
-                        # a = (j + check_fill) % 6
-                        # b = (t + (j + check_fill) // 6) % 6
-                        c = i * 6 + j - check_fill
-                        if len(main_text) > c:
-                            if canvas_fill_squares_list[j][t] == 1:
-                                check_fill += 1
-                                prom_res.append('')
-                            elif canvas_fill_squares_list[j][t] == 0:
-                                canvas.itemconfigure(canvas_symbols_list[j][t], text=main_text[c])
-                                prom_res.append(main_text[c])
-                        else:
-                            if canvas_fill_squares_list[j][t] == 1:
-                                check_fill += 1
-                                prom_res.append('')
-                            elif canvas_fill_squares_list[j][t] == 0:
-                                canvas.itemconfigure(canvas_symbols_list[j][t], text='')
-                            prom_res.append('')
-                    result_list.append(prom_res)
-
-                # showing the result
-                for i in range(6):
-                    for j in range(6):
-                        result_str += result_list[key_list[j] - 1][i]
-                result_entry.delete(0, tk.END)
-                result_entry.insert(0, result_str)
-
-        class Tips(tk.Tk):
-            def __init__(self):
-                super().__init__()
-
-                # settings for the window
-                self.title('Tips')
-                self.geometry('300x440+100+100')
-                self.protocol("WM_DELETE_WINDOW", lambda: self.destroy())
-
-                self.symbol_first_var = tk.IntVar()
-                self.symbol_last_var = tk.IntVar()
-                self.symbol_first_show = tk.Checkbutton(self, text='Показать первые 4 символа',
-                                                        variable=self.symbol_first_var,
-                                                        onvalue=1, offvalue=0, command=lambda: self.symbol_show(0))
-                self.symbol_last_show = tk.Checkbutton(self, text='Показать последние 4 символа',
-                                                       variable=self.symbol_last_var,
-                                                       onvalue=1, offvalue=0, command=lambda: self.symbol_show(1))
-                self.symbol_first_show_entry = tk.Entry(self, width=40)
-                self.symbol_last_show_entry = tk.Entry(self, width=40)
-
-                # filled answer
-                self.filled_tip_label = tk.Label(self, text='Показать запрещенные ячейки в:')
-
-                # all variables for filled squares
-                self.tips_var_filled_list = [tk.IntVar() for _ in range(6)]
-                self.tips_filled_list = []
-
-                # toggle_click_tip(which_list, which_place)
-                # which_list == 0  ->  self.tips_filled_list, which_list == 1  ->  self.tips_key_list
-                self.tips_filled_list.append(
-                    tk.Checkbutton(self, text='первом столбце', variable=self.tips_var_filled_list[0],
-                                   onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 0)))
-                self.tips_filled_list.append(
-                    tk.Checkbutton(self, text='втором столбце', variable=self.tips_var_filled_list[1],
-                                   onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 1)))
-                self.tips_filled_list.append(
-                    tk.Checkbutton(self, text='третьем столбце', variable=self.tips_var_filled_list[2],
-                                   onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 2)))
-                self.tips_filled_list.append(tk.Checkbutton(self, text='четвертом столбце',
-                                                            variable=self.tips_var_filled_list[3],
-                                                            onvalue=1, offvalue=0,
-                                                            command=lambda: self.toggle_click_tip(0, 3)))
-                self.tips_filled_list.append(
-                    tk.Checkbutton(self, text='пятом столбце', variable=self.tips_var_filled_list[4],
-                                   onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 4)))
-                self.tips_filled_list.append(
-                    tk.Checkbutton(self, text='шестом столбце', variable=self.tips_var_filled_list[5],
-                                   onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 5)))
-
-                # key answer
-                self.key_tip_label = tk.Label(self, text='Показать правильное расположение столбцов:')
-
-                # all variables for key answer
-                self.tips_var_key_list = [tk.IntVar() for _ in range(6)]
-                self.tips_key_list = []
-
-                self.tips_key_list.append(
-                    tk.Checkbutton(self, text='первый столбец', variable=self.tips_var_key_list[0],
-                                   onvalue=1, offvalue=0,
-                                   command=lambda: self.toggle_click_tip(1, 0)))
-                self.tips_key_list.append(
-                    tk.Checkbutton(self, text='второй столбец', variable=self.tips_var_key_list[1],
-                                   onvalue=1, offvalue=0,
-                                   command=lambda: self.toggle_click_tip(1, 1)))
-                self.tips_key_list.append(
-                    tk.Checkbutton(self, text='третий столбец', variable=self.tips_var_key_list[2],
-                                   onvalue=1, offvalue=0,
-                                   command=lambda: self.toggle_click_tip(1, 2)))
-                self.tips_key_list.append(
-                    tk.Checkbutton(self, text='четвертый столбец', variable=self.tips_var_key_list[3],
-                                   onvalue=1, offvalue=0,
-                                   command=lambda: self.toggle_click_tip(1, 3)))
-                self.tips_key_list.append(tk.Checkbutton(self, text='пятый столбец', variable=self.tips_var_key_list[4],
-                                                         onvalue=1, offvalue=0,
-                                                         command=lambda: self.toggle_click_tip(1, 4)))
-                self.tips_key_list.append(
-                    tk.Checkbutton(self, text='шестой столбец', variable=self.tips_var_key_list[5],
-                                   onvalue=1, offvalue=0,
-                                   command=lambda: self.toggle_click_tip(1, 5)))
-
-                global sum_tips_key, sum_tips_filled, symbols_to_show
-                if sum(sum_tips_filled) < 3:
-                    for i in range(len(sum_tips_filled)):
-                        if sum_tips_filled[i] == 1:
-                            self.tips_filled_list[i].config(state=tk.DISABLED)
-                            self.tips_filled_list[i].select()
-                        elif sum_tips_filled[i] == 0:
-                            self.tips_filled_list[i].config(state=tk.NORMAL)
-                elif sum(sum_tips_filled) == 3:
-                    for i in range(len(sum_tips_filled)):
-                        self.tips_filled_list[i].config(state=tk.DISABLED)
-                        if sum_tips_filled[i] == 1:
-                            self.tips_filled_list[i].select()
-
-                if sum(sum_tips_key) < 3:
-                    for i in range(len(sum_tips_key)):
-                        if sum_tips_key[i] == 1:
-                            self.tips_key_list[i].config(state=tk.DISABLED)
-                            self.tips_key_list[i].select()
-                        elif sum_tips_key[i] == 0:
-                            self.tips_key_list[i].config(state=tk.NORMAL)
-                elif sum(sum_tips_key) == 3:
-                    for i in range(len(sum_tips_key)):
-                        self.tips_key_list[i].config(state=tk.DISABLED)
-                        if sum_tips_key[i] == 1:
-                            self.tips_key_list[i].select()
-
-                if symbols_to_show[0] == 1:
-                    self.symbol_first_show.config(state=tk.DISABLED)
-                    self.symbol_first_show.select()
-                    self.symbol_first_show_entry.delete(0, tk.END)
-                    index = 0
-                    if current_file_open[:4] == 'nunu':
-                        index = len(tasks_answer_list)
-                    elif current_file_open[:6] == 'try_it':
-                        index = len(tasks_answer_list) - 1
-                    else:
-                        index = int(current_file_open[:5][-1])
-                    self.symbol_first_show_entry.insert(0, tasks_answer_list[index - 1][:4])
-                if symbols_to_show[1] == 1:
-                    self.symbol_last_show.config(state=tk.DISABLED)
-                    self.symbol_last_show.select()
-                    self.symbol_last_show_entry.delete(0, tk.END)
-                    index = 0
-                    if current_file_open[:4] == 'nunu':
-                        index = len(tasks_answer_list)
-                    elif current_file_open[:6] == 'try_it':
-                        index = len(tasks_answer_list) - 1
-                    else:
-                        index = int(current_file_open[:5][-1])
-                    self.symbol_last_show_entry.insert(0, tasks_answer_list[index - 1][-4:])
-
-                self.symbol_first_show.pack()
-                self.symbol_first_show_entry.pack()
-                self.symbol_last_show.pack()
-                self.symbol_last_show_entry.pack()
-                self.filled_tip_label.pack()
-                for i in self.tips_filled_list:
-                    i.pack()
-                self.key_tip_label.pack()
-                for i in self.tips_key_list:
-                    i.pack()
-
-            def symbol_show(self, which_symbol):
-                global tasks_answer_list, current_file_open, symbols_to_show
-                index = 0
-                if current_file_open[:4] == 'nunu':
-                    index = len(tasks_answer_list)
-                elif current_file_open[:6] == 'try_it':
-                    index = len(tasks_answer_list) - 1
-                else:
-                    index = int(current_file_open[:5][-1])
-                if which_symbol == 0:
-                    self.symbol_first_show_entry.delete(0, tk.END)
-                    self.symbol_first_show_entry.insert(0, tasks_answer_list[index - 1][:4])
-                    symbols_to_show[0] = 1
-                elif which_symbol == 1:
-                    self.symbol_last_show_entry.delete(0, tk.END)
-                    self.symbol_last_show_entry.insert(0, tasks_answer_list[index - 1][-4:])
-                    symbols_to_show[1] = 1
-
-                if symbols_to_show[0] == 1:
-                    self.symbol_first_show.config(state=tk.DISABLED)
-                    self.symbol_first_show.select()
-                    self.symbol_first_show_entry.delete(0, tk.END)
-                    self.symbol_first_show_entry.insert(0, tasks_answer_list[index - 1][:4])
-                if symbols_to_show[1] == 1:
-                    self.symbol_last_show.config(state=tk.DISABLED)
-                    self.symbol_last_show.select()
-                    self.symbol_last_show_entry.delete(0, tk.END)
-                    self.symbol_last_show_entry.insert(0, tasks_answer_list[index - 1][-4:])
-
-            def toggle_click_tip(self, which_list, place):
-                global sum_tips_key, sum_tips_filled
-
-                if which_list == 0:
-                    self.tips_var_filled_list[place].set(not self.tips_var_filled_list[place].get())
-                    if self.tips_var_filled_list[place].get() == 1:
-                        sum_tips_filled[place] = 1
-                    elif self.tips_var_filled_list[place].get() == 0:
-                        sum_tips_filled[place] = 0
-                elif which_list == 1:
-                    self.tips_var_key_list[place].set(not self.tips_var_key_list[place].get())
-                    if self.tips_var_key_list[place].get() == 1:
-                        sum_tips_key[place] = 1
-                    elif self.tips_var_key_list[place].get() == 0:
-                        sum_tips_key[place] = 0
-                check_click_tip()
-
-                if sum(sum_tips_filled) < 3:
-                    for i in range(len(sum_tips_filled)):
-                        if sum_tips_filled[i] == 1:
-                            self.tips_filled_list[i].config(state=tk.DISABLED)
-                            self.tips_filled_list[i].select()
-                        elif sum_tips_filled[i] == 0:
-                            self.tips_filled_list[i].config(state=tk.NORMAL)
-                elif sum(sum_tips_filled) == 3:
-                    for i in range(len(sum_tips_filled)):
-                        self.tips_filled_list[i].config(state=tk.DISABLED)
-                        if sum_tips_filled[i] == 1:
-                            self.tips_filled_list[i].select()
-
-                if sum(sum_tips_key) < 3:
-                    for i in range(len(sum_tips_key)):
-                        if sum_tips_key[i] == 1:
-                            self.tips_key_list[i].config(state=tk.DISABLED)
-                            self.tips_key_list[i].select()
-                        elif sum_tips_key[i] == 0:
-                            self.tips_key_list[i].config(state=tk.NORMAL)
-                elif sum(sum_tips_key) == 3:
-                    for i in range(len(sum_tips_key)):
-                        self.tips_key_list[i].config(state=tk.DISABLED)
-                        if sum_tips_key[i] == 1:
-                            self.tips_key_list[i].select()
-                working_with_table_algorithm()
-
         if typo_algorithm == 6:
             global current_file_open
-
-            self.menu.entryconfig('Выбери функцию', state='disabled')
-            self.menu.entryconfig('О программе', state='disabled')
-            self.menu.add_command(label='Подсказки', state='active', command=Tips)
 
             answer_button = tk.Button(self, text='Проверьте ответ', command=self.Answer)
             exit_button = tk.Button(self, text='Завершить дешифрование',
                                     command=lambda: self.exit_from_table_algorithm())
-
             separate2 = tk.Label(self)
             separate3 = tk.Label(self)
 
@@ -2715,15 +2398,223 @@ class MainWindow(tk.Tk):
             answer_button.pack()
             separate3.pack()
             exit_button.pack()
-            working_with_table_algorithm()
 
     def exit_from_table_algorithm(self):
         global current_file_open
         change_task_file(current_file_open)
         self.menu.entryconfig('Выбери функцию', state='normal')
-        self.menu.delete('Подсказки')
         clear_global_variables()
         self.update_current_function(0)
+
+    class Tips(tk.Tk):
+        def __init__(self):
+            super().__init__()
+
+            # settings for the window
+            self.title('Tips')
+            self.geometry('300x440+100+100')
+            self.protocol("WM_DELETE_WINDOW", lambda: self.destroy())
+
+            self.symbol_first_var = tk.IntVar()
+            self.symbol_last_var = tk.IntVar()
+            self.symbol_first_show = tk.Checkbutton(self, text='Показать первые 4 символа',
+                                                    variable=self.symbol_first_var,
+                                                    onvalue=1, offvalue=0, command=lambda: self.symbol_show(0))
+            self.symbol_last_show = tk.Checkbutton(self, text='Показать последние 4 символа',
+                                                   variable=self.symbol_last_var,
+                                                   onvalue=1, offvalue=0, command=lambda: self.symbol_show(1))
+            self.symbol_first_show_entry = tk.Entry(self, width=40)
+            self.symbol_last_show_entry = tk.Entry(self, width=40)
+
+            # filled answer
+            self.filled_tip_label = tk.Label(self, text='Показать запрещенные ячейки в:')
+
+            # all variables for filled squares
+            self.tips_var_filled_list = [tk.IntVar() for _ in range(6)]
+            self.tips_filled_list = []
+
+            # toggle_click_tip(which_list, which_place)
+            # which_list == 0  ->  self.tips_filled_list, which_list == 1  ->  self.tips_key_list
+            self.tips_filled_list.append(
+                tk.Checkbutton(self, text='первом столбце', variable=self.tips_var_filled_list[0],
+                               onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 0)))
+            self.tips_filled_list.append(
+                tk.Checkbutton(self, text='втором столбце', variable=self.tips_var_filled_list[1],
+                               onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 1)))
+            self.tips_filled_list.append(
+                tk.Checkbutton(self, text='третьем столбце', variable=self.tips_var_filled_list[2],
+                               onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 2)))
+            self.tips_filled_list.append(tk.Checkbutton(self, text='четвертом столбце',
+                                                        variable=self.tips_var_filled_list[3],
+                                                        onvalue=1, offvalue=0,
+                                                        command=lambda: self.toggle_click_tip(0, 3)))
+            self.tips_filled_list.append(
+                tk.Checkbutton(self, text='пятом столбце', variable=self.tips_var_filled_list[4],
+                               onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 4)))
+            self.tips_filled_list.append(
+                tk.Checkbutton(self, text='шестом столбце', variable=self.tips_var_filled_list[5],
+                               onvalue=1, offvalue=0, command=lambda: self.toggle_click_tip(0, 5)))
+
+            # key answer
+            self.key_tip_label = tk.Label(self, text='Показать правильное расположение столбцов:')
+
+            # all variables for key answer
+            self.tips_var_key_list = [tk.IntVar() for _ in range(6)]
+            self.tips_key_list = []
+
+            self.tips_key_list.append(tk.Checkbutton(self, text='первый столбец', variable=self.tips_var_key_list[0],
+                                                     onvalue=1, offvalue=0,
+                                                     command=lambda: self.toggle_click_tip(1, 0)))
+            self.tips_key_list.append(tk.Checkbutton(self, text='второй столбец', variable=self.tips_var_key_list[1],
+                                                     onvalue=1, offvalue=0,
+                                                     command=lambda: self.toggle_click_tip(1, 1)))
+            self.tips_key_list.append(tk.Checkbutton(self, text='третий столбец', variable=self.tips_var_key_list[2],
+                                                     onvalue=1, offvalue=0,
+                                                     command=lambda: self.toggle_click_tip(1, 2)))
+            self.tips_key_list.append(tk.Checkbutton(self, text='четвертый столбец', variable=self.tips_var_key_list[3],
+                                                     onvalue=1, offvalue=0,
+                                                     command=lambda: self.toggle_click_tip(1, 3)))
+            self.tips_key_list.append(tk.Checkbutton(self, text='пятый столбец', variable=self.tips_var_key_list[4],
+                                                     onvalue=1, offvalue=0,
+                                                     command=lambda: self.toggle_click_tip(1, 4)))
+            self.tips_key_list.append(tk.Checkbutton(self, text='шестой столбец', variable=self.tips_var_key_list[5],
+                                                     onvalue=1, offvalue=0,
+                                                     command=lambda: self.toggle_click_tip(1, 5)))
+
+            global sum_tips_key, sum_tips_filled, symbols_to_show
+            if sum(sum_tips_filled) < 3:
+                for i in range(len(sum_tips_filled)):
+                    if sum_tips_filled[i] == 1:
+                        self.tips_filled_list[i].config(state=tk.DISABLED)
+                        self.tips_filled_list[i].select()
+                    elif sum_tips_filled[i] == 0:
+                        self.tips_filled_list[i].config(state=tk.NORMAL)
+            elif sum(sum_tips_filled) == 3:
+                for i in range(len(sum_tips_filled)):
+                    self.tips_filled_list[i].config(state=tk.DISABLED)
+                    if sum_tips_filled[i] == 1:
+                        self.tips_filled_list[i].select()
+
+            if sum(sum_tips_key) < 3:
+                for i in range(len(sum_tips_key)):
+                    if sum_tips_key[i] == 1:
+                        self.tips_key_list[i].config(state=tk.DISABLED)
+                        self.tips_key_list[i].select()
+                    elif sum_tips_key[i] == 0:
+                        self.tips_key_list[i].config(state=tk.NORMAL)
+            elif sum(sum_tips_key) == 3:
+                for i in range(len(sum_tips_key)):
+                    self.tips_key_list[i].config(state=tk.DISABLED)
+                    if sum_tips_key[i] == 1:
+                        self.tips_key_list[i].select()
+
+            if symbols_to_show[0] == 1:
+                self.symbol_first_show.config(state=tk.DISABLED)
+                self.symbol_first_show.select()
+                self.symbol_first_show_entry.delete(0, tk.END)
+                index = 0
+                if current_file_open[:4] == 'nunu':
+                    index = len(tasks_answer_list)
+                elif current_file_open[:6] == 'try_it':
+                    index = len(tasks_answer_list) - 1
+                else:
+                    index = int(current_file_open[:5][-1])
+                self.symbol_first_show_entry.insert(0, tasks_answer_list[index - 1][:4])
+            if symbols_to_show[1] == 1:
+                self.symbol_last_show.config(state=tk.DISABLED)
+                self.symbol_last_show.select()
+                self.symbol_last_show_entry.delete(0, tk.END)
+                index = 0
+                if current_file_open[:4] == 'nunu':
+                    index = len(tasks_answer_list)
+                elif current_file_open[:6] == 'try_it':
+                    index = len(tasks_answer_list) - 1
+                else:
+                    index = int(current_file_open[:5][-1])
+                self.symbol_last_show_entry.insert(0, tasks_answer_list[index - 1][-4:])
+
+            self.symbol_first_show.pack()
+            self.symbol_first_show_entry.pack()
+            self.symbol_last_show.pack()
+            self.symbol_last_show_entry.pack()
+            self.filled_tip_label.pack()
+            for i in self.tips_filled_list:
+                i.pack()
+            self.key_tip_label.pack()
+            for i in self.tips_key_list:
+                i.pack()
+
+        def symbol_show(self, which_symbol):
+            global tasks_answer_list, current_file_open, symbols_to_show
+            index = 0
+            if current_file_open[:4] == 'nunu':
+                index = len(tasks_answer_list)
+            elif current_file_open[:6] == 'try_it':
+                index = len(tasks_answer_list) - 1
+            else:
+                index = int(current_file_open[:5][-1])
+            if which_symbol == 0:
+                self.symbol_first_show_entry.delete(0, tk.END)
+                self.symbol_first_show_entry.insert(0, tasks_answer_list[index - 1][:4])
+                symbols_to_show[0] = 1
+            elif which_symbol == 1:
+                self.symbol_last_show_entry.delete(0, tk.END)
+                self.symbol_last_show_entry.insert(0, tasks_answer_list[index - 1][-4:])
+                symbols_to_show[1] = 1
+
+            if symbols_to_show[0] == 1:
+                self.symbol_first_show.config(state=tk.DISABLED)
+                self.symbol_first_show.select()
+                self.symbol_first_show_entry.delete(0, tk.END)
+                self.symbol_first_show_entry.insert(0, tasks_answer_list[index - 1][:4])
+            if symbols_to_show[1] == 1:
+                self.symbol_last_show.config(state=tk.DISABLED)
+                self.symbol_last_show.select()
+                self.symbol_last_show_entry.delete(0, tk.END)
+                self.symbol_last_show_entry.insert(0, tasks_answer_list[index - 1][-4:])
+
+        def toggle_click_tip(self, which_list, place):
+            global sum_tips_key, sum_tips_filled
+
+            if which_list == 0:
+                self.tips_var_filled_list[place].set(not self.tips_var_filled_list[place].get())
+                if self.tips_var_filled_list[place].get() == 1:
+                    sum_tips_filled[place] = 1
+                elif self.tips_var_filled_list[place].get() == 0:
+                    sum_tips_filled[place] = 0
+            elif which_list == 1:
+                self.tips_var_key_list[place].set(not self.tips_var_key_list[place].get())
+                if self.tips_var_key_list[place].get() == 1:
+                    sum_tips_key[place] = 1
+                elif self.tips_var_key_list[place].get() == 0:
+                    sum_tips_key[place] = 0
+            check_click_tip()
+
+            if sum(sum_tips_filled) < 3:
+                for i in range(len(sum_tips_filled)):
+                    if sum_tips_filled[i] == 1:
+                        self.tips_filled_list[i].config(state=tk.DISABLED)
+                        self.tips_filled_list[i].select()
+                    elif sum_tips_filled[i] == 0:
+                        self.tips_filled_list[i].config(state=tk.NORMAL)
+            elif sum(sum_tips_filled) == 3:
+                for i in range(len(sum_tips_filled)):
+                    self.tips_filled_list[i].config(state=tk.DISABLED)
+                    if sum_tips_filled[i] == 1:
+                        self.tips_filled_list[i].select()
+
+            if sum(sum_tips_key) < 3:
+                for i in range(len(sum_tips_key)):
+                    if sum_tips_key[i] == 1:
+                        self.tips_key_list[i].config(state=tk.DISABLED)
+                        self.tips_key_list[i].select()
+                    elif sum_tips_key[i] == 0:
+                        self.tips_key_list[i].config(state=tk.NORMAL)
+            elif sum(sum_tips_key) == 3:
+                for i in range(len(sum_tips_key)):
+                    self.tips_key_list[i].config(state=tk.DISABLED)
+                    if sum_tips_key[i] == 1:
+                        self.tips_key_list[i].select()
 
     class Answer(tk.Tk):
         def __init__(self):
