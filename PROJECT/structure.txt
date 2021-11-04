@@ -1,0 +1,37 @@
+global variables
+choose_directory
+xor_function
+replacement_function
+working_with_files
+working_with_table_algorithm
+filling_squares_with_tips
+clear_global_variables
+check_click_tip
+encryption
+change_task_file
+change_all_task_files
+hex_to_char_func
+class MainWindow
+    __init__
+    about_author
+    exit_function
+    update_current_function
+    destroy_everything
+    home_show
+    xor_show
+    replacement_show
+    rsa_show
+    generating_keys
+    working_with_keys
+        callback
+    decryption
+    table_algorithm_show
+        filling_squares
+    exit_from_table_algorithm
+    class Tips
+        __init__
+        symbol_show
+        toggle_click_tip
+    class Answer
+        __init__
+        check_answer
